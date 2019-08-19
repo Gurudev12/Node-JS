@@ -1,0 +1,19 @@
+{
+  "name": "functional",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "mocha || true"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "commander": "^3.0.0",
+    "mocha": "^6.2.0"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
