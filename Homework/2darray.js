@@ -1,5 +1,5 @@
 var input=require('readline-sync')
- var row=3,col=4
+ var row=4,col=3
  var array=new Array(row)
  
  for(var i=0;i<row;i++)

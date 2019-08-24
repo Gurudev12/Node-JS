@@ -10,6 +10,5 @@ describe('Positive ',function(){
         assert.equal(result[2],6.4031242374328485,"Enter 4 and 5")
     })
 
-   
 })
 

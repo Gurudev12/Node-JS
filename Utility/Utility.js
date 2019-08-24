@@ -6,11 +6,22 @@ module.exports=
     return sq
 },
 
+leapYear(year)
+{
+    if(year%4==0 || year%100!=0 && year%400==0)
+    {
+        return true
+    }
+    else
+    {
+        return false
+    }
+},
 /*2DArray..//////////////////////////////////////////////////////////////////////////////////////////*/
 SetIntegerOfTwoDArray(array,row,column)
     {   
         var Input=require('readline-sync')
-        console.log("enter "+row*column+" total element to fiil twoD array of Integer");
+        console.log("enter "+row*column+" total  element to fiil twoD array of Integer");
         for(var i=0;i<row;i++)
         {   array[i]=[];
             for(var j=0;j<column;j++)
@@ -185,6 +196,77 @@ CalculateWindChill(t,v)
 },
 /*/////////////////////////////////////////////////////////////////////////////////////////*/
 /*ALGORITHMS//////////////////////////////////////////////////////////////////////////////////////////*/
+/*Prime number/////////////////////////////////////////////////////////////////////////////////////////*/
+displayPrime(start,end)
+{
+    let primeArray=[]
+
+    count=0
+    for(let i=start;i<=end;i++)
+    {
+        let flag=0
+        for(j=2;j<=i/2;j++)
+       {
+            if(i%j==0)
+            {
+            flag=1
+            break;
+            }
+        
+       }
+        if(flag==0)
+        {
+           
+        primeArray.push(i)
+        count++
+        }
+    }
+    return primeArray
+},
+/*6.BinaraySearchWord.js//File.js////////////////////////////////////////////////////////////////////////////////////////*/
+displayAnagram(primeArray)
+{
+    let notAnagram=[]
+    let anagramArray=[]
+    let i,j  
+for(i=0;i<primeArray.length;i++)
+{
+    let strFirst="",strSplit1=[]
+
+    strFirst=strFirst+primeArray[i]
+    strSplit1=strFirst.split("")
+    strSplit1.sort()
+    strFirst=strSplit1.toString("");
+   
+    for(j=i+1;j<primeArray.length;j++)
+    {
+        isNotfind=true;
+       let strSecond="",strSplit2=[];
+      
+
+        strSecond=strSecond+primeArray[j]
+        strSplit2=strSecond.split("");
+        strSplit2.sort()
+        strSecond=strSplit2.toString("");
+       
+       
+        if(strFirst==strSecond)
+        {  
+            anagramArray.push(primeArray[i])
+            anagramArray.push(primeArray[j]) 
+            isNotfind=false;
+            break;
+            
+        }
+    }
+    if(isNotfind)
+    {
+        notAnagram.push(primeArray[i])
+    }
+    
+}
+    return [anagramArray,notAnagram]
+},
 /*6.BinaraySearchWord.js//File.js////////////////////////////////////////////////////////////////////////////////////////*/
 Binary(array,key)
 {
@@ -329,7 +411,7 @@ DisplayDay(day,month,year)
     m =(month+12*((14-month)/12)-2)
 
     d=parseInt(((day+x+31*m/12)%7))
-    console.log(d)
+    
 
     return d
 },
