@@ -5,6 +5,7 @@ var result=a+b;
 console.log("addition is done");
 display(result);
 }
+
 function display(result)
 {
 console.log("addition of two number is "+result)

@@ -3,6 +3,7 @@ let input=require('readline-sync')
 let fs=require('fs');
 function link()
 {
+try{
 let array=new Array()
 let data=fs.readFileSync('file.txt')
   
@@ -47,6 +48,10 @@ else
    let data=list.printListData()
     fs.writeFileSync('file.txt',data)
     console.log(data)
+}
+return[list,data,array,key]
+} catch (e) {
+  console.log('file not present ${e}')
 }
 
 }

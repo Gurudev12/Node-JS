@@ -1,7 +1,9 @@
 let input=require('readline-sync')
-let utility=require('/home/administrator/Desktop/Bridgelab/Utility/Utility')
+let utility=require('../../Utility/Utility')
 function calender()
 {
+    try
+    {
     let i
     let month=["","JAN","FEB","MAR","ARIL","MAY","JUN","JULY","AUG","SEPT","OCT","NOV","DEC",]
     let days=  ["","31","28","31","30","31","30","31","31","30","31","30","31"]
@@ -43,5 +45,9 @@ function calender()
         }
      
     }
+    return [enteredMonth,enteredYear,d,month,days];
+} catch (error) {
+    console.log(`error occured at ${error}`)
+}
 }
 module.exports=calender()

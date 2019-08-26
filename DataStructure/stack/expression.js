@@ -2,6 +2,8 @@ let utility=require('../stack/stackutility')
 let input=require('readline-sync')
 function ExpresionStack()
 {
+try{
+
 console.log("Enter Expression:")
 let expression=input.question()
 
@@ -41,6 +43,11 @@ if(value==true && flag!=1)
 else
 {
     console.log("Not Balanced")
+}
+return [expression,ob,exp]
+} catch (err) {
+    console.log(err);
+
 }
 }
 module.exports=ExpresionStack()

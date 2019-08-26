@@ -4,8 +4,12 @@ let ob=new utility.Queue()
 
 function palindromeString()
 {
+try
+{
 console.log("Enter Your String:")
 let str=input.question()
+
+if(str==null)throw err
 
 let array=str.split('')
 console.log(array)
@@ -37,6 +41,12 @@ if(flag==0)
 else
 {
     console.log("Palindrom")
+}
+
+return [ob, str, array]
+} catch (err) {
+    console.log(err);
+
 }
 }
 module.exports=palindromeString()
