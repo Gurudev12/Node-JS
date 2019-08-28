@@ -1,5 +1,1 @@
-{ "name": "Sara",
-    "age": 23,
-    "gender": "Female",
-    "department": "History",
-    "car": "Honda" }
+[{"name":"Sara","age":23,"gender":"Female","department":"History","car":"Honda"},{"name":"guru","age":23,"gender":"male","department":"Physics","car":"Bmw"},{"name":"gu","age":23,"gender":"male","department":"Physics","car":"Bmw"},{"name":"guru","age":23,"gender":"male","department":"Physics","car":"Bmw"},{"name":"guru","age":23,"gender":"male","department":"Physics","car":"Bmw"},{"name":"guru","age":23,"gender":"male","department":"Physics","car":"Bmw"}]

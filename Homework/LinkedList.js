@@ -154,6 +154,7 @@ class LinkedList
 // ob.removeAt(1)
 // /*ob.clearList()*/
 // ob.printListData()
+module.exports={LinkedList}
 
 
 
