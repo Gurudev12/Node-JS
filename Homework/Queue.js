@@ -49,6 +49,7 @@ class Queue
             return true
         }
     }
+    
 }
 
 module.exports={Queue}
