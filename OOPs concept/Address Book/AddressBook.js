@@ -41,9 +41,8 @@ class AddressBook
             "zip":zip,
             "phonenumber":phonenumber
             })
-            fs.writeFileSync('address.json',JSON.stringify(this.addressData))
-           
-
+            // fs.writeFileSync('address.json',JSON.stringify(this.addressData))
+           this.saveFile(addressData)
     }
     //Editing person information
     editInfo(addressData)
@@ -103,10 +102,6 @@ class AddressBook
         
     }
 
-
-
-
-
     //displaying person information based on the flagid
     display(addressData,flagid)
     {
@@ -165,5 +160,102 @@ class AddressBook
         fs.writeFileSync('address.json',JSON.stringify(addressData))
         console.log("Data saved sucessfully...")
     }
+    //Deleting respective record
+    deletePerson(addressData)
+    {
+        let i
+        console.log("Enter your name:")
+        let userName=input.question()
+        console.log("Enter phone number:")
+        let mobNo=input.questionInt()
+        let flagid=-1
+        for(i=0;i<addressData.length;i++)
+        {
+            if(addressData[i].firstname==userName && mobNo==addressData[i].phonenumber)
+            {
+                flagid=i
+            }
+        }
+
+        if(flagid==-1)
+        {
+            console.log("Record is not found which you want to delete")
+            return flagid
+        }
+        //calling display method to display record
+        this.display(addressData,flagid)
+       //asking user to sure to delete user record
+       console.log("Are you sure to delete record")
+       console.log("1.Yes"+"\n2.No")
+       console.log("Enter your chocice")
+       let choice=input.questionInt()
+
+       switch(choice)
+       {
+           case 1:
+               addressData.splice(flagid,1)
+               break;
+            case 2:
+                console.log("Record not deleted")
+                break;
+            default:
+                console.log("You have entered wrong choice..")
+                
+       }
+       this.saveFile(addressData)
+
+    }
+    //method for sorting data by last name
+    sortByLastName(addressData)
+    {
+        let i,j,temp
+        for(i=0;i<addressData.length;i++)
+        {
+            for(j=0;j<addressData.length-1;j++)
+            {
+                if(addressData[j+1].lastname < addressData[j].lastname)
+                {
+                    temp=addressData[j+1]
+                    addressData[j+1]=addressData[j]
+                    addressData[j]=temp
+                }
+            }
+        }
+        for(i=0;i<addressData.length;i++)
+        {
+            console.log(addressData[i])
+        }
+    }
+    //Sorting data by zipcode
+    sortByZipCode(addressData)
+    {
+        let i,j,temp
+        console.log("your sorted zip codes are..")
+        for(i=0;i<addressData.length;i++)
+        {
+            for(j=0;j<addressData.length-1;j++)
+            {
+                if(addressData[j+1].zip < addressData[j].zip)
+                {
+                    temp=addressData[j+1]
+                    addressData[j+1]=addressData[j]
+                    addressData[j]=temp
+                }
+            }
+        }
+        for(i=0;i<addressData.length;i++)
+        {
+            console.log(addressData[i].zip)
+        }
+    }
+    //Display records of user
+    displayRecord(addressData)
+    {
+        for(let i=0;i<addressData.length;i++)
+        {
+            console.log(addressData[i])
+        }
+    }
+
 }
 module.exports={AddressBook}

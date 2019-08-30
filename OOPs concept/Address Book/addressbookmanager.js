@@ -33,19 +33,23 @@ let choice
                 break;
 
             case 3:
-                bookMethod.deletePerson()
+               let deleteResponce=bookMethod.deletePerson(addressData)
+               if(deleteResponce !=-1)
+               {
+                    console.log("Your data deleted sucessfully")
+               }
                 break;
             
             case 4:
-                bookMethod.sortByName()
+                bookMethod.sortByLastName(addressData)
                 break;
 
             case 5:
-                bookMethod.sortByZipCode()
+                bookMethod.sortByZipCode(addressData)
                 break;
             
             case 6:
-                bookMethod.displayRecord()
+                bookMethod.displayRecord(addressData)
                 break;
             case 7:
                 bookMethod.saveFile()

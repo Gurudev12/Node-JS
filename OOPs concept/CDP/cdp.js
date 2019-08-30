@@ -90,7 +90,6 @@ console.log("Inserted element to linked list..")
     }
     list.printListData()
 
-
 //Reading updated transaction file
 let updatedTrans=fs.readFileSync("transaction.json")
 let updatedTransaction=JSON.parse(updatedTrans)
