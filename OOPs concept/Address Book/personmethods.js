@@ -1,3 +1,12 @@
+/******************************************************************************
+ *  
+ *  @Purpose: Person class contain getter and setter methods
+ *
+ *  @author  Gurudev Murkar
+ *  @version 1.0
+ *  @since   29-08-2019
+ *
+ ******************************************************************************/
 class Person
 {
     constructor()

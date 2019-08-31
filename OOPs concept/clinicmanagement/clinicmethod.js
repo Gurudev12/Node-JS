@@ -1,3 +1,12 @@
+/******************************************************************************
+ *  
+ *  @Purpose: Class ClinicManagement contain all implementation methods
+ *
+ *  @author  Gurudev Murkar
+ *  @version 1.0
+ *  @since   30-08-2019
+ *
+ ******************************************************************************/
 let input=require('readline-sync')
 let fs=require('fs')
 
@@ -7,17 +16,25 @@ class ClinicManagement
     //Add new person in the system
     addDoctor(doctorData)
     {
+        let format = /^[a-zA-Z]+$/;
+        let formatnum = /^\d{10,10}$/;
+        try{
         console.log("Enter Doctor name")
         let doctorName=input.question()
+        //validation(name should be string)
+        if (format.test(doctorName) == false) throw "doactor name should be in string format";
 
         console.log("Enter Doctor Id")
         let doctorID=input.questionInt()
 
         console.log("Enter Specialization")
         let doctorSpecialization=input.question()
+        //validation that specialization must string
+        if (format.test(doctorSpecialization) == false) throw "specialization should be in string format";
 
         console.log("Enter Doctaor availability")
         let available=input.question()
+        if (format.test(available) == false) throw "please enter AM or PM";
 
         //creating object and add it to the addressData 
         doctorData.push (
@@ -31,6 +48,12 @@ class ClinicManagement
             })
             fs.writeFileSync('doctor.json',JSON.stringify(doctorData))
         //    this.saveFileToDoctor()
+
+        return [doctorName,doctorSpecialization,available]
+        }catch(e)
+        {
+            return e
+        }
     }
     //Adding patient if he/she is new to clinic
     addPatient(patientData)
@@ -62,6 +85,9 @@ class ClinicManagement
     //take appointment
     takeAppointment(patientData,doctorData,appointmentData)
     {  
+        let format = /^[a-zA-Z]+$/;
+        let formatnum = /^\d{10,10}$/;
+        try{
         console.log("-----------------------------")
             
                     console.log("Searching patient details")
@@ -85,10 +111,11 @@ class ClinicManagement
                         let patientName=this.addPatient(patientData)
                     console.log("New patient added sucessfuly")
                     this.newAppointment(doctorData,patientName,appointmentData)
-
-
-
                     }
+        }catch(e)
+        {
+            return e
+        }
       
     }
 

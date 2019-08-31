@@ -1,16 +1,26 @@
+
+/******************************************************************************
+ *  
+ *  @Purpose: Class CDP contain all the implementation methods
+ *
+ *  @author  Gurudev Murkar
+ *  @version 1.0
+ *  @since   28-08-2019
+ *
+ ******************************************************************************/
 let fs=require('fs')
 let input=require ('readline-sync')
 //requring Stack linked list file & create object to call method
 let util=require('/home/administrator/Desktop/Bridgelab/Homework/StackLinkedList')
 let obStack=new util.LinkedList() 
 
-let data=fs.readFileSync("companyshare.json")
+let data=fs.readFileSync("/home/administrator/Desktop/Bridgelab/OOPs concept/CDP/companyshare.json")
 let companyData=JSON.parse(data)
 
-let dataCust=fs.readFileSync("custdata.json")
+let dataCust=fs.readFileSync("/home/administrator/Desktop/Bridgelab/OOPs concept/CDP/custdata.json")
 let custDetails=JSON.parse(dataCust)
 
-let trans=fs.readFileSync("transaction.json")
+let trans=fs.readFileSync("/home/administrator/Desktop/Bridgelab/OOPs concept/CDP/transaction.json")
 let transactionData=JSON.parse(trans)
 
 class CDP
@@ -18,9 +28,14 @@ class CDP
 //to buy share
 toBuy(enteredSymbol)
 {
+   
+
     /*Asking which user wants to buy share*/
     console.log("Which user wants to buy share:")
     let user=input.questionInt()
+
+  if(user<custDetails.length)
+  {
     /*Asking which no of share to buy*/
     console.log("Enter no of share to buy:")
     let noShare=input.questionInt()
@@ -69,12 +84,18 @@ toBuy(enteredSymbol)
                 fs.writeFileSync('transaction.json',val)
             }
         }
-    }
+}
+
 
     console.log(companyData)
     console.log(custDetails)
     fs.writeFileSync('companyshare.json',JSON.stringify(companyData))
     fs.writeFileSync('custdata.json',JSON.stringify(custDetails))
+}
+    else
+    {
+    console.log("Please enter valid user")
+    }
 }
 //to sell share
 toSell(user,noShare,compSymbol)
@@ -121,3 +142,18 @@ toSell(user,noShare,compSymbol)
 }
 }
 module.exports={CDP}
+
+
+
+// try{
+//     let format = /^[a-zA-Z]+$/;
+
+
+  /*validating name*/
+//   if(format.test(user)==false)throw "User must be string"
+
+
+// }catch(e)
+// {
+//     return e
+// }

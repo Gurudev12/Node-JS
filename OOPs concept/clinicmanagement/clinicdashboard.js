@@ -1,15 +1,24 @@
+/******************************************************************************
+ *  
+ *  @Purpose: function Clinic Dashboard calling all the methods
+ *
+ *  @author  Gurudev Murkar
+ *  @version 1.0
+ *  @since   30-08-2019
+ *
+ ******************************************************************************/
 let fs=require('fs')
 let input=require('readline-sync')
 //reading doctor.json file and storing it.
-let doctorInfo=fs.readFileSync('doctor.json')
+let doctorInfo=fs.readFileSync('/home/administrator/Desktop/Bridgelab/OOPs concept/clinicmanagement/doctor.json')
 let doctorData=JSON.parse(doctorInfo)
 
 //reading patient.json file and storing it.
-let patientInfo=fs.readFileSync('patient.json')
+let patientInfo=fs.readFileSync('/home/administrator/Desktop/Bridgelab/OOPs concept/clinicmanagement/patient.json')
 let patientData=JSON.parse(patientInfo)
 
 //reading appointment.json file and storing it.
-let appointmentInfo=fs.readFileSync('appointment.json')
+let appointmentInfo=fs.readFileSync('/home/administrator/Desktop/Bridgelab/OOPs concept/clinicmanagement/appointment.json')
 let appointmentData=JSON.parse(appointmentInfo)
 
 
@@ -20,7 +29,7 @@ let obClinicManagement=new util.ClinicManagement()
 
 function ClinicDashboard()
 {
-    let choice
+    let choice=0,doctordetail,doctorName,doctorSpecialization,available
     do
     {
         console.log("Clinic Management")
@@ -33,7 +42,11 @@ function ClinicDashboard()
             case 1:
                 console.log("--------------------")         //done
                 console.log("Add Doctor")
-               obClinicManagement.addDoctor(doctorData)
+               doctordetail=obClinicManagement.addDoctor(doctorData)
+               //split doctordetail array
+               doctorName= doctordetail[0]
+               doctorSpecialization= doctordetail[1]
+               available= doctordetail[2]
                 break;
             case 2:
                 console.log("--------------------------")   //done
@@ -81,8 +94,9 @@ function ClinicDashboard()
 
 
         }
-    }while(choice==1)
+    }while(choice>1)
 
+    return[doctordetail,doctorName,doctorSpecialization,available]
 }
 module.exports=ClinicDashboard()
 

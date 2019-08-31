@@ -1,4 +1,14 @@
-let utilityQue=require('/home/administrator/Desktop/Bridgelab/Homework/QueueULinkedlist')
+/******************************************************************************
+ *  
+ *  @Purpose: To distribute card among 4 people
+ *
+ *  @author  Gurudev Murkar
+ *  @version 1.0
+ *  @since   27-08-2019
+ *
+ ******************************************************************************/
+//requering class QueueULinkedlist and create its object
+ let utilityQue=require('/home/administrator/Desktop/Bridgelab/Homework/QueueULinkedlist')
 let obQue=new utilityQue.QueueLinkedList()
 
 class Card
@@ -77,7 +87,7 @@ class Deck
 }
 
 
-  
+  try{
   
     //Creating object of Deck class
    let obj=new Deck()
@@ -87,8 +97,15 @@ obj.createDeck(suit,value)
 console.log(obj.deck.length)
 obj.shuffle()
 //Printing distributed cards among four player. 
-console.log(obj.distributeCard())
+let distribute=obj.distributeCard()
+console.log(distribute)
 
+return[suit,value,distribute]
+  }
+  catch(e)
+  {
+      return e;
+  }
 //sorting each player cards.
 
 
