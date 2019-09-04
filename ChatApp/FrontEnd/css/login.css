@@ -1,0 +1,31 @@
+body{
+    background-color:cadetblue
+}
+.container{
+    height: 350;
+    width: 400;
+    background-color:white; 
+    position: absolute;
+    top:15%;
+    left: 35%;
+}
+.loginbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    opacity: 0.9;
+    align-content: center
+  }
+
+  .forgotpassword{
+    height:70%;
+    width:40%;
+    background-color:white; 
+    position: absolute;
+    left: 30%;
+    top: 15%
+}
