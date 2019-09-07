@@ -21,7 +21,17 @@ body{
     opacity: 0.9;
     align-content: center
   }
-
+  .submitbtn{
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    opacity: 0.9;
+    align-content: center
+  }
   .forgotpassword{
     height:70%;
     width:40%;
@@ -62,6 +72,15 @@ body{
     width: 30%;
     opacity: 0.9;
     align-content: center
-
-
+  }
+  .sendbtn{
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    opacity: 0.9;
+    align-content: center
   }
