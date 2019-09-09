@@ -1,41 +1,32 @@
-<html>
+<!-- <!DOCTYPE htm>
 <head>
-    <title>Login Page</title>
-    <link rel="stylesheet" type="text/css" href="../css/registration.css">
+        <link rel="stylesheet" type="text/css" href="../css/registration.css">
 </head>
-<body>
-        <form >
+     <body ng-controller="loginCtrl">   -->
+       <form >
             <div class="container" align="center">
                 <h1>Login</h1>
                 <div>
                     <label> <b>E-mail</b> &nbsp;&nbsp;&nbsp;</label>
-                    <input type="text" size="25"> 
+                    <input type="text" size="25" ng-model='email'> 
                 </div>
                  <br>  
                 <div> 
                     <label><b>Password</b></label>
-                    <input type="text" size="25">
+                    <input type="Password"  size="25" ng-model='password'>
                 </div>
             
                 <br><br>
                 <div>
-                    <button type="button" class="loginbtn">Login </button>
-                    <button type="button" class="cancelbtn"> Cancel</button><br>
-                    <a href="stylesheet" type="txt/css">Forgot Password</a>
+                    <button type="button" class="loginbtn" ng-click='login()'>Login </button>
+                    <button type="button" class="cancelbtn"> Cancel</button><br><br>
+
+                    <button type="submit" ui-sref='forgotPassword'>Forget Password</button>
+                    <button type="submit"  class="registerbtn" ui-sref='register'>Register</button>
                  </div>
             </div>
         </form>
+<!-- 
 </body>
 </html>
-
-
-
-
-
-<!--
-
-
-
-
-
--->
+ -->

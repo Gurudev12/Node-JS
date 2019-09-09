@@ -1,7 +1,23 @@
 
+/*************************************************************************
+ * Execution        : 1. default node       cmd> nodemon model.js
+ * 
+ * Purpose          : Model contains the schema for database as mongodb is without
+ *                    schema and the data received from the service is put in the 
+ *                    schema and that schema variable's model is saved in the 
+ *                    MONGO DATABASE .
+ * 
+ * @file            : model.js
+ * @author          : Gurudev Murkar
+ * @version         : 1.0
+ * @since           : 5-09-2019
+ * 
+ **************************************************************************/
 const mongoose = require('mongoose');
 const bcrypt=require('bcrypt')
 const nodemail=require('../middleware/sendMail')
+const tokenGenerator=require('../middleware/tokengenerator')
+
 
 let RegisterSchema = mongoose.Schema({
     firstname:String,
@@ -99,15 +115,27 @@ exports.loginModel=(loginDetail,callback)=>{
 
 
 /*************************************************************** */
+
 exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
 
     model.find({'email':forgotPasswordEmail},(err,data)=>{
         if(err){
             callback(err)
         }
-        else if(data.length>0){
+        //email find in the database
+        else if(data.length>0){ 
+            console.log("Your email is matched")
 
-            nodemail.sendMail(forgotPasswordEmail,(err,rsp)=>{
+                //taking email and send it to createNewToken()
+                let payload = {
+                    '_id': data[0]._id
+                }
+        
+            //create new token
+         let newToken=tokenGenerator.createNewToken(payload)
+         console.log(newToken)
+            //after generating token send it to perticular email-id
+            nodemail.sendMail(forgotPasswordEmail,newToken,(err,rsp)=>{
                 if(err)
                 {
                     callback(err)
@@ -117,14 +145,35 @@ exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
                     callback(rsp)
                 }
             })
-
         }
         else{
             callback("Sorry..these email is invalid")
         }
-
     })
     
+}
+/*Reset password****************************************************************** */
+exports.resetPasswordModel=(id,newPassword,callback)=> 
+{
+ 
+    let hashedPassword=passwordEncrypt(newPassword)
+
+
+            model.findOneAndUpdate({ '_id': id }, { $set: { 'password':hashedPassword} }, (err, data) => {
+            
+                if (err) {
+                    console.log("update document error");
+                    return callback(err + " update document error")
+                } else {
+                    if (data) {
+                        console.log("update document success");
+                        return callback(null, data)
+                    } else {
+                        console.log("user credential not found");
+                        return callback("user credential not found")
+                    }
+                }
+            })
 }
 
 
@@ -140,28 +189,3 @@ exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
 
 
 
-// var nodemailer=require('nodemailer')
-
-// var transport=nodemailer.createTransport({
-//     service:'gmail',
-//     auth:{
-//         user:'',
-//         pass:'',
-//     }
-// });
-
-// var mailOption={
-//     from:'dd@gmail.com',
-//     to:'@gmail.com',
-//     subject:'sending mail using node js',
-//     text:'hello'
-// }
-// transporter.sendMail(mailOption,function(err,info){
-//     if(err)
-//     {
-//         console.log(err)
-//     }
-//     else{
-//         console.log("Email sent:"+info.responce);
-//     }
-// })

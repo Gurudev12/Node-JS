@@ -1,3 +1,17 @@
+/*************************************************************************
+ * Execution        : 1. default node       cmd> nodemon model.js
+ * 
+ * Purpose          : 
+ *                    
+ *                     
+ *                    
+ * 
+ * @file            : server.js
+ * @author          : Gurudev Murkar
+ * @version         : 1.0
+ * @since           : 6-9-2019
+ * 
+ **************************************************************************/
 const express = require('express')
 //validator require for validation purpose.
 var validator = require('express-validator');
@@ -15,6 +29,8 @@ const app = express()
 //port no
 const port=3000;
 app.use(cors())
+app.use(express.static("../FrontEnd"));
+
 app.use(bodyparser.json())
 app.use(validator())
 
@@ -23,7 +39,7 @@ app.use('/ChatApp',routes)
 
 //these method getting something and display
 app.get('/ChatApp', function (req, res) {
-    res.send('Hello World')
+    res.send('hello pratham')
   })
 
 

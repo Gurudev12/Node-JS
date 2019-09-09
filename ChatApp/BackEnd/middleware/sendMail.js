@@ -1,6 +1,6 @@
 var nodemailer=require('nodemailer')
 module.exports={
-sendMail(userEmail,callback)
+sendMail(userEmail,newToken,callback)
 {
 var transporter=nodemailer.createTransport({
     service:'gmail',
@@ -15,7 +15,7 @@ var mailOption={
     to:userEmail,
     subject:'sending mail using node js',
     text:'Reset password',
-    html:'<p>this is link to reset</p><a href="http://localhost:3000/#/ChatApp/Registration/">Visit chatApp</a>'
+    html:'<p>this is link to reset</p><a href="http://localhost:3000/ChatApp/Registration/'+newToken+'">Reset PassWord</a>'
    
 }
 transporter.sendMail(mailOption,function(err,info){
@@ -24,7 +24,7 @@ transporter.sendMail(mailOption,function(err,info){
         callback(err)
     }
     else{
-        callback(null,"Email sent:"+info.responce);
+        callback(null,"Email sent");
     }
 })
 }

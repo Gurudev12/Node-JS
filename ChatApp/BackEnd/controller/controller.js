@@ -1,4 +1,20 @@
+ 
+/*************************************************************************
+ * Execution        : 1. default node       cmd> nodemon model.js
+ * 
+ * Purpose          : 
+ *                    
+ *                     
+ *                    
+ * 
+ * @file            : contoller.js
+ * @author          : Gurudev Murkar
+ * @version         : 1.0
+ * @since           : 06-09-2019
+ * 
+ **************************************************************************/
 var validator = require('express-validator');
+const service=require('../services/services')
 
 exports.registrationController=(req,res)=>
 {
@@ -25,7 +41,7 @@ exports.registrationController=(req,res)=>
     {
         response.success=false
         response.error=error;
-        return res.status(422).send(response)
+        return res.status(400).send(response)
     }
     else{
 
@@ -44,7 +60,7 @@ exports.registrationController=(req,res)=>
                 return res.status(400).send(err)
             }
             else{
-                return res.status(400).send("Registartion SuccessFull")
+                return res.status(200).send("Registartion SuccessFull")
             }
         })
     }
@@ -53,7 +69,7 @@ exports.registrationController=(req,res)=>
 /**********************************************************************************************/
 exports.loginController=(req,res)=>
 {
-  
+  console.log('i am in contoller')
     req.check("email","email should not be null").isEmail();
     req.check("email","email should not be empty").notEmpty();
 
@@ -91,7 +107,7 @@ exports.loginController=(req,res)=>
 exports.forgotPasswordController=(req,res)=>
 {
   
-    req.check("email","email should not be null").isEmail();
+    req.check("email","email should be in email form").isEmail();
     req.check("email","email should not be empty").notEmpty();
 
     let error=req.validationErrors();
@@ -121,3 +137,91 @@ exports.forgotPasswordController=(req,res)=>
         })
     }
 }
+
+
+
+
+
+exports.resetPassword=(req,res)=>{
+        console.log("req data",req.body.password);
+        
+        req.check('password', 'password should be have length 6 ').isLength({ min: 6 })
+        req.check('password', 'password should be have max length 12').isLength({ max: 12})
+    
+
+    let error = req.validationErrors();
+    let response = {};
+
+    if (error) {
+        
+        response.suceess = false;
+        response.error = error
+        
+        return res.status(400).send(response)
+
+    } else {
+
+        service.resetPasswordService(req.id,req.body.password,(err, data) => {
+            if (err) {
+               
+                response.success = false;
+                response.error = err;
+                
+                return res.status(422).send(response)
+            } else {
+                
+                response.success = true;
+                response.content = data;
+                
+                return res.status(200).send(response)
+            }
+    
+        })
+        
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
