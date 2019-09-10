@@ -10,26 +10,26 @@
 		<h1>Registration Form</h1>
         <div>
         <label><b>First Name*</b> &nbsp;&nbsp;&nbsp;</label><br>
-        <input type="text" size="25" ng-model='firstName'> 
+        <input type="text" size="25" ng-model='firstname' required> 
         </div>
         <br>  
         <div> 
         <label><b>Last Name*</b></label><br>
-        <input type="text" size="25" ng-model='lastname'>
+        <input type="text" size="25" ng-model='lastname' required>
 		</div>
 		<br>  
         <div> 
         <label><b>E-mail*</b></label><br>
-        <input type="text" size="25" ng-model='email'>
+        <input type="text" size="25" ng-model='email' required>
 		</div> 
         <div> 
         <label><b>Password*</b></label><br>
-        <input type="text" size="25" ng-model='password'>
+        <input type="password" size="25" ng-model='password' required>
 		</div>
         <div>
-		<button type="button" class="registerbtn" > Register</button>
+		<button type="button" class="registerbtn" ng-click='registration()'>Register</button>
 		<button type="button" class="cancelbtn"> Cancel</button>
-        <p>Already have an account?<a ui-sref='login' >Sign in</a></p>
+        <p>Already have an account?<a ui-sref='login'>Sign in</a></p>
 
     
         </div>

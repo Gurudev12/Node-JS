@@ -8,20 +8,20 @@
                 <h1>Login</h1>
                 <div>
                     <label> <b>E-mail</b> &nbsp;&nbsp;&nbsp;</label>
-                    <input type="text" size="25" ng-model='email'> 
+                    <input type="text"  ng-model='email' required> 
                 </div>
                  <br>  
                 <div> 
                     <label><b>Password</b></label>
-                    <input type="Password"  size="25" ng-model='password'>
+                    <input type="Password"  ng-model='password' required>
                 </div>
             
                 <br><br>
                 <div>
                     <button type="button" class="loginbtn" ng-click='login()'>Login </button>
-                    <button type="button" class="cancelbtn"> Cancel</button><br><br>
-
-                    <button type="submit" ui-sref='forgotPassword'>Forget Password</button>
+                    <button type="button" class="cancelbtn"> Cancel</button><br>
+                    
+                    <a href='#/ForgetPassword'><u>Forget Password</u></a>
                     <button type="submit"  class="registerbtn" ui-sref='register'>Register</button>
                  </div>
             </div>

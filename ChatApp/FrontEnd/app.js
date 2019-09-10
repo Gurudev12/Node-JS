@@ -13,13 +13,13 @@
 
           .state('register',{
            
-               url:'/register',
+               url:'/Registration',
                templateUrl:'templates/register.html',
                controller:'registrationCtrl'
           })
 
           .state('forgetPassword',{
-               url:'/forgetPassword',
+               url:'/ForgetPassword',
                templateUrl:'templates/forgetpassword.html',
                controller:'forgetPasswordCtrl'
           })
@@ -28,6 +28,11 @@
                url:'/resetPassword',
                templateUrl:'templates/resetpassword.html',
                controller:'resetCtrl'
+          })
+
+          .state('welcome',{
+               url:'/welcome',
+               templateUrl:'templates/welcome.html'
           })
           $urlRouterProvider.otherwise('/login');
      }]);

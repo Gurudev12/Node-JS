@@ -34,16 +34,14 @@ app.use(express.static("../FrontEnd"));
 app.use(bodyparser.json())
 app.use(validator())
 
-app.use('/ChatApp',routes)
+app.use('/',routes)
 
 
 //these method getting something and display
 app.get('/ChatApp', function (req, res) {
     res.send('hello pratham')
   })
-
-
-
+  
 //Connecting to the database
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true

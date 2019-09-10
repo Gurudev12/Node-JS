@@ -1,13 +1,14 @@
 chatApp.controller('registrationCtrl',function($scope,registrationService){
 
-
+    console.log("in to registration controller .....");
+    
     $scope.registration=function(){
         let registrationData={
-            'firstName':$scope.firstName,
-            'lastName':$scope.lastName,
+            'firstname':$scope.firstname,
+            'lastname':$scope.lastname,
             'email':$scope.email,
             'password':$scope.password
         }
-        registrationService.registerServicesUser(registrationData);
+        registrationService.registerServicesUser(registrationData,$scope);
     }  
 })

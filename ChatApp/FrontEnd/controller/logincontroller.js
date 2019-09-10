@@ -6,5 +6,4 @@ chatApp.controller('loginCtrl',function($scope,loginService){
         }
         loginService.loginServicesUser(loginData,$scope);
     }    
-   
 })

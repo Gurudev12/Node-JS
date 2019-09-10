@@ -2,7 +2,8 @@
 /*************************************************************************
  * Execution        : 1. default node       cmd> nodemon model.js
  * 
- * Purpose          : 
+ * Purpose          : contoller check the client request and if there is error
+ *                    then print error otherwise goto services.
  *                    
  *                     
  *                    
@@ -18,32 +19,33 @@ const service=require('../services/services')
 
 exports.registrationController=(req,res)=>
 {
-  
-    
     req.check("firstname","first name should not be null").notEmpty()
-    req.check("firstname","first name should not be null").isAlpha()
+    req.check("firstname","first name should be valid format").isAlpha()
 
 
     req.check("lastname","last name should not be null").notEmpty();
-    req.check("lastname","last name should be character").isAlpha();
+    req.check("lastname","last name should be valid format").isAlpha();
 
-    req.check("email","email should not be null").isEmail();
     req.check("email","email should not be empty").notEmpty();
+    req.check("email","email should be in valid format").isEmail();
+
 
     req.check("password","pasword is invalid").isLength({min:6}).notEmpty();
    
 
     let error=req.validationErrors();
-
+    console.log("----->",error);
+    
     let response={}
 
     if(error)
     {
         response.success=false
         response.error=error;
-        return res.status(400).send(response)
+        return res.status(200).send(response)
     }
     else{
+        console.log("i m in controller...")
 
         const service=require('../services/services')
         let userDetail={
@@ -60,7 +62,9 @@ exports.registrationController=(req,res)=>
                 return res.status(400).send(err)
             }
             else{
-                return res.status(200).send("Registartion SuccessFull")
+                response.success=true
+                response.data=data
+                return res.status(200).send(response)
             }
         })
     }
@@ -69,11 +73,12 @@ exports.registrationController=(req,res)=>
 /**********************************************************************************************/
 exports.loginController=(req,res)=>
 {
-  console.log('i am in contoller')
-    req.check("email","email should not be null").isEmail();
-    req.check("email","email should not be empty").notEmpty();
-
-    req.check("password","pasword is invalid").isLength({min:6}).notEmpty();
+    console.log(req.body.email)
+ 
+  req.checkBody("email","email should not be empty").notEmpty();
+    req.checkBody("email","email should not be null").isEmail();
+  
+    req.checkBody("password","password is invalid").isLength({min:6}).notEmpty();
    
 
     let error=req.validationErrors();
@@ -83,7 +88,7 @@ exports.loginController=(req,res)=>
     {
         response.success=false
         response.error=error;
-        return res.status(400).send(response)
+        return res.status(200).send(response)
     }
     else{
         const service=require('../services/services')
@@ -98,7 +103,10 @@ exports.loginController=(req,res)=>
                 return res.status(400).send(err)
             }
             else{
-                return res.status(400).send(data)
+                console.log(data)
+                response.success=true
+                response.data=data
+                return res.status(200).send(response)
             }
         })
     }
@@ -106,25 +114,22 @@ exports.loginController=(req,res)=>
 /*Forgot password controller************************************************************************************ */
 exports.forgotPasswordController=(req,res)=>
 {
-  
-    req.check("email","email should be in email form").isEmail();
     req.check("email","email should not be empty").notEmpty();
+    req.check("email","email should be in email form").isEmail();
+   
 
     let error=req.validationErrors();
     let response={}
-
     if(error)
     {
         response.success=false
         response.error=error;
-        return res.status(400).send(response)
+        return res.status(200).send(response)
     }
     else{
 
-        console.log("forgot_password controller")
+        
         const service=require('../services/services')
-
-
         //this method sending forgot password Details to service & also callback
         service.forgotPasswordService(req.body.email,(err,data)=>{
             if(err)
@@ -132,7 +137,10 @@ exports.forgotPasswordController=(req,res)=>
                 return res.status(400).send(err)
             }
             else{
-                return res.status(400).send(data)
+                console.log("forgot_password controller")
+                response.success=true
+                response.data=data
+                return res.status(200).send(response)
             }
         })
     }

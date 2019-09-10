@@ -10,9 +10,9 @@
  * @file            : model.js
  * @author          : Gurudev Murkar
  * @version         : 1.0
- * @since           : 5-09-2019
+ * @since           : 6-9-2019
  * 
- **************************************************************************/
+ ******************************************************************************/
 const mongoose = require('mongoose');
 const bcrypt=require('bcrypt')
 const nodemail=require('../middleware/sendMail')
@@ -41,17 +41,16 @@ let RegisterSchema = mongoose.Schema({
 let model= mongoose.model('registrationDetail',RegisterSchema);
 
 exports.registrationModel=(userDetail,callback)=>{
-
+    console.log("i m in model before find")
     model.find({'email':userDetail.email},model.email,(err,data)=>{
-   
+
         if(err)
         {
            console.log("Error occured while registration")
         }
         else if(data.length>0)
         {
-            console.log("Already exist")
-           return callback("Sorry..Already register")
+           return callback(null,"Sorry..Already register")
         }
         //if registration is not done before then register to database
         else{
@@ -63,16 +62,18 @@ exports.registrationModel=(userDetail,callback)=>{
             })
             
             //register new entry
-            newUser.save((err,data)=>{
+            newUser.save((err,res)=>{
             if(err)
             {  
                 callback(err)
             }
             else
             {
-            console.log("Register Sucessfully")
-            callback(null,data)
+                console.log("\n\n\n\t\tREGISTRATION SUCCESFULL !!! ...  ");
+                
+            callback(null,"Registration successfully")
             }
+            
         })
     }
 })
@@ -97,18 +98,19 @@ exports.loginModel=(loginDetail,callback)=>{
                 }
                 else if(res===true)
                 {
-                   callback("password matches")
+                   callback(null,"password matches")
                 }
                 else if(res===false)
                 {
-                callback("password not matched")
+                callback(null,"password not matched")
 
                 }
+
             })
             }
         } 
         else{
-            callback("email not matched")
+            callback(null,"email not matched")
         }
       })
 }
@@ -117,7 +119,7 @@ exports.loginModel=(loginDetail,callback)=>{
 /*************************************************************** */
 
 exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
-
+    
     model.find({'email':forgotPasswordEmail},(err,data)=>{
         if(err){
             callback(err)
@@ -135,19 +137,23 @@ exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
          let newToken=tokenGenerator.createNewToken(payload)
          console.log(newToken)
             //after generating token send it to perticular email-id
-            nodemail.sendMail(forgotPasswordEmail,newToken,(err,rsp)=>{
+            nodemail.sendMail(forgotPasswordEmail,newToken,(err,res)=>{
                 if(err)
                 {
                     callback(err)
                 }
-                else
+                else if(res==true)
                 {
-                    callback(rsp)
+                    callback(null,"mail send sucessfully")
+                }
+                else if(res===false)
+                {
+                    callback(null,"Mail not send")
                 }
             })
         }
         else{
-            callback("Sorry..these email is invalid")
+            callback(null,"email is invalid")
         }
     })
     

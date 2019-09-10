@@ -2,7 +2,7 @@
 /*************************************************************************
  * Execution        : 1. default node       cmd> nodemon model.js
  * 
- * Purpose          : 
+ * Purpose          : It provides the differenet service. 
  *                    
  *                     
  *                    
@@ -17,6 +17,7 @@ const model=require('../model/model')
 exports.registrationService=(userDetail,callback)=>
 {
     model.registrationModel(userDetail,(err,data)=>{
+        console.log("\n\n\t\tin to register service ....");
         
         if(err)
         {
