@@ -41,7 +41,6 @@ let RegisterSchema = mongoose.Schema({
 let model= mongoose.model('registrationDetail',RegisterSchema);
 
 exports.registrationModel=(userDetail,callback)=>{
-    console.log("i m in model before find")
     model.find({'email':userDetail.email},model.email,(err,data)=>{
 
         if(err)
@@ -69,7 +68,7 @@ exports.registrationModel=(userDetail,callback)=>{
             }
             else
             {
-                console.log("\n\n\n\t\tREGISTRATION SUCCESFULL !!! ...  ");
+                console.log("REGISTRATION SUCCESFULL !!! ...  ");
                 
             callback(null,"Registration successfully")
             }
@@ -83,14 +82,17 @@ exports.registrationModel=(userDetail,callback)=>{
 exports.loginModel=(loginDetail,callback)=>{
     console.log("model login")
 
-    model.find({'email':loginDetail.email},(err,data)=>{ //data contain hole user information
+    model.find({'email':loginDetail.email},(err,data)=>{ //data contain whole user information
         console.log(data)
+        console.log("*****above data***")
         if(err) {
             console.log("error generated while login")
         } 
         else if(data.length>0)
         {
-            for(let i=0;i<data.length;i++){
+            payload={
+                'id':data[0]._id
+            }
             bcrypt.compare(loginDetail.password,data[0].password,(err,res)=>{ //res contain true or false
                 if(err)
                 {
@@ -98,24 +100,35 @@ exports.loginModel=(loginDetail,callback)=>{
                 }
                 else if(res===true)
                 {
-                   callback(null,"password matches")
+                    let newToken=tokenGenerator.createNewToken(payload)
+
+                    loginResponse={
+                       'success':true,
+                       'message':"Successful login",
+                       'data':{
+                           email:data[0].email,
+                           userId:data[0]._id,
+                           name:data[0].firstname,
+                           token:newToken
+                                }
+                          }
+
+                   callback(null,loginResponse)
                 }
                 else if(res===false)
                 {
-                callback(null,"password not matched")
+                callback(null,"login failed")
 
                 }
 
             })
-            }
+            
         } 
         else{
             callback(null,"email not matched")
         }
       })
 }
-
-
 /*************************************************************** */
 
 exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
@@ -159,29 +172,49 @@ exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
     
 }
 /*Reset password****************************************************************** */
-exports.resetPasswordModel=(id,newPassword,callback)=> 
+exports.resetPasswordModel=(resetData,callback)=> 
 {
  
-    let hashedPassword=passwordEncrypt(newPassword)
+    let hashedPassword=passwordEncrypt(resetData.password)
+    console.log("Model"+hashedPassword)
 
 
-            model.findOneAndUpdate({ '_id': id }, { $set: { 'password':hashedPassword} }, (err, data) => {
-            
-                if (err) {
-                    console.log("update document error");
-                    return callback(err + " update document error")
-                } else {
-                    if (data) {
-                        console.log("update document success");
-                        return callback(null, data)
-                    } else {
-                        console.log("user credential not found");
-                        return callback("user credential not found")
-                    }
+    model.findOneAndUpdate({ '_id': resetData.id},{ $set: { 'password':hashedPassword} }, (err, data) => {
+
+            if (err) {
+                    return callback(err)
+            }
+            else if(data){
+                console.log("model dtaa"+data)
+                return callback(null,data)
+            } 
+            else{
+                return callback(null,"user credential not matched")
                 }
+                    
+                
             })
-}
+        }
 
+
+/********************************newchanges***************************************** */
+exports.userDataModel=(callback)=>{
+
+    model.find({},(err,userData)=>{
+    if(err)
+    {
+        return callback(err)
+    }
+    else if(userData.length>0)
+    {
+        return callback(null,userData)
+    }
+    else
+    {
+        return callback(null,"data is not present")
+    }
+      })  
+    };
 
 
 

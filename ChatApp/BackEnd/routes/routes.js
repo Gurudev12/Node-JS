@@ -16,24 +16,24 @@ const express=require('express')
 const router=express.Router()
 const tokenVerify=require('../middleware/tokengenerator')
 
-const crtl=require('../controller/controller')
+const ctrl=require('../controller/controller')
 
-router.post('/Registration',crtl.registrationController)
+router.post('/Registration',ctrl.registrationController)
 
-router.post('/Login',crtl.loginController)
+router.post('/Login',ctrl.loginController)
 
-router.post('/ForgotPassword',crtl.forgotPasswordController)
+router.post('/ForgotPassword',ctrl.forgotPasswordController)
 
-router.post('/ResetPassword',tokenVerify.verifyToken,crtl.resetPassword)
+router.post('/ResetPassword',tokenVerify.verifyToken,ctrl.resetPassword)
+
+/****************newchanges********************************************/ 
+router.get('/userData',ctrl.userDataController)
+
+router.post('/chatAppDetail',ctrl.chatAppDetailController)
+
+
 
 module.exports=router
-
-
-
-
-
-
-
 
 
 

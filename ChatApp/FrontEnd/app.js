@@ -25,7 +25,7 @@
           })
 
           .state('resetPassword',{
-               url:'/resetPassword',
+               url:'/resetPassword:token',
                templateUrl:'templates/resetpassword.html',
                controller:'resetCtrl'
           })

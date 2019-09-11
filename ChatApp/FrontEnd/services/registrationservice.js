@@ -8,7 +8,7 @@ chatApp.service("registrationService", function($http, $location) {
         $http(
             {
                 method: 'POST',
-                url: 'http://localhost:3000/Registration',
+                url: 'http://localhost:4000/Registration',
                 data: data
             }).then(
                 function (response)  {

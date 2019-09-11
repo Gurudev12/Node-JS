@@ -4,14 +4,13 @@ let jwt=require('jsonwebtoken');
 exports.createNewToken=(payload)=>
 {
 let token=jwt.sign(payload,'privatekey',{expiresIn:'1hr'});
-console.log(token)
 return  token;
 }
 
 // verify token 
 exports.verifyToken=(req,res,next)=>{
 
-    let token=req.headers['token'];
+    let token=req.body.token
     if(token){
         jwt.verify(token,'privatekey',(err,data)=>{
             //data contain({ _id: '5d75e97800a7b9335ace7796', iat: 1568008896, exp: 1568012496 })
@@ -20,9 +19,9 @@ exports.verifyToken=(req,res,next)=>{
             {
                 res.status(400).send(err +" Token has expired")
             }else{
-            req.id=data._id
+            console.log("Token got&***************************")
+            req.body.id=data._id
              next();
-                
             }
     
         })

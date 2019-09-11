@@ -7,7 +7,7 @@ chatApp.service("forgetPasswordService",function ($http,$location) {
         $http(
             {
                 method: 'POST',
-                url: 'http://localhost:3000/ForgotPassword',
+                url: 'http://localhost:4000/ForgotPassword',
                 data: data
             }).then(
                 function (response)  {

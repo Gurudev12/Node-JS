@@ -15,9 +15,9 @@ var mailOption={
     to:userEmail,
     subject:'sending mail using node js',
     text:'Reset password',
-    html:'<p>this is link to reset</p><a href="http://localhost:3000/ChatApp/Registration/'+newToken+'">Reset PassWord</a>'
-   
-}
+    // following href is url of the state(url:)
+    html:'<p>this is link to reset</p><a href="http://localhost:4000/#/resetPassword'+newToken+'">Reset PassWord</a>'
+    }
 transporter.sendMail(mailOption,function(err,info){
     if(err)
     {

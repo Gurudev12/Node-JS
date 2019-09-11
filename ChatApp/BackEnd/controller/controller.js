@@ -104,9 +104,7 @@ exports.loginController=(req,res)=>
             }
             else{
                 console.log(data)
-                response.success=true
-                response.data=data
-                return res.status(200).send(response)
+                return res.status(200).send(data)
             }
         })
     }
@@ -146,17 +144,12 @@ exports.forgotPasswordController=(req,res)=>
     }
 }
 
-
-
-
-
 exports.resetPassword=(req,res)=>{
         console.log("req data",req.body.password);
         
         req.check('password', 'password should be have length 6 ').isLength({ min: 6 })
         req.check('password', 'password should be have max length 12').isLength({ max: 12})
     
-
     let error = req.validationErrors();
     let response = {};
 
@@ -164,34 +157,76 @@ exports.resetPassword=(req,res)=>{
         
         response.suceess = false;
         response.error = error
-        
-        return res.status(400).send(response)
-
-    } else {
-
-        service.resetPasswordService(req.id,req.body.password,(err, data) => {
-            if (err) {
-               
-                response.success = false;
-                response.error = err;
-                
-                return res.status(422).send(response)
+        return res.status(400).send(error)
+    } 
+    else {
+        let resetData={
+            password:req.body.password,
+            id:req.body.id
+        }
+        service.resetPasswordService(resetData,(err, data) => {
+            if (err) { 
+                return res.status(400).send(err)
             } else {
-                
-                response.success = true;
-                response.content = data;
-                
-                return res.status(200).send(response)
+                return res.status(200).send(data)
             }
     
         })
         
 }
 }
+/****************newchanges********************************************/ 
+exports.userDataController=(req,res)=>{
 
+ 
+    let error = req.validationErrors()
+    if(error)
+    {
+        return res.status(400).send(error)
+    }
+    else
+    {
+        
+        service.userDataService((err,data)=>{
+            if(err)
+            {
+                return res.status(400).send(err)
+            }
+            else{
+                return res.status(200).send(data)
+            }
+        })
+    }
+}
 
+exports.chatAppDetailController=(req,res)=>{
+    console.log("i m in controller")
 
-
+    let error=req.validationErrors()
+    
+    if(error)
+    {
+        return res.status(400).send(error)
+    }
+    else{
+        let chatAppDetail={
+            senderId:req.body.senderId,
+            senderName:req.body.senderName,
+            receiverId:req.body.receiverId,
+            receiverName:req.body.receiverName,
+            message:req.body.message
+        }
+        service.chatAppDetailService(chatAppDetail,(err,data)=>{
+            if(err)
+            {
+                return res.status(400).send(err)
+            }
+            else{
+                return res.status(200).send(data)
+            }
+        })
+}
+}
 
 
 

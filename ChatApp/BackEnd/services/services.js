@@ -17,7 +17,6 @@ const model=require('../model/model')
 exports.registrationService=(userDetail,callback)=>
 {
     model.registrationModel(userDetail,(err,data)=>{
-        console.log("\n\n\t\tin to register service ....");
         
         if(err)
         {
@@ -71,4 +70,32 @@ exports.resetPasswordService =(id,newPassword,callback)=>
 
         })
     
+}
+/****************newchanges********************************************/ 
+exports.userDataService=(callback)=>
+{
+    model.userDataModel((err,data)=>{
+        if(err){
+            return callback(err)
+        }
+        else{
+            return callback(null,data)
+        }
+
+    })
+}
+let chatModel=require('../model/chatmodel')
+exports.chatAppDetailService=(chatAppDetail,callback)=>{
+    console.log("i m in service")
+
+    chatModel.chatAppDetailModel(chatAppDetail,(err,data)=>{
+        if(err)
+        {
+            return callback(err)
+        }
+        else{
+            return callback(null,data)
+        }
+
+    })
 }

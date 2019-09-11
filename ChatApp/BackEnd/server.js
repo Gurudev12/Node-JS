@@ -27,7 +27,13 @@ const dbConfig = require('../BackEnd/config/database');
 const app = express()
  
 //port no
-const port=3000;
+// const port=3000;
+require('dotenv').config()
+let PORT=process.env.PORT
+console.log(PORT)
+
+
+
 app.use(cors())
 app.use(express.static("../FrontEnd"));
 
@@ -36,11 +42,6 @@ app.use(validator())
 
 app.use('/',routes)
 
-
-//these method getting something and display
-app.get('/ChatApp', function (req, res) {
-    res.send('hello pratham')
-  })
   
 //Connecting to the database
 mongoose.connect(dbConfig.url, {
@@ -54,6 +55,6 @@ mongoose.connect(dbConfig.url, {
 
 
 //it show  that msg that server is started
-app.listen(port,()=>{
-    console.log("Server started at port:"+port)
+app.listen(PORT,()=>{
+    console.log("Server started at port:"+PORT)
 })

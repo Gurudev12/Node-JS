@@ -1,14 +1,12 @@
-chatApp.controller('resetCtrl',($scope,resetService)=>{
+chatApp.controller('resetCtrl',function($scope,$stateParams,resetService){
 
-    console.log("reset is called");
+    console.log("")
     
-    $scope.reset=function(){
+    $scope.resetPassword=function(){
         let resetPasswordData={
-            'password':$scope.password
+            'password':$scope.password,
+            'token':$stateParams.token
         }
+        resetService.resetServicesUser(resetPasswordData,$scope);
     }
-    
-    console.log("reset data",registrationData);
-    
-    resetService.resetServicesUser(registrationData);
 })

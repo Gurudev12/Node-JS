@@ -4,31 +4,17 @@ chatApp.service("loginService", function ($http, $location) {
         $http(
             {
                 method:'POST',
-                url:'http://localhost:3000/Login',
+                url:'http://localhost:4000/Login',
                 data: data
             }).then(
-                     function (response){
-                        if(response.data.data==="password matches")
-                        {
-                            alert("login succesfull");
-                            $location.path('/welcome')
-                        }
-                        else if(response.data.data==="password not matched")
-                        {
-                            alert('Login fialed');
-                            
-                        }
-                        else if(response.data.data==="email not matched")
-                        {
-                            alert("invalid");
-                        }
-                        else if(response.data.error)
-                        {
-                            alert(response.data.error[0].msg);
-                        }
+                     function (response)
+                     {                    
+                        console.log(response.data)
+                        localStorage.setItem('token',response.data.data.token)
+                        $location.path('/welcome')
+                    })
 
-
-                }).catch( function (error)  {
+              .catch( function (error)  {
 
                     $scope.login = function () {
                         alert("login failed...")
