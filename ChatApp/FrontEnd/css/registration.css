@@ -1,7 +1,10 @@
-body{
-    background-color:cadetblue
-}
 
+body { 
+  margin: 0 auto; 
+  background-position:center; 
+  background-size: contain; 
+  background-color:cadetblue
+} 
 .container{
     height: 300;
     width: 400;
@@ -84,3 +87,50 @@ body{
     opacity: 0.9;
     align-content: center
   }
+
+  /*  **************************************************************************/
+  .head1 { 
+    font-size:40px; 
+    color:midnightblue;
+    font-weight:bold; 
+    align-self:left;
+} 
+.menu {    
+    top: 0; 
+    background-color:mediumpurple;  
+    color:white; 
+    margin: 0 auto; 
+    /* overflow: hidden;  */
+} 
+.loginBtnRight { 
+    right: auto; 
+    float: right; 
+} 
+.userDiv{
+content: "";
+display: table;
+clear: both;       
+}
+
+.userList {
+    overflow:scroll;
+    float: left;
+    width: 20%;
+    height: 590px;
+    background:palevioletred;
+    }
+
+.contentView{
+
+    overflow:scroll;
+    float: right;
+    width: 80%;
+    background-color:lightgreen;
+    height:590px;
+    
+   
+}
+    /* nav, article {
+    width: 100%;
+    height: auto;
+} */

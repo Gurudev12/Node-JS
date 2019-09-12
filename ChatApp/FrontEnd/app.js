@@ -30,9 +30,12 @@
                controller:'resetCtrl'
           })
 
-          .state('welcome',{
-               url:'/welcome',
-               templateUrl:'templates/welcome.html'
+          .state('chat',{
+               url:'/chat',
+               templateUrl:'templates/chat.html',
+               controller:'getUserDetailCtrl'     
           })
+
+
           $urlRouterProvider.otherwise('/login');
      }]);

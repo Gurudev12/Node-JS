@@ -17,6 +17,7 @@ const router=express.Router()
 const tokenVerify=require('../middleware/tokengenerator')
 
 const ctrl=require('../controller/controller')
+const chatCtrl=require('../controller/chatcontroller')
 
 router.post('/Registration',ctrl.registrationController)
 
@@ -27,9 +28,15 @@ router.post('/ForgotPassword',ctrl.forgotPasswordController)
 router.post('/ResetPassword',tokenVerify.verifyToken,ctrl.resetPassword)
 
 /****************newchanges********************************************/ 
+/*getting data back from databce*/
+
 router.get('/userData',ctrl.userDataController)
 
-router.post('/chatAppDetail',ctrl.chatAppDetailController)
+//storing chat detail in db
+router.post('/chatAppDetail',chatCtrl.chatAppDetailController)
+
+//get back chat detail from db
+router.get('/userChatAppdata',chatCtrl.getChatAppDataController)
 
 
 
