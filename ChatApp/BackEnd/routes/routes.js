@@ -32,11 +32,12 @@ router.post('/ResetPassword',tokenVerify.verifyToken,ctrl.resetPassword)
 
 router.get('/userData',ctrl.userDataController)
 
+
 //storing chat detail in db
 router.post('/chatAppDetail',chatCtrl.chatAppDetailController)
 
-//get back chat detail from db
-router.get('/userChatAppdata',chatCtrl.getChatAppDataController)
+//get back message chat detail from db
+router.get('/messageChatAppData',chatCtrl.getChatAppDataController)
 
 
 

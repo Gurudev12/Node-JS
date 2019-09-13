@@ -116,7 +116,7 @@ clear: both;
     overflow:scroll;
     float: left;
     width: 20%;
-    height: 590px;
+    height: 500px;
     background:palevioletred;
     }
 
@@ -126,7 +126,7 @@ clear: both;
     float: right;
     width: 80%;
     background-color:lightgreen;
-    height:590px;
+    height:400px;
     
    
 }

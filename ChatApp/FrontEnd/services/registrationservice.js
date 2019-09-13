@@ -1,10 +1,6 @@
 chatApp.service("registrationService", function($http, $location) {
 
-  
-
-
     this.registerServicesUser =  function (data, $scope){
-        console.log("in to registration service .....");
         $http(
             {
                 method: 'POST',

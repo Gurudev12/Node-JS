@@ -40,7 +40,6 @@ exports.getChatAppDataController=(req,res)=>{
     }
     else
     {
-        
        chatService.getChatAppDataService((err,data)=>{
             if(err)
             {

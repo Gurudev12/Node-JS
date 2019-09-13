@@ -11,6 +11,8 @@ chatApp.service("loginService", function ($http, $location) {
                      {                    
                         console.log(response.data)
                         localStorage.setItem('token',response.data.data.token)
+                        localStorage.setItem('firstname',response.data.firstname)
+                        localStorage.setItem('id',response.data._id)
                         $location.path('/chat')
                     })
 

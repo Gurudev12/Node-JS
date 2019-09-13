@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let chatSchema = mongoose.Schema({
     senderId:{
-        type:Number,
+        type:String,
         required:[true,"sender id is empty"]
     },
     
@@ -12,7 +12,7 @@ let chatSchema = mongoose.Schema({
     },
 
     receiverId:{
-        type:Number,
+        type:String,
         required:[true,"receiver id is empty"]
     },
 
@@ -64,6 +64,7 @@ exports.getChatAppDataModel=(callback)=>{
     }
     else if(chatData.length>0)
     {
+        
         return callback(null,chatData)
     }
     else

@@ -80,11 +80,11 @@ exports.registrationModel=(userDetail,callback)=>{
 /*login model***************************************************/
 
 exports.loginModel=(loginDetail,callback)=>{
-    console.log("model login")
+   
 
     model.find({'email':loginDetail.email},(err,data)=>{ //data contain whole user information
+    
         console.log(data)
-        console.log("*****above data***")
         if(err) {
             console.log("error generated while login")
         } 
@@ -195,18 +195,18 @@ exports.resetPasswordModel=(resetData,callback)=>
                 
             })
         }
-
-
 /********************************newchanges***************************************** */
 exports.userDataModel=(callback)=>{
 
     model.find({},(err,userData)=>{
+        console.log(userData)
     if(err)
     {
         return callback(err)
     }
     else if(userData.length>0)
     {
+
         return callback(null,userData)
     }
     else
@@ -215,9 +215,6 @@ exports.userDataModel=(callback)=>{
     }
       })  
     };
-
-
-
 
 
 

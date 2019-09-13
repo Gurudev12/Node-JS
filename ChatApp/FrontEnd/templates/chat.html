@@ -1,10 +1,12 @@
-<!DOCTYPE html> 
+<!DOCTYPE html ng-app='chatApp'> 
 <html> 
 <head> 
     <title>Chat Application</title> 
     <link rel="stylesheet" type="text/css" href="../css/registration.css">
+
 </head> 
-<body>
+<body ng-controller='getUserDetailCtrl'>
+    
     <!-- this is for chatapp head -->
         <div class="menu"> 
                     <div class="head1">Chat App   
@@ -15,15 +17,19 @@
     <!-- this for user -->
 
             <div class="userList">
-                    <div ng-repeat="x in getUserData">
-                            <button >{{x.firstname}}</button>
-                        </div>
+                    <div ng-repeat="uData in getUserData">
+                            <button ng-click="getUserMessage(uData)">{{uData.firstname}}</button>
+                    </div>
             </div>
         <!-- this if for content -->
+        <div>
+            <h1>Hello Guru</h1>
+        </div>
             <div class="contentView">
-                    <h1>This  user view</h1>
-                    <li>Here you can chat</li>  
+                  <div ng-repeat="msg in message">
+                      {{msg.message}}</div>
             </div>
 
 </body> 
 </html>   
+

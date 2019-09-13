@@ -32,7 +32,9 @@ require('dotenv').config()
 let PORT=process.env.PORT
 console.log(PORT)
 
-
+/*socket part********************************** */
+const socketIo=require('socket.io')
+/**************************************** */
 
 app.use(cors())
 app.use(express.static("../FrontEnd"));
@@ -55,6 +57,13 @@ mongoose.connect(dbConfig.url, {
 
 
 //it show  that msg that server is started
-app.listen(PORT,()=>{
+const server=app.listen(PORT,()=>{                     //change
     console.log("Server started at port:"+PORT)
 })
+
+const io=socketIo(server);
+
+io.on('connection',(socket)=>{
+    console.log("Socket connected");
+})
+
