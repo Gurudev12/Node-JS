@@ -9,10 +9,18 @@ chatApp.service("loginService", function ($http, $location) {
             }).then(
                      function (response)
                      {                    
-                        console.log(response.data)
-                        localStorage.setItem('token',response.data.data.token)
-                        localStorage.setItem('firstname',response.data.firstname)
-                        localStorage.setItem('id',response.data._id)
+                        console.log(response.data.data)
+//'token,firstname,loginId' is key value set to local storage and 'response.data.data.name' getting from db.
+                        localStorage.setItem('token',response.data.data.token) 
+                        localStorage.setItem('firstname',response.data.data.name) 
+                        localStorage.setItem('loginId',response.data.data.userId)
+
+//'firstname,userId' is keyvalue gettting from localstorage and save it to another variable
+                       $scope.loginId=localStorage.getItem('loginId')
+                       $scope.loginName= localStorage.getItem('firstname') 
+                       console.log("login service")
+                        console.log($scope.loginId)
+                        console.log($scope.loginName)
                         $location.path('/chat')
                     })
 

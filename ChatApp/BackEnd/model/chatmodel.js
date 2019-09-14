@@ -33,7 +33,6 @@ let chatSchema = mongoose.Schema({
 
     exports.chatAppDetailModel=(chatAppDetail,callback)=>
     {
-       console.log("i m in model")
             let newChatDetail=new chatModel({
 
                 senderId:chatAppDetail.senderId,

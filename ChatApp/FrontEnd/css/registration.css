@@ -3,7 +3,7 @@ body {
   margin: 0 auto; 
   background-position:center; 
   background-size: contain; 
-  background-color:cadetblue
+  /* background-color:rebeccapurple */
 } 
 .container{
     height: 300;
@@ -122,15 +122,46 @@ clear: both;
 
 .contentView{
 
-    overflow:scroll;
+    overflow: auto;
     float: right;
-    width: 80%;
+    width: 500px;
     background-color:lightgreen;
     height:400px;
-    
+    position: absolute;
+    left:300px;  
+    /* padding :10px 15px 22px 20px; 
+     border-radius: 30px;  */
    
 }
-    /* nav, article {
-    width: 100%;
-    height: auto;
-} */
+.senderMsg{
+  position: absolute;
+  right: 10px;
+}
+
+.receiverMsg{
+  position: absolute;
+  left:40px;
+}
+
+.msgSendText{
+  position: absolute;
+  left:25%;
+  top: 85%;
+  width: 40%;
+  padding: 12px 15px;
+  /* margin: 8px 0; */
+
+}
+
+.sendBtn{
+  color: blue;
+  background-color: crimson;
+  position: absolute;
+  left:50%;
+  top: 85%;
+  width:60px;
+  padding: 12px 15px;
+  /* margin: 8px 0; */
+  right: 50%;
+
+}

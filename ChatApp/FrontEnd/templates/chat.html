@@ -5,8 +5,8 @@
     <link rel="stylesheet" type="text/css" href="../css/registration.css">
 
 </head> 
-<body ng-controller='getUserDetailCtrl'>
-    
+<body  ng-controller='getUserDetailCtrl'>
+
     <!-- this is for chatapp head -->
         <div class="menu"> 
                     <div class="head1">Chat App   
@@ -21,15 +21,62 @@
                             <button ng-click="getUserMessage(uData)">{{uData.firstname}}</button>
                     </div>
             </div>
-        <!-- this if for content -->
+    
         <div>
-            <h1>Hello Guru</h1>
+            <h1>Welcome..</h1>
         </div>
-            <div class="contentView">
-                  <div ng-repeat="msg in message">
-                      {{msg.message}}</div>
+
+        <!-- CHAT MSG -->
+            <div class="contentView">  
+                <div ng-repeat="msg in allMessage">
+                      <!-- only message sender on right side -->
+                   <button class="senderMsg" ng-if="senderLoginId == msg.senderId && receiverClickId == msg.receiverId">{{msg.message}}</button> <br>
+                    <!-- only messag receiver on left  side -->
+                    <button class="receiverMsg" ng-if="receiverClickId== msg.senderId && senderLoginId == msg.receiverId">{{msg.message}}</button><br>
+                  
+                </div>
             </div>
 
+        <!-- msg send button -->
+        
+            <div class="msgSendText">
+                <input type="text" placeholder="Enter msg" ng-model="message"> 
+            </div>
+            <div>
+                <button class="sendBtn">Send</button>
+            </div>
+      
 </body> 
 </html>   
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--  -->

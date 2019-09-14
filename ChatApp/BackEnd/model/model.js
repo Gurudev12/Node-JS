@@ -198,15 +198,14 @@ exports.resetPasswordModel=(resetData,callback)=>
 /********************************newchanges***************************************** */
 exports.userDataModel=(callback)=>{
 
-    model.find({},(err,userData)=>{
-        console.log(userData)
+    model.find({},['_id','firstname'],(err,userData)=>{ //it will only return id,firstname from array of user data
+      
     if(err)
     {
         return callback(err)
     }
     else if(userData.length>0)
     {
-
         return callback(null,userData)
     }
     else

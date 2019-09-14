@@ -84,18 +84,3 @@ exports.userDataService=(callback)=>
 
     })
 }
-// let chatModel=require('../model/chatmodel')
-// exports.chatAppDetailService=(chatAppDetail,callback)=>{
-//     console.log("i m in service")
-
-//     chatModel.chatAppDetailModel(chatAppDetail,(err,data)=>{
-//         if(err)
-//         {
-//             return callback(err)
-//         }
-//         else{
-//             return callback(null,data)
-//         }
-
-//     })
-// }
