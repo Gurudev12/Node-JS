@@ -34,7 +34,7 @@ router.get('/userData',ctrl.userDataController)
 
 
 //storing chat detail in db
-router.post('/chatAppDetail',chatCtrl.chatAppDetailController)
+// router.post('/chatAppDetail',chatCtrl.chatAppDetailController)
 
 //get back message chat detail from db
 router.get('/messageChatAppData',chatCtrl.getChatAppDataController)

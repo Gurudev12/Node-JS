@@ -35,7 +35,7 @@ chatApp.service('getUserDetailService', function ($http, $location) {
                      {         
             //In this response we will get ('senderId,senderName,receiverId,receiverName,message) and store that response in 'messageObj'
                         let messageObj=response.data
-                        console.log("responce",response.data)
+                        // console.log("responce",response.data)
                         let message=[]
                         let receiverId=localStorage.getItem('receiverId')
                         let receiverName=localStorage.getItem('receiverName')
@@ -62,13 +62,13 @@ chatApp.service('getUserDetailService', function ($http, $location) {
                                 ||(loginId===messageObj[i].receiverId && receiverId===messageObj[i].senderId)))
 
                             {
-                                console.log("MessageObject",messageObj[i])
+                                // console.log("MessageObject",messageObj[i])
                                 message.push(messageObj[i])
                             }
                         }
-                        console.log("**********************************************")
+                        
                         $scope.allMessage=message;
-                        console.log("All messages", $scope.allMessage)
+                        // console.log("All messages", $scope.allMessage)
                       
                         
                     })

@@ -10,9 +10,11 @@
     <!-- this is for chatapp head -->
         <div class="menu"> 
                     <div class="head1">Chat App   
-                        <button href="#logOut" class="loginBtnRight">LOGOUT</button> 
+                        <button href="#logOut" class="loginBtnRight" ui-sref="login">LOGOUT</button> 
                     </div>       
         </div> 
+
+
        
     <!-- this for user -->
 
@@ -26,6 +28,7 @@
             <h1>Welcome..</h1>
         </div>
 
+
         <!-- CHAT MSG -->
             <div class="contentView">  
                 <div ng-repeat="msg in allMessage">
@@ -37,13 +40,14 @@
                 </div>
             </div>
 
+
         <!-- msg send button -->
         
             <div class="msgSendText">
                 <input type="text" placeholder="Enter msg" ng-model="message"> 
             </div>
             <div>
-                <button class="sendBtn">Send</button>
+                <button class="sendBtn" ng-click="sendMessage()">Send</button>
             </div>
       
 </body> 

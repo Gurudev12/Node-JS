@@ -1,5 +1,6 @@
-body{
-    background-color:cadetblue
+form{
+    /* background-color:cadetblue */
+    background-image: url('/asserts/login.jpeg')
 }
 .container{
     height: 350;

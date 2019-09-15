@@ -34,6 +34,7 @@ console.log(PORT)
 
 /*socket part********************************** */
 const socketIo=require('socket.io')
+const chatController=require('../BackEnd/controller/chatcontroller')
 /**************************************** */
 
 app.use(cors())
@@ -61,9 +62,25 @@ const server=app.listen(PORT,()=>{                     //change
     console.log("Server started at port:"+PORT)
 })
 
+//Bind the socket.IO with the http server
 const io=socketIo(server);
 
 io.on('connection',(socket)=>{
     console.log("Socket connected");
+
+
+    socket.on('messageContainer',(message)=>{
+        
+        chatController.chatAppDetailController(message,(err,messageData)=>{
+            if(err)
+            {
+                console.log("error====>",err)
+            }
+            else{
+                console.log("Message data comming from client side====>",messageData)
+                io.emit(messageData.receiverID,message);
+            }
+        })
+    })
 })
 
