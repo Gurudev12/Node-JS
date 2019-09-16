@@ -1,5 +1,7 @@
-chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService){
-    
+
+//We will get list of all user at left hand side those who are register
+chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService,SocketService){
+     $scope.allMessage=[];
     $scope.getUserData=function(){
         getUserDetailService.getUserDetailServiceUser($scope); 
     }
@@ -19,7 +21,7 @@ chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService){
     }
     
 
-    $scope.allMessage=[];
+    // $scope.allMessage=[];
 
     $scope.sendMessage=function(){
 
@@ -32,15 +34,23 @@ chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService){
         }
         console.log("message content============>",sendObj)
         //following first parameter is name of message,and second is actual content
-        socket.emit("messageContainer",sendObj)
-        }
+        SocketService.emit("messageContainer",sendObj)
+        
 
-        socket.on("message",(message)=>{
+
+        
+        SocketService.on("message",(message)=>{
 
             if (localStorage.getItem('loginId') == message.senderId || localStorage.getItem('receiverId') == message.receiverId){
-
-                $scope.allMessage.push(message);
+                console.log("i m in if part")
+               $scope.allMessage.push(message);
+                console.log("array msg",$scope.allMessage)
+            }
+            else{
+                console.log("Hello vaishu...")
+               $scope.allMessage.push(sendObj)
             }
         })
-
+        
+    }
 })

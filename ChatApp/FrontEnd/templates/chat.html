@@ -1,11 +1,10 @@
-<!DOCTYPE html ng-app='chatApp'> 
-<html> 
+<!-- <!DOCTYPE html> 
+ 
 <head> 
     <title>Chat Application</title> 
     <link rel="stylesheet" type="text/css" href="../css/registration.css">
-
 </head> 
-<body  ng-controller='getUserDetailCtrl'>
+<body> -->
 
     <!-- this is for chatapp head -->
         <div class="menu"> 
@@ -20,12 +19,20 @@
 
             <div class="userList">
                     <div ng-repeat="uData in getUserData">
-                            <button ng-click="getUserMessage(uData)">{{uData.firstname}}</button>
+                            <button ng-click="getUserMessage(uData)">{{uData.firstname}}</button><br><br>
                     </div>
             </div>
     
         <div>
             <h1>Welcome..</h1>
+        </div>
+
+        <!-- msg send button -->
+        <div class="msgSendText">
+            <input type="text" placeholder="Enter msg" ng-model="message"> 
+        </div>
+        <div>
+            <button class="sendBtn" ng-click="sendMessage()">Send</button>
         </div>
 
 
@@ -40,19 +47,12 @@
                 </div>
             </div>
 
-
-        <!-- msg send button -->
+<!-- 
         
-            <div class="msgSendText">
-                <input type="text" placeholder="Enter msg" ng-model="message"> 
-            </div>
-            <div>
-                <button class="sendBtn" ng-click="sendMessage()">Send</button>
-            </div>
       
 </body> 
 </html>   
-
+ -->
 
 
 

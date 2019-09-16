@@ -78,7 +78,7 @@ io.on('connection',(socket)=>{
             }
             else{
                 console.log("Message data comming from client side====>",messageData)
-                io.emit(messageData.receiverID,message);
+                io.emit("message",messageData);
             }
         })
     })

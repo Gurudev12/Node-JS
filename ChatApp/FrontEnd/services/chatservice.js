@@ -6,7 +6,8 @@ chatApp.service('getUserDetailService', function ($http, $location) {
                 method:'GET',
                 url:'http://localhost:4000/userData'
 
-            }).then(function (response)
+            })
+            .then(function (response)
                      {                    
             //in the form of id,first name last name.
                         $scope.getUserData=response.data //this is actual getUserData in chat.html
@@ -35,7 +36,7 @@ chatApp.service('getUserDetailService', function ($http, $location) {
                      {         
             //In this response we will get ('senderId,senderName,receiverId,receiverName,message) and store that response in 'messageObj'
                         let messageObj=response.data
-                        // console.log("responce",response.data)
+                        console.log("response",response )
                         let message=[]
                         let receiverId=localStorage.getItem('receiverId')
                         let receiverName=localStorage.getItem('receiverName')
@@ -52,12 +53,7 @@ chatApp.service('getUserDetailService', function ($http, $location) {
 
                         for(let i=0;i<messageObj.length;i++)
                         {
-                            // console.log("receiver id in local storage",receiverId)
-                            // console.log("receiverName store in localstorage",receiverName)
-                            // console.log("***************")
-                            // console.log("login id in local storage",loginId)
-                            // console.log("login Name store in localstorage",loginName)
-
+                    
                             if(((messageObj[i].senderId===loginId && messageObj[i].receiverId===receiverId) 
                                 ||(loginId===messageObj[i].receiverId && receiverId===messageObj[i].senderId)))
 

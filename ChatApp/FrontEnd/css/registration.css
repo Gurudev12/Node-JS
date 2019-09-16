@@ -119,17 +119,19 @@ clear: both;
     width: 20%;
     height: 500px;
     background:palevioletred;
+    background-image: url('/asserts/userList.jpeg')
     }
 
 .contentView{
 
     overflow: auto;
     float: right;
-    width: 500px;
+    width: 600px;
     background-color:lightgreen;
     height:400px;
     position: absolute;
     left:300px;  
+    background-image: url('/asserts/chat.jpeg')
     /* padding :10px 15px 22px 20px; 
      border-radius: 30px;  */
    

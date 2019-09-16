@@ -49,10 +49,14 @@ let chatSchema = mongoose.Schema({
                 }
                 else
                 {
+                    console.log("\n\n\nmesaage saved successfully\n\n")
+
                     return callback(null,data)
                 }
             })
     }
+
+    
 //fetching chatting data from database
 exports.getChatAppDataModel=(callback)=>{
 

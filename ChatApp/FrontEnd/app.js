@@ -36,13 +36,11 @@
                controller:'getUserDetailCtrl'     
           })
           $urlRouterProvider.otherwise('/login');
-
-          /*socket code************************************ */
-          chatApp.service('SocketService',['socketFactory', function SocketService(socketFactory) {
-               return socketFactory({
-               ioSocket: io.connect('http://localhost:4000')
-               });
-               }]);
-        
-
      }]);
+
+       /*socket code************************************ */
+       chatApp.service('SocketService',['socketFactory', function SocketService(socketFactory) {
+          return socketFactory({
+          ioSocket: io.connect('http://localhost:4000')
+          });
+          }]);

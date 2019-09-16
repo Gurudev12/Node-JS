@@ -177,7 +177,7 @@ exports.resetPassword=(req,res)=>{
 }
 /****************newchanges********************************************/ 
 exports.userDataController=(req,res)=>{
-
+    let responseResult = {};
  
     let error = req.validationErrors()
     if(error)
@@ -189,8 +189,10 @@ exports.userDataController=(req,res)=>{
         
         service.userDataService((err,data)=>{
             if(err)
-            {
-                return res.status(400).send(err)
+            {  
+                responseResult.success = false;
+                responseResult.errors = err;
+                return res.status(400).send(responseResult);s
             }
             else{
                 return res.status(200).send(data)
