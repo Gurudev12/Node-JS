@@ -20,10 +20,24 @@ const tokenGenerator=require('../middleware/tokengenerator')
 
 
 let RegisterSchema = mongoose.Schema({
-    firstname:String,
-    lastname:String,
-    email:String,
-    password:String,
+    firstname:{
+        type:String,
+        required:[true,"first name is empty"]
+    },
+
+    lastname:{
+        type:String,
+        required:[true,"last name is empty"]
+    },
+
+    email:{
+        type:String,
+        required:[true,"email is not in format"]
+    },
+    password:{
+        type:String,
+        required:[true,"password is empty"]
+    }
     },
     {
     timestamps: true
@@ -40,180 +54,198 @@ let RegisterSchema = mongoose.Schema({
 //creating collection(registrationDetail)
 let model= mongoose.model('registrationDetail',RegisterSchema);
 
-exports.registrationModel=(userDetail,callback)=>{
-    model.find({'email':userDetail.email},model.email,(err,data)=>{
-
-        if(err)
-        {
-           console.log("Error occured while registration")
-        }
-        else if(data.length>0)
-        {
-           return callback(null,"Sorry..Already register")
-        }
-        //if registration is not done before then register to database
-        else{
-            let newUser=new model({
-            firstname:userDetail.firstname,
-            lastname:userDetail.lastname,
-            email:userDetail.email,
-            password:passwordEncrypt(userDetail.password),
-            })
-            
-            //register new entry
-            newUser.save((err,res)=>{
+class UserModel
+{
+    registrationModel=(userDetail,callback)=>{
+        try{
+        model.find({'email':userDetail.email},model.email,(err,data)=>{
+    
             if(err)
-            {  
-                callback(err)
-            }
-            else
             {
-                console.log("REGISTRATION SUCCESFULL !!! ...  ");
+               console.log(err)
+            }
+            else if(data.length>0)
+            {
+               return callback(null,false)
+            }
+            //if registration is not done before then register to database
+            else{
+                let newUser=new model({
+                firstname:userDetail.firstname,
+                lastname:userDetail.lastname,
+                email:userDetail.email,
+                password:passwordEncrypt(userDetail.password),
+                })
                 
-            callback(null,"Registration successfully")
-            }
-            
-        })
-    }
-})
-}
-/*login model***************************************************/
-
-exports.loginModel=(loginDetail,callback)=>{
-   
-
-    model.find({'email':loginDetail.email},(err,data)=>{ //data contain whole user information
-    
-        console.log(data)
-        if(err) {
-            console.log("error generated while login")
-        } 
-        else if(data.length>0)
-        {
-            payload={
-                'id':data[0]._id
-            }
-            bcrypt.compare(loginDetail.password,data[0].password,(err,res)=>{ //res contain true or false
+                //register new entry
+                newUser.save((err,res)=>{
                 if(err)
-                {
-                    console.log(err)
-                }
-                else if(res===true)
-                {
-                    let newToken=tokenGenerator.createNewToken(payload)
-
-                    loginResponse={
-                       'success':true,
-                       'message':"Successful login",
-                       'data':{
-                           email:data[0].email,
-                           userId:data[0]._id,
-                           name:data[0].firstname,
-                           token:newToken
-                                }
-                          }
-
-                   callback(null,loginResponse)
-                }
-                else if(res===false)
-                {
-                callback(null,"login failed")
-
-                }
-
-            })
-            
-        } 
-        else{
-            callback(null,"email not matched")
-        }
-      })
-}
-/*************************************************************** */
-
-exports.forgotPasswordModel=(forgotPasswordEmail,callback)=>{
-    
-    model.find({'email':forgotPasswordEmail},(err,data)=>{
-        if(err){
-            callback(err)
-        }
-        //email find in the database
-        else if(data.length>0){ 
-            console.log("Your email is matched")
-
-                //taking email and send it to createNewToken()
-                let payload = {
-                    '_id': data[0]._id
-                }
-        
-            //create new token
-         let newToken=tokenGenerator.createNewToken(payload)
-         console.log(newToken)
-            //after generating token send it to perticular email-id
-            nodemail.sendMail(forgotPasswordEmail,newToken,(err,res)=>{
-                if(err)
-                {
+                {  
                     callback(err)
                 }
-                else if(res==true)
-                {
-                    callback(null,"mail send sucessfully")
+                else
+                {    
+                callback(null,true)
                 }
-                else if(res===false)
-                {
-                    callback(null,"Mail not send")
-                }
-            })
-        }
-        else{
-            callback(null,"email is invalid")
-        }
-    })
-    
-}
-/*Reset password****************************************************************** */
-exports.resetPasswordModel=(resetData,callback)=> 
-{
- 
-    let hashedPassword=passwordEncrypt(resetData.password)
-    console.log("Model"+hashedPassword)
-
-
-    model.findOneAndUpdate({ '_id': resetData.id},{ $set: { 'password':hashedPassword} }, (err, data) => {
-
-            if (err) {
-                    return callback(err)
-            }
-            else if(data){
-                console.log("model dtaa"+data)
-                return callback(null,data)
-            } 
-            else{
-                return callback(null,"user credential not matched")
-                }
-                    
                 
             })
         }
-/********************************newchanges***************************************** */
-exports.userDataModel=(callback)=>{
+    })
+        }catch(e)
+        {
+            console.log(e)
+        }
+    }
+    /*login model***************************************************/
+    
+loginModel=(loginDetail,callback)=>{
+       
+        try{
+        model.find({'email':loginDetail.email},(err,data)=>{ //data contain whole user information
+        
+            console.log(data)
+            if(err) {
+                console.log("error generated while login")
+            } 
+            else if(data.length>0)
+            {
+               let payload={
+                    'id':data[0]._id
+                }
+                bcrypt.compare(loginDetail.password,data[0].password,(err,res)=>{ //res contain true or false
+                    if(err)
+                    {
+                        console.log(err)
+                    }
+                    else if(res===true)
+                    {
+                        let newToken=tokenGenerator.createNewToken(payload)
+    
+                       let  loginResponse={
+                           'success':true,
+                           'message':"Successful login",
+                           'data':{
+                               email:data[0].email,
+                               userId:data[0]._id,
+                               name:data[0].firstname,
+                               token:newToken
+                                    }
+                              }
+    
+                       callback(null,loginResponse)
+                    }
+                    else if(res===false)
+                    {
+                    callback(null,"login failed")
+    
+                    }
+    
+                })
+                
+            } 
+            else{
+                callback(null,"email not matched")
+            }
+          })
+        }catch(e)
+        {
+            console.log(e)
+        }
+    }
+    /*************************************************************** */
+    
+ forgotPasswordModel=(forgotPasswordEmail,callback)=>{
+        
+        try{
+        model.find({'email':forgotPasswordEmail},(err,data)=>{
+            if(err){
+                callback(err)
+            }
+            //email find in the database
+            else if(data.length>0){ 
+                console.log("Your email is matched")
+    
+                    //taking email and send it to createNewToken()
+                    let payload = {
+                        '_id': data[0]._id
+                    }
+            
+                //create new token
+             let newToken=tokenGenerator.createNewToken(payload)
+             console.log(newToken)
+                //after generating token send it to perticular email-id
+                nodemail.sendMail(forgotPasswordEmail,newToken,(err,data)=>{
+                    if(err)
+                    {
+                        callback(err)
+                    }
+                    else 
+                    {
+                        callback(null,data)
+                    }
+                })
+            }
+        })
+        }catch(e)
+        {
+            console.log(e)
+        }
+        
+    }
+    /*Reset password****************************************************************** */
+resetPasswordModel=(resetData,callback)=> 
+    {
+        try{
+     
+        let hashedPassword=passwordEncrypt(resetData.password)
+        console.log("Model"+hashedPassword)
+    
+    
+        model.findOneAndUpdate({ '_id': resetData.id},{ $set: { 'password':hashedPassword} }, (err, data) => {
+    
+                if (err) {
+                        return callback(err)
+                }
+                else if(data){
+                    console.log("model dtaa"+data)
+                    return callback(null,data)
+                } 
+     
+                })
+            }catch(e)
+            {
+                console.log(e)
+            }
+            }
+    /********************************newchanges***************************************** */
+userDataModel=(callback)=>{
+    
+        try{
+        model.find({},['_id','firstname'],(err,userData)=>{ //it will only return id,firstname from array of user data
+          
+        if(err)
+        {
+            return callback(err)
+        }
+        else if(userData.length>0)
+        {
+            return callback(null,userData)
+        }
+        else
+        {
+            return callback(null,"data is not present")
+        }
+    })
+        }catch(e)
+        {
+            console.log(e)
+        }
+        };
+    
+}
 
-    model.find({},['_id','firstname'],(err,userData)=>{ //it will only return id,firstname from array of user data
-      
-    if(err)
-    {
-        return callback(err)
-    }
-    else if(userData.length>0)
-    {
-        return callback(null,userData)
-    }
-    else
-    {
-        return callback(null,"data is not present")
-    }
-      })  
-    };
+const userModelObject=new UserModel();
+module.exports=userModelObject;
 
 
 

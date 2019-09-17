@@ -20,9 +20,6 @@ chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService,Sock
     
     }
     
-
-    // $scope.allMessage=[];
-
     $scope.sendMessage=function(){
 
         sendObj={
@@ -37,8 +34,7 @@ chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService,Sock
         SocketService.emit("messageContainer",sendObj)
         
 
-
-        
+        try{
         SocketService.on("message",(message)=>{
 
             if (localStorage.getItem('loginId') == message.senderId || localStorage.getItem('receiverId') == message.receiverId){
@@ -51,6 +47,11 @@ chatApp.controller('getUserDetailCtrl',function($scope,getUserDetailService,Sock
                $scope.allMessage.push(sendObj)
             }
         })
+
+        }catch(err)
+        {
+            console.log(err)
+        }
         
     }
 })

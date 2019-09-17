@@ -8,23 +8,14 @@ chatApp.service("registrationService", function($http, $location) {
                 data: data
             }).then(
                 function (response)  {
-                    if(response.data.data==="Registration successfully")
+                    if(response.data.success===true)
                     {
                         alert("Register succesfull");
                         $location.path('/welcome')
                     }
-                    else if(response.data.data==="Registration not done")
+                    else if(response.data.success===false)
                     {
-                        alert('Registration failed');
-                        
-                    }
-                    else if(response.data.data==="Sorry..Already register")
-                    {
-                        alert("Registration already done");
-                    }
-                    else if(response.data.error)
-                    {
-                        alert(response.data.error[0].msg);
+                        alert('Allready registration done'); 
                     }
 
                 }).catch( function (error)  {

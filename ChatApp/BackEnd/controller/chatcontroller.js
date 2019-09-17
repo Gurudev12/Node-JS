@@ -1,9 +1,14 @@
 
 const chatService=require('../services/chatservice')
-//storing chat history
-exports.chatAppDetailController=(req,callback)=>{
-    
-         chatAppDetail={
+
+class UserChatController
+{
+
+    //storing messages history
+chatAppDetailController=(req,callback)=>{
+
+    try{
+        let chatAppDetail={
             senderId:req.senderId,
             senderName:req.senderName,
             receiverId:req.receiverId,
@@ -14,40 +19,57 @@ exports.chatAppDetailController=(req,callback)=>{
             if(err)
             {
                 console.log("Error occured",err)
-                return err;
+                callback (err);
             }
             else{
                 console.log("Saved operation successfully")
-                return  callback(null,data)
+                callback(null,data)
             }
         })
 
+    }catch(e){
+    console.log(e);
+    }   
+
 }
 
-
-
-
-
-
 //return back chat data from database
-exports.getChatAppDataController=(req,res)=>{
+getChatAppDataController=(req,res)=>{
 
- 
+    try{
+        let response={}
     let error = req.validationErrors()
     if(error)
     {
-        return res.status(400).send(error)
+        response.success=false;
+        response.error=error;
+        return res.status(400).send(response)
     }
     else
     {
        chatService.getChatAppDataService((err,data)=>{
             if(err)
             {
-                return res.status(400).send(err)
+                response.success=false;
+                response.message="Getting all message failed"
+                response.error=error;
+                return res.status(400).send(response)
             }
             else{
-                return res.status(200).send(data)
+                response.success=true;
+                response.message="All message successfully get"
+                response.content=data
+                return res.status(200).send(response)
             }
         })
     }
+    
+    }catch(e)
+    {
+        console.log(e)
+    }
 }
+}
+
+const userChatControllerObject=new UserChatController();
+module.exports=userChatControllerObject;

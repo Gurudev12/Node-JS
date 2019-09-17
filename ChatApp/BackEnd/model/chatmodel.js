@@ -31,48 +31,65 @@ let chatSchema = mongoose.Schema({
     //creating chatModel
     let chatModel= mongoose.model('chatDetail',chatSchema);
 
-    exports.chatAppDetailModel=(chatAppDetail,callback)=>
+    class UserChatModel
     {
-            let newChatDetail=new chatModel({
-
-                senderId:chatAppDetail.senderId,
-                senderName:chatAppDetail.senderName,
-                receiverId:chatAppDetail.receiverId,
-                receiverName:chatAppDetail.receiverName,
-                message:chatAppDetail.message
-            })
-            newChatDetail.save((err,data)=>
-            {
-                if(err)
-                {
-                    return callback()
-                }
-                else
-                {
-                    console.log("\n\n\nmesaage saved successfully\n\n")
-
-                    return callback(null,data)
-                }
-            })
-    }
-
+    chatAppDetailModel=(chatAppDetail,callback)=>
+        {
+            try{
+                let newChatDetail=new chatModel({
     
-//fetching chatting data from database
-exports.getChatAppDataModel=(callback)=>{
-
-    chatModel.find({},(err,chatData)=>{
-    if(err)
-    {
-        return callback(err)
-    }
-    else if(chatData.length>0)
-    {
+                    senderId:chatAppDetail.senderId,
+                    senderName:chatAppDetail.senderName,
+                    receiverId:chatAppDetail.receiverId,
+                    receiverName:chatAppDetail.receiverName,
+                    message:chatAppDetail.message
+                })
+                newChatDetail.save((err,data)=>
+                {
+                    if(err)
+                    {
+                        return callback()
+                    }
+                    else
+                    {
+                        console.log("\n\n\nmesaage saved successfully\n\n")
+    
+                        return callback(null,data)
+                    }
+                })
+            }catch(e)
+            {
+                console.log(e)
+            }
+        }
+    
         
-        return callback(null,chatData)
+    //fetching chatting data from database
+getChatAppDataModel=(callback)=>{
+        try{
+    
+        chatModel.find({},(err,chatData)=>{
+        if(err)
+        {
+            return callback(err)
+        }
+        else if(chatData.length>0)
+        {
+            
+            return callback(null,chatData)
+        }
+        else
+        {
+            return callback(null,"data is not present")
+        }
+        })  
+        }catch(e)
+        {
+            console.log(e);
+        }
+        };
+    
     }
-    else
-    {
-        return callback(null,"data is not present")
-    }
-    })  
-    };
+    const userChatModelObject=new UserChatModel();
+    module.exports=userChatModelObject;
+    

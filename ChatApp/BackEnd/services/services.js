@@ -14,8 +14,12 @@
  * 
  **************************************************************************/
 const model=require('../model/model')
-exports.registrationService=(userDetail,callback)=>
+
+class UserService{
+
+registrationService=(userDetail,callback)=>
 {
+    try{
     model.registrationModel(userDetail,(err,data)=>{
         
         if(err)
@@ -26,10 +30,16 @@ exports.registrationService=(userDetail,callback)=>
             return callback(null,data)
         }
     })
+    }catch(e)
+    {
+        console.log(e)
+    }
 }
 /*login service******************************************************* */
-exports.loginService=(loginDetail,callback)=>
+loginService=(loginDetail,callback)=>
 {
+    try{
+
     model.loginModel(loginDetail,(err,data)=>{
         if(err)
         {
@@ -39,11 +49,15 @@ exports.loginService=(loginDetail,callback)=>
             return callback(null,data)
         }
     })
+    }catch(e)
+    {
+        console.log(e)
+    }
 }
 /* forgot password service******************************************************* */
-exports.forgotPasswordService=(forgotPasswordDetail,callback)=>
+forgotPasswordService=(forgotPasswordDetail,callback)=>
 {
-   
+   try{
     model.forgotPasswordModel(forgotPasswordDetail,(err,data)=>{
      
         if(err)
@@ -54,11 +68,15 @@ exports.forgotPasswordService=(forgotPasswordDetail,callback)=>
             return callback(null,data)
         }
     })
+    }catch(e)
+    {
+        console.log(e)
+    }
 }
 /*reset password service******************************* */
-exports.resetPasswordService =(id,newPassword,callback)=>
+resetPasswordService =(id,newPassword,callback)=>
 {
-
+    try{
         model.resetPasswordModel(id,newPassword,(err, data) => {
             if (err) {
                  
@@ -69,11 +87,16 @@ exports.resetPasswordService =(id,newPassword,callback)=>
             }
 
         })
+    }catch(e)
+    {
+        console.log(e)
+    }
     
 }
 /****************newchanges********************************************/ 
-exports.userDataService=(callback)=>
+userDataService=(callback)=>
 {
+    try{
     model.userDataModel((err,data)=>{
         if(err){
             return callback(err)
@@ -83,4 +106,11 @@ exports.userDataService=(callback)=>
         }
 
     })
+    }catch(e)
+    {
+        console.log(e)
+    }
 }
+}
+const userServiceObject=new UserService()
+module.exports=userServiceObject;

@@ -3,7 +3,6 @@ chatApp.service("forgetPasswordService",function ($http,$location) {
   
 
     this.forgetPasswordServicesUser =  function(data, $scope){
-        console.log("in forget password service.... ");
         $http(
             {
                 method: 'POST',
@@ -11,30 +10,22 @@ chatApp.service("forgetPasswordService",function ($http,$location) {
                 data: data
             }).then(
                 function (response)  {
-                    if(response.data.data==="mail send sucessfully")
+                    console.log("forget passord success==>",response.data.success)
+                    if(response.data.success===true)
                     {
-                        alert("mail send succesfull");
+                        alert("MAIL SEND SUCCESSFULLY");
                     }
-                    else if(response.data.data==="Mail not send")
+                    else
                     {
-                        alert('MAIL NOT SEND');
+                        alert("ERROR GENERATED WHILE RESET PASSWORD");
                         
                     }
-                    else if(response.data.data==="email is invalid")
-                    {
-                        alert("EMAIL IS INVALID");
-                    }
-                    else if(response.data.error)
-                    {
-                        alert(response.data.error[0].msg);
-                    }
-
+            
                 }).catch( function (error)  {
 
                     $scope.forgetPassword = function () {
                         alert("forget password  failed...")
                     }
-                    console.log("forget password failed..", error)
                 });
     }
 });
