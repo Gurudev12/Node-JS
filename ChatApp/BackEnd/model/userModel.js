@@ -16,7 +16,7 @@
 const mongoose = require('mongoose');
 const bcrypt=require('bcrypt')
 const nodemail=require('../middleware/sendMail')
-const tokenGenerator=require('../middleware/tokengenerator')
+const tokenGenerator=require('../middleware/tokenGenerator')
 
 
 let RegisterSchema = mongoose.Schema({
@@ -154,7 +154,7 @@ loginModel=(loginDetail,callback)=>{
     }
     /*************************************************************** */
     
- forgotPasswordModel=(forgotPasswordEmail,callback)=>{
+forgotPasswordModel=(forgotPasswordEmail,callback)=>{
         
         try{
         model.find({'email':forgotPasswordEmail},(err,data)=>{

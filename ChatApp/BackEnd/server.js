@@ -17,7 +17,7 @@ const express = require('express')
 var validator = require('express-validator');
 var mongoose=require('mongoose')
 var bodyparser=require('body-parser')
-let routes=require('../BackEnd/routes/routes')
+let routes=require('./routes/userRoutes')
 
 var cors= require('cors')
 // Configuring the database
@@ -34,7 +34,7 @@ console.log(PORT)
 
 /*socket part********************************** */
 const socketIo=require('socket.io')
-const chatController=require('../BackEnd/controller/chatcontroller')
+const chatController=require('./controller/chatController')
 /**************************************** */
 
 app.use(cors())

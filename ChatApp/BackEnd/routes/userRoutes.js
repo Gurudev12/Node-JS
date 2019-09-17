@@ -14,10 +14,10 @@
  **************************************************************************/
 const express=require('express')
 const router=express.Router()
-const tokenVerify=require('../middleware/tokengenerator')
+const tokenVerify=require('../middleware/tokenGenerator')
 
-const ctrl=require('../controller/controller')
-const chatCtrl=require('../controller/chatcontroller')
+const ctrl=require('../controller/userController')
+const chatCtrl=require('../controller/chatController')
 
 router.post('/Registration',ctrl.registrationController)
 

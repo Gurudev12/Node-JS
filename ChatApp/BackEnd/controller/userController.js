@@ -15,7 +15,7 @@
  * 
  **************************************************************************/
 var validator = require('express-validator');
-const service=require('../services/services')
+const service=require('../services/userServices')
 
 class UserController
 {
@@ -50,7 +50,7 @@ registrationController=(req,res)=>
         }
         else{
     
-            const service=require('../services/services')
+            const service=require('../services/userServices')
             let userDetail={
                 firstname:req.body.firstname,
                 lastname:req.body.lastname,
@@ -69,7 +69,7 @@ registrationController=(req,res)=>
                 else{
                     response.success=true
                     response.data=data
-                    response.message="Sorry..Already register"
+                    response.message="Register successfully"
                     return res.status(200).send(response)
                 }
             })
@@ -102,7 +102,7 @@ loginController=(req,res)=>
             return res.status(200).send(response)
         }
         else{
-            const service=require('../services/services')
+            const service=require('../services/userServices')
             let loginDetail={
                 email:req.body.email,
                 password:req.body.password,
@@ -150,7 +150,7 @@ forgotPasswordController=(req,res)=>
         else{
     
             
-            const service=require('../services/services')
+            const service=require('../services/userServices')
             //this method sending forgot password Details to service & also callback
             service.forgotPasswordService(req.body.email,(err,data)=>{
                 if(err)

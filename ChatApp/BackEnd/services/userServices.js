@@ -13,7 +13,7 @@
  * @since           : 06-09-2019
  * 
  **************************************************************************/
-const model=require('../model/model')
+const model=require('../model/userModel')
 
 class UserService{
 

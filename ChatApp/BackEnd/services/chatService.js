@@ -1,4 +1,4 @@
-let chatModel=require('../model/chatmodel')
+let chatModel=require('../model/chatModel')
 
 class UserChatService
 {

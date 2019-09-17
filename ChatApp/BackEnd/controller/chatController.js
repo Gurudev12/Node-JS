@@ -1,5 +1,5 @@
 
-const chatService=require('../services/chatservice')
+const chatService=require('../services/chatService')
 
 class UserChatController
 {

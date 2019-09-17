@@ -20,13 +20,13 @@
 
           .state('forgetPassword',{
                url:'/ForgetPassword',
-               templateUrl:'templates/forgetpassword.html',
+               templateUrl:'templates/forgetPassword.html',
                controller:'forgetPasswordCtrl'
           })
 
           .state('resetPassword',{
                url:'/resetPassword:token',
-               templateUrl:'templates/resetpassword.html',
+               templateUrl:'templates/resetPassword.html',
                controller:'resetCtrl'
           })
 
