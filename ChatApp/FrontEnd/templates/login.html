@@ -7,8 +7,8 @@
             <div class="container" align="center">
                 <h1>Login</h1>
                 <div>
-                    <label> <b>E-mail</b> &nbsp;&nbsp;&nbsp;</label>
-                    <input type="text"  ng-model='email' required> 
+                    <label> <b>E-mail</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+                    <input type="text"  ng-model='email' required ng-keyup="emailValidation(email)"> 
                 </div>
                  <br>  
                 <div> 
@@ -16,7 +16,7 @@
                     <input type="Password"  ng-model='password' required>
                 </div>
             
-                <br><br>
+                <br>
                 <div>
                     <button type="button" class="loginbtn" ng-click='login()'>Login </button>
                     <button type="button" class="cancelbtn"> Cancel</button><br>
