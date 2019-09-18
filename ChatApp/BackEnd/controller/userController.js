@@ -228,11 +228,12 @@ userDataController=(req,res)=>{
         let error = req.validationErrors()
         if(error)
         {
-            return res.status(400).send(error)
+            response.success = false;
+            response.errors = error;
+            return res.status(400).send(response)
         }
         else
         {
-            
             service.userDataService((err,data)=>{
                 if(err)
                 {  

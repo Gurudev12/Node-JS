@@ -89,6 +89,18 @@ background-image: url('/asserts/img.jpeg')
     align-content: center
   }
 
+  .sendbutton{
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    opacity: 0.9;
+    align-content: center
+  }
+
   /*  **************************************************************************/
   .head1 { 
     font-size:40px; 

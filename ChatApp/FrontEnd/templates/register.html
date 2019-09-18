@@ -20,7 +20,8 @@
 		<br>  
         <div> 
         <label><b>E-mail*</b></label><br>
-        <input type="text" size="25" ng-model='email' required>
+        <input type="text" size="25" ng-model='email' required ng-keyup="emailValidation(email)"><br>
+        <span ng-show ="emailVal" style="color: red">Email should be in email format</span>
 		</div> 
         <div> 
         <label><b>Password*</b></label><br>

@@ -58,7 +58,7 @@ mongoose.connect(dbConfig.url, {
 
 
 //it show  that msg that server is started
-const server=app.listen(PORT,()=>{                     //change
+const server=app.listen(PORT,()=>{                    
     console.log("Server started at port:"+PORT)
 })
 
