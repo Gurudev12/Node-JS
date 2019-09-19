@@ -134,7 +134,7 @@ loginController=(req,res)=>
 forgotPasswordController=(req,res)=>
     {
         try{
-    
+            
         req.check("email","email should not be empty").notEmpty();
         req.check("email","email should be in email form").isEmail();
        

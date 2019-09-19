@@ -1,17 +1,32 @@
+/*************************************************************************
+ * Execution        : 1. default node       cmd> nodemon model.js
+ * 
+ * Purpose          : Sending mail to that person who want to forget password
+ *                    
+ *                     
+ *                    
+ * 
+ * @file            : sendMail.js
+ * @author          : Gurudev Murkar
+ * @version         : 1.0
+ * @since           : 07-09-2019
+ * 
+ **************************************************************************/
 var nodemailer=require('nodemailer')
 module.exports={
 sendMail(userEmail,newToken,callback)
 {
+    console.log("i m inside send mail")
 var transporter=nodemailer.createTransport({
     service:'gmail',
     auth:{
-        user:'gurumurkar@gmail.com',
+        user:'murkargurudev@gmail.com',
         pass:'gurudev123'
     }
 });
 
 var mailOption={
-    from:'gurumurkar@gmail.com',
+    from:'murkargurudev@gmail.com',
     to:userEmail,
     subject:'sending mail using node js',
     text:'Reset password',
@@ -24,7 +39,8 @@ transporter.sendMail(mailOption,function(err,info){
         callback(err)
     }
     else{
-        callback(null,"Email sent");
+       
+        callback(null,"mail sent");
     }
 })
 }

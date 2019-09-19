@@ -3,13 +3,14 @@ chatApp.service("forgetPasswordService",function ($http,$location) {
   
 
     this.forgetPasswordServicesUser =  function(data, $scope){
-        $http(
-            {
+        
+        $http({
                 method: 'POST',
                 url: 'http://localhost:4000/ForgotPassword',
                 data: data
-            }).then(
-                function (response)  {
+            })
+        .then(function (response)  {
+            console.log("i m in services")
                     console.log("forget passord success==>",response.data.success)
                     if(response.data.success===true)
                     {
@@ -21,8 +22,8 @@ chatApp.service("forgetPasswordService",function ($http,$location) {
                         
                     }
             
-                }).catch( function (error)  {
-
+                })
+        .catch( function (error){
                     $scope.forgetPassword = function () {
                         alert("forget password  failed...")
                     }

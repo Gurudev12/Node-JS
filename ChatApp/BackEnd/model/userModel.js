@@ -174,14 +174,15 @@ forgotPasswordModel=(forgotPasswordEmail,callback)=>{
              let newToken=tokenGenerator.createNewToken(payload)
              console.log(newToken)
                 //after generating token send it to perticular email-id
-                nodemail.sendMail(forgotPasswordEmail,newToken,(err,data)=>{
+                nodemail.sendMail(forgotPasswordEmail,newToken,(err,res)=>{ //responce contain mail send
+                    
                     if(err)
                     {
                         callback(err)
                     }
                     else 
                     {
-                        callback(null,data)
+                        callback(null,res)
                     }
                 })
             }

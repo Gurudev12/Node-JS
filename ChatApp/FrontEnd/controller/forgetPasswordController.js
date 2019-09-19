@@ -12,6 +12,7 @@ chatApp.controller('forgetPasswordCtrl',function($scope,forgetPasswordService){
         }
     
     $scope.forgetPassword=function(){
+        console.log("I m in front end controller")
         let forgotPasswordData={
             'email':$scope.email
         }
