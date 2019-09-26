@@ -3,7 +3,7 @@ let chatModel=require('../model/chatModel')
 class UserChatService
 {
 //storing chat details to database
-chatAppDetailService=(chatAppDetail,callback)=>{
+chatAppDetailService(chatAppDetail,callback){
     try{
  
      chatModel.chatAppDetailModel(chatAppDetail,(err,data)=>{
@@ -23,7 +23,7 @@ chatAppDetailService=(chatAppDetail,callback)=>{
  }
  
  //service for getting chat details
-getChatAppDataService=(callback)=>
+getChatAppDataService(callback)
  {
      try{
      chatModel.getChatAppDataModel((err,data)=>{

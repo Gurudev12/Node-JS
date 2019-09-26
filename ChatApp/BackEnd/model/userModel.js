@@ -56,12 +56,12 @@ let model= mongoose.model('registrationDetail',RegisterSchema);
 
 class UserModel
 {
-    registrationModel=(userDetail,callback)=>{
+    registrationModel(userDetail,callback){
         try{
         model.find({'email':userDetail.email},model.email,(err,data)=>{
     
             if(err)
-            {
+            {   
                console.log(err)
             }
             else if(data.length>0)
@@ -98,20 +98,23 @@ class UserModel
     }
     /*login model***************************************************/
     
-loginModel=(loginDetail,callback)=>{
-       
+loginModel(loginDetail,callback){
         try{
+            
         model.find({'email':loginDetail.email},(err,data)=>{ //data contain whole user information
-        
-            console.log(data)
-            if(err) {
+           console.log("fouund data====>",data)
+            if(err) 
+            {
                 console.log("error generated while login")
+                callback (err)
             } 
             else if(data.length>0)
             {
+                console.log("data matched based on email")
+                console.log("email matched")
                let payload={
                     'id':data[0]._id
-                }
+                    }
                 bcrypt.compare(loginDetail.password,data[0].password,(err,res)=>{ //res contain true or false
                     if(err)
                     {
@@ -131,21 +134,18 @@ loginModel=(loginDetail,callback)=>{
                                token:newToken
                                     }
                               }
-    
+                       console.log("model data",loginResponse)
                        callback(null,loginResponse)
                     }
                     else if(res===false)
                     {
                     callback(null,"login failed")
-    
                     }
-    
                 })
-                
             } 
             else{
                 callback(null,"email not matched")
-            }
+                }
           })
         }catch(e)
         {
@@ -154,7 +154,7 @@ loginModel=(loginDetail,callback)=>{
     }
     /*************************************************************** */
     
-forgotPasswordModel=(forgotPasswordEmail,callback)=>{
+forgotPasswordModel(forgotPasswordEmail,callback){
         
         try{
         model.find({'email':forgotPasswordEmail},(err,data)=>{
@@ -194,7 +194,7 @@ forgotPasswordModel=(forgotPasswordEmail,callback)=>{
         
     }
     /*Reset password****************************************************************** */
-resetPasswordModel=(resetData,callback)=> 
+resetPasswordModel(resetData,callback)
     {
         try{
      
@@ -219,7 +219,7 @@ resetPasswordModel=(resetData,callback)=>
             }
             }
     /********************************newchanges***************************************** */
-userDataModel=(callback)=>{
+userDataModel(callback){
     
         try{
         model.find({},['_id','firstname'],(err,userData)=>{ //it will only return id,firstname from array of user data

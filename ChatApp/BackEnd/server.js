@@ -6,7 +6,7 @@
  *                     
  *                    
  * 
- * @file            : server.js
+ * @file            : server.js 
  * @author          : Gurudev Murkar
  * @version         : 1.0
  * @since           : 6-9-2019
@@ -21,15 +21,12 @@ let routes=require('./routes/userRoutes')
 
 var cors= require('cors')
 // Configuring the database
-const dbConfig = require('../BackEnd/config/database');
+// const dbConfig = require('../BackEnd/config/database');
 
 //use express method and assign to variable app.
 const app = express()
- 
-//port no
-// const port=3000;
-require('dotenv').config()
-let PORT=process.env.PORT
+
+let PORT=4000;
 console.log(PORT)
 
 /*socket part********************************** */
@@ -38,18 +35,19 @@ const chatController=require('./controller/chatController')
 /**************************************** */
 
 app.use(cors())
-app.use(express.static("../FrontEnd"));
+app.use(express.static("../Frontend"));
 
 app.use(bodyparser.json())
+
 app.use(validator())
 
 app.use('/',routes)
 
   
 //Connecting to the database
-mongoose.connect(dbConfig.url, {
-    useNewUrlParser: true
-}).then(() => {
+mongoose.connect('mongodb://localhost:27017/ChatApp', {useNewUrlParser: true})
+
+.then(() => {
     console.log("Successfully connected to the database");    
 }).catch(err => {
     console.log('Could not connect to the database. Exiting now...', err);
@@ -65,11 +63,11 @@ const server=app.listen(PORT,()=>{
 //Bind the socket.IO with the http server
 const io=socketIo(server);
 
-io.on('connection',(socket)=>{
+io.on("connection",(socket)=>{
     console.log("Socket connected");
 
 
-    socket.on('messageContainer',(message)=>{
+    socket.on("messageContainer",(message)=>{
         
         chatController.chatAppDetailController(message,(err,messageData)=>{
             if(err)
@@ -78,7 +76,7 @@ io.on('connection',(socket)=>{
             }
             else{
                 console.log("Message data comming from client side====>",messageData)
-                io.emit("message",messageData);
+                io.emit("messageEvent",messageData);
             }
         })
     })

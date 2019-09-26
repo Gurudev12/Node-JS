@@ -4,7 +4,7 @@ body {
   background-position:center; 
   background-size: contain; 
 
-background-image: url('/asserts/img.jpeg')
+background-image: url('/assets/img.jpg')
 } 
 .container{
     height: 300;
@@ -130,27 +130,24 @@ clear: both;
     float: left;
     width: 20%;
     height: 500px;
-    background:palevioletred;
-    background-image: url('/asserts/userList.jpeg')
+    background-image: url('/assets/userList.jpeg')
     }
 
-    .userListColor{
-      background-color:yellowgreen;
-      color:black
+.userListColor{
+  height:50;
+  width: 130;
     }
 .contentView{
 
     overflow: auto;
     float: right;
     width: 600px;
-    background-color:lightgreen;
     height:400px;
     position: absolute;
     left:300px;  
-    background-image: url('/asserts/chat.jpeg')
-    /* padding :10px 15px 22px 20px; 
-     border-radius: 30px;  */
-   
+    background-image: url('/assets/chat.jpg');
+    padding :10px 15px 22px 20px; 
+    border-radius: 30px;
 }
 .senderMsg{
   position: absolute;
@@ -166,21 +163,21 @@ clear: both;
   position: absolute;
   left:25%;
   top: 85%;
-  width: 40%;
+  width: 300px;
+  height:50px;
   padding: 12px 15px;
-  /* margin: 8px 0; */
+  margin: 8px 0;
 
 }
 
 .sendBtn{
-  color: blue;
-  background-color: crimson;
+  background-color:rgb(55, 151, 207);
   position: absolute;
-  left:50%;
+  left:45%;
   top: 85%;
   width:60px;
   padding: 12px 15px;
-  /* margin: 8px 0; */
+  margin: 8px 0; 
   right: 50%;
 
 }

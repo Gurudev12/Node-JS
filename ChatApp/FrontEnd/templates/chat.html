@@ -24,9 +24,8 @@
             </div>
     
         <div>
-            <h1>Welcome..{{firstname}}</h1>
+            <h1>Welcome...</h1>
         </div>
-
         <!-- msg send button -->
         <div class="msgSendText">
             <input type="text" placeholder="Enter msg" ng-model="message"> 
@@ -40,16 +39,14 @@
             <div class="contentView">  
                 <div ng-repeat="msg in allMessage">
                       <!-- only message sender on right side -->
-                   <button class="senderMsg" ng-if="senderLoginId == msg.senderId && receiverClickId == msg.receiverId">{{msg.message}}</button> <br>
+                   <label class="senderMsg" ng-if="senderLoginId == msg.senderId && receiverClickId == msg.receiverId">{{msg.message}}</label> <br>
                     <!-- only messag receiver on left  side -->
-                    <button class="receiverMsg" ng-if="receiverClickId== msg.senderId && senderLoginId == msg.receiverId">{{msg.message}}</button><br>
+                    <label class="receiverMsg" ng-if="receiverClickId== msg.senderId && senderLoginId == msg.receiverId">{{msg.message}}</label><br>
                   
                 </div>
             </div>
 
-<!-- 
-        
-      
+<!--
 </body> 
 </html>   
  -->

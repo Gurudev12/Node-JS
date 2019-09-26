@@ -1,14 +1,13 @@
-form{
-    /* background-color:cadetblue */
-    background-image: url('/asserts/login.jpeg')
-}
+
 .container{
-    height: 350;
-    width: 400;
+    height:auto;
+    width:300;
     background-color:white; 
     position: absolute;
-    top:15%;
-    left: 35%;
+    top:20%;
+    left:35%;
+    border: 7px solid black;
+    background-image: url('/assets/login.jpeg')
 }
 .loginbtn {
     background-color: #4CAF50;

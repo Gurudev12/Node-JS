@@ -4,11 +4,11 @@ chatApp.service("loginService", function ($http, $location) {
         $http(
             {
                 method:'POST',
-                url:'http://localhost:4000/Login',
+                url:'http://18.188.202.15:4000/Login',
                 data: data
             }).then(function (response)
                      {                    
-                        console.log("==>new content data",response.data.content.data)
+                        console.log("==>new content data",response.data.content)
 //'token,firstname,loginId' is key value set to local storage and 'response.data.content.data.name' getting from db.
                         localStorage.setItem('token',response.data.content.data.token) 
                         localStorage.setItem('firstname',response.data.content.data.name) 

@@ -1,0 +1,37 @@
+{
+  "name": "bridgelab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "express-validator": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mochai": "^0.2.5",
+    "mongoose": "^5.6.13",
+    "nodemailer": "^6.3.0",
+    "readline-sync": "^1.4.10",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurudev12/weekFirst.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gurudev12/weekFirst/issues"
+  },
+  "homepage": "https://github.com/Gurudev12/weekFirst#readme"
+}

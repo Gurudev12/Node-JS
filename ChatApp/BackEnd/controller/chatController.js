@@ -5,7 +5,7 @@ class UserChatController
 {
 
     //storing messages history
-chatAppDetailController=(req,callback)=>{
+chatAppDetailController(req,callback){
 
     try{
         let chatAppDetail={
@@ -34,7 +34,7 @@ chatAppDetailController=(req,callback)=>{
 }
 
 //return back chat data from database
-getChatAppDataController=(req,res)=>{
+getChatAppDataController(req,res){
 
     try{
         let response={}

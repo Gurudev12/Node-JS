@@ -33,7 +33,7 @@ let chatSchema = mongoose.Schema({
 
     class UserChatModel
     {
-    chatAppDetailModel=(chatAppDetail,callback)=>
+    chatAppDetailModel(chatAppDetail,callback)
         {
             try{
                 let newChatDetail=new chatModel({
@@ -65,7 +65,7 @@ let chatSchema = mongoose.Schema({
     
         
     //fetching chatting data from database
-getChatAppDataModel=(callback)=>{
+getChatAppDataModel(callback){
         try{
     
         chatModel.find({},(err,chatData)=>{

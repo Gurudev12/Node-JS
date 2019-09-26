@@ -19,22 +19,21 @@ const service=require('../services/userServices')
 
 class UserController
 {
-registrationController=(req,res)=>
-    {
+    registrationController(req,res){
         try{
     
-        req.check("firstname","first name should not be null").notEmpty()
-        req.check("firstname","first name should be valid format").isAlpha()
+        req.checkBody('firstname',"first name should not be null").notEmpty()
+        req.checkBody('firstname',"first name should be valid format").isAlpha()
     
     
-        req.check("lastname","last name should not be null").notEmpty();
-        req.check("lastname","last name should be valid format").isAlpha();
+        req.checkBody('lastname',"last name should not be null").notEmpty();
+        req.checkBody('lastname',"last name should be valid format").isAlpha();
     
-        req.check("email","email should not be empty").notEmpty();
-        req.check("email","email should be in valid format").isEmail();
+        req.checkBody('email',"email should not be empty").notEmpty();
+        req.checkBody('email',"email should be in valid format").isEmail();
     
     
-        req.check("password","pasword is invalid").isLength({min:6}).notEmpty();
+        req.checkBody("password","pasword is invalid").isLength({min:6}).notEmpty();
        
     
         let error=req.validationErrors();
@@ -46,7 +45,7 @@ registrationController=(req,res)=>
         {
             response.success=false
             response.error=error;
-            return res.status(200).send(response)
+            return res.status(400).send(response)
         }
         else{
     
@@ -82,7 +81,7 @@ registrationController=(req,res)=>
     }
     
     /**********************************************************************************************/
-loginController=(req,res)=>
+loginController(req,res)
     {
         try{
      
@@ -94,7 +93,6 @@ loginController=(req,res)=>
     
         let error=req.validationErrors();
         let response={}
-    
         if(error)
         {
             response.success=false
@@ -117,7 +115,7 @@ loginController=(req,res)=>
                 }
                 else{
                     response.success=true;
-                    response.message="Login Sucessfully done."
+                    response.message="login successful"
                     response.content=data;
                     return res.status(200).send(response)
                 }
@@ -131,7 +129,7 @@ loginController=(req,res)=>
     
     
     /*Forgot password controller************************************************************************************ */
-forgotPasswordController=(req,res)=>
+forgotPasswordController(req,res)
     {
         try{
             
@@ -148,8 +146,6 @@ forgotPasswordController=(req,res)=>
             return res.status(200).send(response)
         }
         else{
-    
-            
             const service=require('../services/userServices')
             //this method sending forgot password Details to service & also callback
             service.forgotPasswordService(req.body.email,(err,data)=>{
@@ -175,7 +171,7 @@ forgotPasswordController=(req,res)=>
         }
     }
     
-resetPassword=(req,res)=>{
+resetPassword(req,res){
     
         try{
             console.log("req data",req.body.password);
@@ -221,7 +217,7 @@ resetPassword=(req,res)=>{
     
     }
     /****************newchanges********************************************/ 
-userDataController=(req,res)=>{
+userDataController(req,res){
     
         try{
         let response= {};

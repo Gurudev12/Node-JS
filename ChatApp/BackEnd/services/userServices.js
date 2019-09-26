@@ -17,7 +17,7 @@ const model=require('../model/userModel')
 
 class UserService{
 
-registrationService=(userDetail,callback)=>
+registrationService(userDetail,callback)
 {
     try{
     model.registrationModel(userDetail,(err,data)=>{
@@ -36,7 +36,7 @@ registrationService=(userDetail,callback)=>
     }
 }
 /*login service******************************************************* */
-loginService=(loginDetail,callback)=>
+loginService(loginDetail,callback)
 {
     try{
 
@@ -55,7 +55,7 @@ loginService=(loginDetail,callback)=>
     }
 }
 /* forgot password service******************************************************* */
-forgotPasswordService=(forgotPasswordDetail,callback)=>
+forgotPasswordService(forgotPasswordDetail,callback)
 {
    try{
     model.forgotPasswordModel(forgotPasswordDetail,(err,data)=>{
@@ -74,7 +74,7 @@ forgotPasswordService=(forgotPasswordDetail,callback)=>
     }
 }
 /*reset password service******************************* */
-resetPasswordService =(id,newPassword,callback)=>
+resetPasswordService (id,newPassword,callback)
 {
     try{
         model.resetPasswordModel(id,newPassword,(err, data) => {
@@ -94,7 +94,7 @@ resetPasswordService =(id,newPassword,callback)=>
     
 }
 /****************newchanges********************************************/ 
-userDataService=(callback)=>
+userDataService(callback)
 {
     try{
     model.userDataModel((err,data)=>{
