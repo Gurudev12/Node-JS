@@ -13,22 +13,22 @@
  * 
  **************************************************************************/
 var nodemailer=require('nodemailer')
-// require('dotenv').config()
+require('dotenv').config()
 module.exports={
 sendMail(userEmail,newToken,callback)
 {
 var transporter=nodemailer.createTransport({
     service:'gmail',
     auth:{
+        user:process.env.USER_EMAIL,
+        pass:process.env.USER_PASSWORD
         // user:'murkargurudev@gmail.com',
         // pass:'gurudev123'
-        user:'murkargurudev@gmail.com',
-        pass:'gurudev123'
     }
 });
 
 var mailOption={
-    from:'murkargurudev@gmail.com',
+    from:process.env.USER_EMAIL,
     to:userEmail,
     subject:'sending mail using node js',
     text:'Reset password',

@@ -20,6 +20,8 @@ const bodyParser=require('body-parser');
 const cors=require('cors');
 const routes=require('../backEnd/routes/userRoutes');
 
+require('dotenv').config()
+
 const app=express();
 const port=4000;
 app.use(bodyParser.json())
@@ -27,7 +29,7 @@ app.use(validator());
 app.use('/',routes)
 
 
-mongoose.connect('mongodb://localhost:27017/fundooNotes',{useNewUrlParser:true})
+mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser:true})
 
 .then(()=>{
     console.log("successfully connected to database");
@@ -37,8 +39,8 @@ mongoose.connect('mongodb://localhost:27017/fundooNotes',{useNewUrlParser:true})
     process.exit();
 });
 
-app.listen(port,()=>{
-    console.log("Server started at port:",port);
+app.listen(process.env.PORT,()=>{
+    console.log("Server started at port:",process.env.PORT);
 })
 
 

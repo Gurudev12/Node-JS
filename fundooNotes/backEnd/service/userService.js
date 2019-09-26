@@ -27,7 +27,7 @@ class UserService {
     }
 
     createNewToken=(payload)=>{
-        let token=jwt.sign(payload,'secretKey',{expiresIn:'2hr'});
+        let token=jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'2hr'});
         return token;
 
     }
