@@ -26,7 +26,7 @@ let UserSchema = mongoose.Schema({
         type: String,
         required: [true, "email in proper format"]
     },
-    loginType: {
+    userType: {
         type: String,
         required: [true, "login type required"]
     },
@@ -69,13 +69,13 @@ class UserClass {
     /***************************************************************************/
     //this method will create new entry in database
     createNewUser=(paramObject)=>{
-        console.log("model saveuser===>", paramObject)
+
         return new Promise((resolve, reject) => {
             let user = new this.User({
                 "firstName": paramObject.firstName,
                 "lastName": paramObject.lastName,
                 "email": paramObject.email,
-                "loginType": paramObject.loginType,
+                "userType": paramObject.userType,
                 "password": paramObject.password
             });
 
@@ -120,13 +120,13 @@ class UserClass {
     /********UPDATE PASSWORD**********************************************************************/
     updatePassword=(id,newPassword)=>{
 
-        console.log("MODELIDDDDDDDDDD",id)
-        console.log("MODElPASSSSSSSS",newPassword)
+        console.log("MODEL IDDDDDDDDDD",id)
+
         return new Promise((resolve,reject)=>{
-            this.User.updateOne({ _id:id }, { $set: { password:newPassword }})
+            this.User.updateOne( { _id:id },{ $set: { password:newPassword }})    //{ _id:id },
             .then(()=>{
-                console.log("PASSWORD UPDATED SUCCESSFUL")
-                resolve("PASSWORD UPDATED SUCCESSFUL")
+                console.log("PASSWORD UPDATED SUCCESSFUL@@@@@@@")
+                resolve("PASSWORD UPDATED SUCCESSFUL@@@@@@@@@@@@@@@@@@@@@@@@")
             })
             .catch(err=>{
                 console.log("ERROR WHILE UPDATING PASSWORD")

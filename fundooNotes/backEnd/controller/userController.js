@@ -1,10 +1,8 @@
 /*************************************************************************
  * Execution        : 
  * 
- * Purpose          : 
- *                    
- *                     
- *                    
+ * Purpose          : userController.js is used to handle request and response of client in backend server
+ *                                 
  * 
  * @file            : userController.js
  * @author          : Gurudev Murkar
@@ -18,7 +16,7 @@ let serviceObject=new service.UserService()
 
 class UserController
 {
-/*****************************registrationController **************/
+
 registrationController(req,res){
 
         req.checkBody("firstName","first name should not be null").notEmpty()
@@ -31,28 +29,27 @@ registrationController(req,res){
         req.checkBody("email","email should not be empty").notEmpty();
         req.checkBody("email","email should be in valid format").isEmail();
     
-        req.checkBody("loginType","loginType should not be empty").notEmpty()
-        req.checkBody("loginType","loginType should be valid format").isAlpha()
+        req.checkBody("userType","userType should not be empty").notEmpty()
+        req.checkBody("userType","userType should be valid format").isAlpha()
 
-        req.checkBody("password","pasword length must be greater than 6").isLength({min:6}).notEmpty();
-
+        req.checkBody("password","pasword length must be greater than 6").isLength({min:6})
+        req.checkBody("password","pasword should not be empty").notEmpty()
     let error=req.validationErrors();
     let response={};
 
     if(error){
         response.success=false;
         response.error=error;
-        return res.status(400).send(response)
+        return res.status(422).send(response)
     }
     else{
         let paramObject={
             "firstName":req.body.firstName,
             "lastName":req.body.lastName,
             "email":req.body.email,
-            "loginType":req.body.loginType,
+            "userType":req.body.userType,
             "password":req.body.password
-        } //paramObject closed
-
+        }
         // service.registrationService(paramObject)
         serviceObject.registrationService(paramObject)
             .then(data=>{
@@ -68,7 +65,7 @@ registrationController(req,res){
                 return res.status(400).send(response)
             })
 
-    } //else closed
+    } 
 
 }//registration closed
 
@@ -77,15 +74,15 @@ loginController=(req,res)=>{
     req.checkBody("email","email should not be empty").notEmpty();
     req.checkBody("email","email should be in valid format").isEmail();
 
-    req.checkBody("password","pasword length must be greater than 6").isLength({min:6}).notEmpty();
-
+    req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
+    req.checkBody("password","password should not be empty").notEmpty();
     let error=req.validationErrors()
     let response={}
     if(error)
     {
         response.success=false,
         response.error=error,
-        res.status(400).send(response)
+        res.status(422).send(response)
     }
     else{
         let loginDetail={
@@ -121,19 +118,20 @@ forgotController=(req,res)=>{
     {
         response.error=error;
         response.success=false;
-        res.status(400).send(response)
+        res.status(422).send(response)
     }
     else{
         serviceObject.forgotPasswordService(req.body.email)
-        .then(sendinEmailResponce=>{
+        .then(sendinEmailResponse=>{
             response.success=true;
-            response.content=sendinEmailResponce;
+            response.content=sendinEmailResponse;
             res.status(200).send(response)
         })
         .catch(err=>{
             response.success=false;
             response.error=err;
             response.message="ERROR WHILE SENDING MAIL"
+            res.status(400).send(response)
         })
         
     }
@@ -141,19 +139,20 @@ forgotController=(req,res)=>{
 }
 /**************************************************************/
 resetPassword=(req,res)=>{
-    req.checkBody("password","pasword length must be greater than 6").isLength({min:6}).notEmpty();
+    req.checkBody("password","pasword should not be empty").notEmpty()
+    req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
     let error=req.validationErrors()
     let response={}
 
     if(error){
         response.success=false;
         response.error=error;
-        return res.status(400).send(response)
+        return res.status(422).send(response)
     }
     else{
-       
+        console.log("CONTROLLER ID",req.body.content._id)
         let resetData={
-            "id":req.body.content.id,
+            "id":req.body.content._id,
             "password":req.body.password
         }
         serviceObject.resetService(resetData)

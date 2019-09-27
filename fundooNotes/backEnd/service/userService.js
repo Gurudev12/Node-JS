@@ -25,31 +25,47 @@ class UserService {
         let encrptedPass = bcrypt.hashSync(password, salt)
         return encrptedPass
     }
-
-    createNewToken=(payload)=>{
-        let token=jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'2hr'});
+/***********
+ *@description-This method will create new token at the time of login,forgetPassword
+ * *********/
+ createNewToken=(payload)=>{
+        // let token=jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'2hr'});
+        let token=jwt.sign(payload,'secretKey',{expiresIn:'2hr'});
         return token;
 
     }
 
 
-
+/****
+ * @description-This is  registration service while new registration
+ ****/
     registrationService=(paramObject)=>{
         return new Promise((resolve, reject) => {
 
+            /****
+            * @description-Checking that user email id is allready present or not
+            ****/
             userModel.findEmail(paramObject.email)
                 .then((data) => {
                     if(data){
                         reject('email id allready registered')
                     }
                     else{
+                        /****
+                        * @description-If email is not present then create new object(registrationDetail) 
+                        *              before that password should encrypt.
+                        ****/
                     let registrationDetail = {
                         "firstName": paramObject.firstName,
                         "lastName": paramObject.lastName,
                         "email": paramObject.email,
-                        "loginType": paramObject.loginType,
+                        "userType": paramObject.userType,
                         "password": this.passwordEncrypt(paramObject.password)
                     }
+
+                     /****
+                        * @description-This method will send that object to userModel.
+                        ****/
                     userModel.createNewUser(registrationDetail)
                         .then(data => {
                             resolve({ "data": data })
@@ -66,15 +82,22 @@ class UserService {
         })
     }
 
-    /************************loginService*******************************888 */
+/****
+ * @description-This is login service
+ ****/
 
     loginService=(loginDetail)=>{
         
         return new Promise((resolve, reject) => {
+            /****
+            * @description-Checking that user email id is already present or not.
+            ****/
             userModel.findEmail(loginDetail.email)
                 .then(userData => {
                     
-                    // console.log("logindetail service==>",data)
+                     /****
+                     * @description-If email is matched then compare password of login user with its actual password
+                     ****/
                     bcrypt.compare(loginDetail.password,userData[0].password,(err,result)=>
                     {
                         if(result){
@@ -83,6 +106,9 @@ class UserService {
                                 "id":userData[0].id
                             }
                             //Generate new token
+                             /****
+                            * @description-creating new token while login and store it to database
+                            ****/
                             let loginToken=this.createNewToken(payload)
                 
                             //after generating new token saved to database
@@ -111,15 +137,24 @@ class UserService {
         })
     }
 /*******************************************************************************/
+/****
+        * @description-This is forgotPassword service
+        ****/
 forgotPasswordService=(email)=>{
    
     return new Promise((resolve,reject)=>{
- 
+    
+        /****
+        * @description-Checking that user email id is  present or not
+        ****/
         userModel.findEmail(email)
         .then(foundData=>{
                 let payload={
                     "_id":foundData[0]._id
                 }
+                /****
+                * @description-After finding email create new token and send it to perticular emailId
+                ****/
                 let forgotToken=this.createNewToken(payload)
                 console.log("FORGOT TOKEN",forgotToken)
                 nodemail.sendMail(foundData[0].email,forgotToken,(err,data)=>{
@@ -150,13 +185,11 @@ resetService=(resetData)=>{
     
     return new Promise((resolve,reject)=>{
 
-        console.log("PPPSSERVIce",resetData.password)
+        console.log("RESET DATA ID",resetData.id)
         let encrptedPassword=this.passwordEncrypt(resetData.password)
-        console.log("RESET PASSWORD",encrptedPassword)
-
+      
         userModel.updatePassword(resetData.id,encrptedPassword)
         .then(updatePasswordResponse=>{
-            console.log("UPDAATED RESPONCE IN SERVICE",updatePasswordResponse)
             resolve(updatePasswordResponse)
         })
         .catch(err=>{
