@@ -36,7 +36,9 @@ registrationController(req,res){
         req.checkBody("password","pasword should not be empty").notEmpty()
     let error=req.validationErrors();
     let response={};
-
+    /******
+     * @description-This error will generate validation error and send status code (422)
+     * *** */
     if(error){
         response.success=false;
         response.error=error;
@@ -50,7 +52,7 @@ registrationController(req,res){
             "userType":req.body.userType,
             "password":req.body.password
         }
-        // service.registrationService(paramObject)
+
         serviceObject.registrationService(paramObject)
             .then(data=>{
                 response.success=true;
@@ -61,13 +63,12 @@ registrationController(req,res){
             .catch(err=>{
                 response.success=false;
                 response.error=err;
-                response.message="Allready crediantial is register";
                 return res.status(400).send(response)
             })
 
     } 
 
-}//registration closed
+}
 
 /**********************LoginController ****************************************/
 loginController=(req,res)=>{
@@ -130,7 +131,6 @@ forgotController=(req,res)=>{
         .catch(err=>{
             response.success=false;
             response.error=err;
-            response.message="ERROR WHILE SENDING MAIL"
             res.status(400).send(response)
         })
         

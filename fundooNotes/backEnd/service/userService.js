@@ -18,7 +18,9 @@ const jwt=require('jsonwebtoken')
 const nodemail=require('../service/sendMail')
 
 class UserService {
-
+    /***********
+    *@description-This method will encrypt the plaintext password.
+    * *********/
     passwordEncrypt=(password)=>{
         let saltRounds = 10
         let salt = bcrypt.genSaltSync(saltRounds)
@@ -35,7 +37,7 @@ class UserService {
 
     }
 
-
+/***************************REGISTRATION SERVICE****************************************************/
 /****
  * @description-This is  registration service while new registration
  ****/
@@ -48,7 +50,7 @@ class UserService {
             userModel.findEmail(paramObject.email)
                 .then((data) => {
                     if(data){
-                        reject('email id allready registered')
+                        reject('EMAIL IS ALLREADY REGISTER')
                     }
                     else{
                         /****
@@ -63,29 +65,27 @@ class UserService {
                         "password": this.passwordEncrypt(paramObject.password)
                     }
 
-                     /****
-                        * @description-This method will send that object to userModel.
-                        ****/
+                    /****
+                    * @description-This method will send that object to userModel.
+                    ****/
                     userModel.createNewUser(registrationDetail)
                         .then(data => {
                             resolve({ "data": data })
                         })
                         .catch(err => {
-                            reject(err)
+                            reject("ERROR OCCURED WHILE CREATING NEW USER")
                         })
                     }
                 })
                 .catch(err => {
-                    console.log("servicee reject", err)
-                    reject(err)
+                    reject("ERROR OCCURED WHILE FINDING EMIAL IN DATABASE")
                 })
         })
     }
-
+/******************************LOGIN SERVICE*************************************************/
 /****
- * @description-This is login service
+ * @description-This is login service.
  ****/
-
     loginService=(loginDetail)=>{
         
         return new Promise((resolve, reject) => {
@@ -101,7 +101,6 @@ class UserService {
                     bcrypt.compare(loginDetail.password,userData[0].password,(err,result)=>
                     {
                         if(result){
-                            console.log("password matched")
                             let payload={
                                 "id":userData[0].id
                             }
@@ -112,34 +111,30 @@ class UserService {
                             let loginToken=this.createNewToken(payload)
                 
                             //after generating new token saved to database
-                                userModel.loginTokenSave(userData[0],loginToken)   //userData send array and userData[0] send object
+                                userModel.updateToken(userData[0],loginToken)   //userData send array and userData[0] send object
                                 .then(updatedData=>{
-                                    console.log("UPDATED DATA WITH TOKEN IN DATABASE====>",updatedData)
                                     resolve(updatedData)
                                 })
                                 .catch(error=>{
-                                    console.log("ERROR IN UPDATED DATA WITH TOKEN IN DATABASE===>",error)
-                                    reject({})
+                                    reject("ERROR IN UPDATED DATA WITH TOKEN IN DATABASE")
                                 
                                 })  
                         }
                         else{
-                            console.log("password not matched")
                             reject("PASSWORD NOT MATCHED")
                         }
                     })
                     
                 })
                 .catch(err => {
-                    console.log("login failed")
-                 reject("LOGIN FAILED....!!!1")
+                 reject("EMAIL IS NOT PRESENT....!!!1")
                 })
         })
     }
-/*******************************************************************************/
+/********************FORGOTPASSWORD SERVICE***********************************************************/
 /****
-        * @description-This is forgotPassword service
-        ****/
+* @description-This is forgotPassword service
+****/
 forgotPasswordService=(email)=>{
    
     return new Promise((resolve,reject)=>{
@@ -152,6 +147,7 @@ forgotPasswordService=(email)=>{
                 let payload={
                     "_id":foundData[0]._id
                 }
+
                 /****
                 * @description-After finding email create new token and send it to perticular emailId
                 ****/
@@ -160,12 +156,11 @@ forgotPasswordService=(email)=>{
                 nodemail.sendMail(foundData[0].email,forgotToken,(err,data)=>{
                     if(err)
                     {
-                        console.log("ERROR WHILE SENDIN MAIL")
                         reject("ERROR WHILE SENDIN MAIL")
                     }
                     else
                     {
-                        console.log("SEND EMAIL SUCCESSFULLY")
+                        
                         resolve("SEND EMAIL SUCCESSFULLY")
                     }
 
@@ -180,34 +175,30 @@ forgotPasswordService=(email)=>{
 
 
 }
-/**RESET SERVICE**********************************************************************/
+/********************RESET SERVICE**************************************************************/
+/****
+* @description-This is resetPassword service
+****/
 resetService=(resetData)=>{
-    
+  
     return new Promise((resolve,reject)=>{
 
-        console.log("RESET DATA ID",resetData.id)
         let encrptedPassword=this.passwordEncrypt(resetData.password)
-      
+        /****
+        * @description-This method will pass the perticular user id and encrypted password to userModel 
+        *              for update password .
+        ****/
         userModel.updatePassword(resetData.id,encrptedPassword)
         .then(updatePasswordResponse=>{
-            resolve(updatePasswordResponse)
+            resolve("PASSWORD UPDATED SUCCESSFULL")
         })
         .catch(err=>{
-            reject(err)
+            reject("ERROR OCCURED WHILE UPDATING PASSWORD")
         })
     })
 }
 
 }
 module.exports = { UserService }
-
-
-
-
-
-
-
-
-
 // let UserServiceObject=new UserService()
 // module.exports=UserServiceObject

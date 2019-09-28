@@ -47,9 +47,10 @@ class UserClass {
         this.User = mongoose.model('registeredCollection', UserSchema)
 
     }
-    /***************************************************************************/
+
+    /***************************FIND EMAIL************************************************/
     //this method will check the email is already present in database or not
-    findEmail=(email)=>{
+    findEmail = (email) => {
         return new Promise((resolve, reject) => {
             this.User.find({ 'email': email })        //['_id','email','password']
                 .then((data) => {
@@ -57,18 +58,19 @@ class UserClass {
                         resolve(data)
                     }
                     else {
-                        console.log("data model===>", data)
                         resolve();
                     }
                 })
                 .catch((err) => {
-                    reject({ "error": false, "message": "Error while database searching" })
+                    reject("EMAIL IS NOT PRESENT")
                 })
         })
     }
-    /***************************************************************************/
-    //this method will create new entry in database
-    createNewUser=(paramObject)=>{
+    /****************************CREATE NEW USER***********************************************/
+    /***
+     * @description-this method will create new entry in database
+     */
+    createNewUser = (paramObject) => {
 
         return new Promise((resolve, reject) => {
             let user = new this.User({
@@ -81,8 +83,13 @@ class UserClass {
 
             user.save()
                 .then(savedUser => {
-                    console.log("user saved successfully", savedUser)
-                    resolve({ "data": savedUser })
+                    let newRegisterUser={
+                        "firstName": savedUser.firstName,
+                        "lastName": savedUser.lastName,
+                        "email": savedUser.email,
+                        "userType": savedUser.userType,
+                    }
+                    resolve(newRegisterUser)
                 })
                 .catch(err => {
                     console.log("Error occured while new user saved")
@@ -90,24 +97,28 @@ class UserClass {
                 })
         })
     }
-    /*********login with token save******************************************************************/
-    loginTokenSave=(userData, tokenData)=>{
+
+    /*********login and save save token***************************************************/
+     /***
+     * @description-It will save token  to perticular login user based on its unique id.
+     */
+    updateToken = (userData, tokenData) => {
         return new Promise((resolve, reject) => {
 
             this.User.updateOne({ _id: userData._id }, { $set: { loginToken: tokenData } })
                 .then(savedTokenResponse => {
-                    console.log("MODEL TOKEN===>",savedTokenResponse)
-                    console.log("USER DATA UPDATED TOKEN===>",userData)
-                    let loginResponse={
-                        "success":true,
-                        "message":"LOGIN SUCCESSFUL",
-                        "id":userData._id,
-                        "firstName":userData.firstName,
-                        "lastName":userData.lastName,
-                        "email":userData.email,
-                        "token":userData.loginToken
+                    
+                    let loginResponse = {
+                        "success": true,
+                        "message": "LOGIN SUCCESSFUL",
+                        "id": userData._id,
+                        "firstName": userData.firstName,
+                        "lastName": userData.lastName,
+                        "email": userData.email,
+                        "token": userData.loginToken
                     }
                     resolve(loginResponse)
+                
                 })
                 .catch(err => {
                     console.log("TOKEN DATA SAVE ERROR")
@@ -117,26 +128,24 @@ class UserClass {
         })
     }
 
-    /********UPDATE PASSWORD**********************************************************************/
-    updatePassword=(id,newPassword)=>{
+    /*******************UPDATE PASSWORD*************************************/
+    /***
+     * @description-It will update the password of perticular  user based on its unique id.
+     */
+    updatePassword = (id, newPassword) => {
 
-        console.log("MODEL IDDDDDDDDDD",id)
-
-        return new Promise((resolve,reject)=>{
-            this.User.updateOne( { _id:id },{ $set: { password:newPassword }})    //{ _id:id },
-            .then(()=>{
-                console.log("PASSWORD UPDATED SUCCESSFUL@@@@@@@")
-                resolve("PASSWORD UPDATED SUCCESSFUL@@@@@@@@@@@@@@@@@@@@@@@@")
-            })
-            .catch(err=>{
-                console.log("ERROR WHILE UPDATING PASSWORD")
-                reject("ERROR WHILE UPDATING PASSWORD")
-            })
+        return new Promise((resolve, reject) => {
+            this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
+                .then(() => {
+                    resolve("PASSWORD UPDATED SUCCESSFUL")
+                })
+                .catch(err => {
+                    reject("ERROR WHILE UPDATING PASSWORD")
+                })
 
         })
 
     }
-    /*******************************************************************************/
-}   //class close
+}   
 let UserClassObject = new UserClass();
 module.exports = UserClassObject;
