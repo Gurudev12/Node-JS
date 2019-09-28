@@ -69,6 +69,29 @@ registrationController(req,res){
     } 
 
 }
+/******************************************************* */
+registrationVerifyController=(req,res)=>{
+   
+    console.log("CONTROLLLLLLLLLLLLLLERRRRRRRR IDDDDDDDD",req.body.content._id)
+    let response={}
+    serviceObject.registrationVerifyService(req.body.content._id)
+    .then(data=>{
+        response.success=true;
+        response.content=data;
+        res.status(200).send(response)
+    })
+    .catch(err=>{
+        response.success=false;
+        res.status(400).send(response)
+
+    })
+
+
+
+
+}
+/******************************************************* */
+
 
 /**********************LoginController ****************************************/
 loginController=(req,res)=>{

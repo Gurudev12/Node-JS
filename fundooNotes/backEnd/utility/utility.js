@@ -13,6 +13,7 @@
  * 
  **************************************************************************/
 const jwt=require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 // require('dotenv').config()
 class UserUtility{
    
@@ -43,6 +44,24 @@ class UserUtility{
         }  
 
     
+}
+/***********
+    *@description-This method will encrypt the plaintext password.
+    * *********/
+passwordEncrypt=(password)=>{
+    let saltRounds = 10
+    let salt = bcrypt.genSaltSync(saltRounds)
+    let encrptedPass = bcrypt.hashSync(password, salt)
+    return encrptedPass
+}
+/***********
+ *@description-This method will create new token at the time of login,forgetPassword
+ * *********/
+createNewToken=(payload)=>{
+    // let token=jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'2hr'});
+    let token=jwt.sign(payload,'secretKey',{expiresIn:'2hr'});
+    return token;
+
 }
 }
 let userUtilityObject=new UserUtility()

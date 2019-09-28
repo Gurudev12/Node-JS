@@ -11,9 +11,9 @@ class Person
 {
     constructor()
     {
-        this.firstName=""
-        this.lastName=""
-        this.address=""
+        this.firstName="",
+        this.lastName="",
+        this.address="",
         this.phoneNumber=""
     }
     //set first name

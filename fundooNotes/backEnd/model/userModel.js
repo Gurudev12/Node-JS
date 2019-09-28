@@ -37,6 +37,9 @@ let UserSchema = mongoose.Schema({
     loginToken: {
         type: String,
         // required:[true,"token is required"]
+    },
+    isVerify:{
+        type:Boolean
     }
 },
     {
@@ -78,16 +81,19 @@ class UserClass {
                 "lastName": paramObject.lastName,
                 "email": paramObject.email,
                 "userType": paramObject.userType,
-                "password": paramObject.password
+                "password": paramObject.password,
+                "isVerify":false
             });
 
             user.save()
                 .then(savedUser => {
                     let newRegisterUser={
+                        "_id":savedUser._id,
                         "firstName": savedUser.firstName,
                         "lastName": savedUser.lastName,
                         "email": savedUser.email,
                         "userType": savedUser.userType,
+                 
                     }
                     resolve(newRegisterUser)
                 })
@@ -98,6 +104,22 @@ class UserClass {
         })
     }
 
+
+    updateRegistrationDetail=(userId_id)=>{
+        // return new Promise((resolve,reject)=>{
+          
+
+        return new Promise((resolve, reject) => {
+            this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })    //{ _id:id },
+                .then(() => {
+                    resolve("REGISTRTION VERIFIED SUCCESSFULL")
+                })
+                .catch(err => {
+                    reject("REGISTRTION VERIFICATION FAILED")
+                })
+
+        })
+    }
     /*********login and save save token***************************************************/
      /***
      * @description-It will save token  to perticular login user based on its unique id.

@@ -25,4 +25,6 @@ router.post('/forgotPassword',ctrl.forgotController)
 
 router.post('/resetPassword',utility.verifyToken,ctrl.resetPassword)
 
+router.post('/verifyRegistration',utility.verifyToken,ctrl.registrationVerifyController)
+
 module.exports=router;
