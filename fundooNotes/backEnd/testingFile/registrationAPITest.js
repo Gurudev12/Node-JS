@@ -3,10 +3,12 @@
 //Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../backEnd/server');
+const server = require('../server');
 const fs=require('fs')
 
-let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/testingFile/testingObjects.json')
+let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/backEnd/testingFile/testingObjects.json')
+
+
 let testData=JSON.parse(testObject)
 const registrationTestData=testData.registrationTest
 
@@ -66,30 +68,24 @@ describe('/registration', () => {
           });
     });
 
-
-
-/*****
- * @description-This test case will throw message that last name is empty.
- ****/
-    it('It should not POST regitstration with empty last name', (done) => {
+    it('It should not POST regitstration because email is not existed', (done) => {
         chai.request(server)
             .post('/registration')
-            .send(registrationTestData.emptyLastName)
+            .send(registrationTestData.emailNotExist)
             .end((err, res) => {
-                  res.should.have.status(422);
+                  res.should.have.status(500);
               done();
             });
       });
 
-/*****
- * @description-This test case will throw message that last name is invalid.
- ****/
-it('It should not POST regitstration with invalid last name', (done) => {
+it('It should not POST regitstration because email allready registered', (done) => {
     chai.request(server)
         .post('/registration')
-        .send(registrationTestData.invalidLastName)
+        //.send(registrationTestData.invalidLastName)
+        .send(registrationTestData.emailAllreadyPresent)
+
         .end((err, res) => {
-              res.should.have.status(422);
+              res.should.have.status(500);
           done();
         });
   });

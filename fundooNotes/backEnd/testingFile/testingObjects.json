@@ -30,19 +30,19 @@
             "password":"dasharath123"
         },
 
-        "emptyLastName":{
+        "emailNotExist":{
             "firstName":"dasharath",
-            "lastName":"",
-            "email":"dashrathmurkar@gmail.com",
+            "lastName":"murkar",
+            "email":"gurudeeeeeeev@gmail.com",
             "userType":"user",
             "password":"dasharath123"
         },
-        "invalidLastName":{
-            "firstName":"dasharath",
-            "lastName":"123murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "emailAllreadyPresent":{
+            "firstName":"gurudev",
+            "lastName":"murkar",
+            "email":"gurudevrameshmurkar@gmail.com",
+            "userType":"admin",
+            "password":"gurudev12345"
         },
 
         "emptyEmail":{
@@ -106,9 +106,21 @@
             "password":"12"
         },
         "credentialNotMatched":{
+            "email":"guruevrameshmurkar@gmail.com",
+            "password":"gurude12345"
+
+        },
+        "credentialMatched":{
+            "email":"gurudevrameshmurkar@gmail.com",
+            "password":"gurudev123"
+        },
+        "emailWrong":{
+            "email":"gurudevrmurkar@gmail.com",
+            "password":"gurudev123"
+        },
+        "passwordWrong":{
             "email":"gurudevrameshmurkar@gmail.com",
             "password":"gurudev12345"
-
         }
     },
     "forgotPasswordTest":{
@@ -120,6 +132,9 @@
         },
         "validEmail":{
             "email":"gurudevrameshmurkar@gmail.com"
+        },
+        "notPresentEmail":{
+            "email":"gurudevrmurkar@gmail.com"
         }
     },
 
@@ -135,7 +150,7 @@
         "password":"1234567"
         },
         "headerWithToken":{
-            "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDhiNGUzNWFmNzgxZjRiMTViMTZlMjQiLCJpYXQiOjE1Njk1NzgxMjAsImV4cCI6MTU2OTU4NTMyMH0.aPK90ERE4hbKYxTwvzS0-lKHNk5VIr6-kMpqWM4AIio"
+            "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDkxODkzZDJmMjBmMTI0ZWRhYjBjYWEiLCJpYXQiOjE1Njk4MjIyMTMsImV4cCI6MTU2OTgyOTQxM30.uRG_JvdIwb6XP8FbZbdnF68g-6b5EAqjOEINeTKALcw"
         }
     }
 }

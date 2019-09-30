@@ -19,9 +19,7 @@ chatApp.controller('getUserDetailCtrl', function ($scope, getUserDetailService, 
         localStorage.setItem('receiverName', x.firstname)
 
         getUserDetailService.getUserMessageServiceUser($scope)
-
     }
-
     $scope.sendMessage = function () {
 
         if ($scope.message) {

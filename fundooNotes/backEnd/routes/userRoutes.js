@@ -1,10 +1,9 @@
 /*************************************************************************
- * Execution        : 
+ * @Execution        : 1. default node       cmd> nodemon model.js
  * 
- * Purpose          : 
+ * @Purpose          : It contain all API routes
  *                    
  *                     
- *                    
  * 
  * @file            : userRoutes.js
  * @author          : Gurudev Murkar
@@ -23,7 +22,10 @@ router.post('/login',ctrl.loginController)
 
 router.post('/forgotPassword',ctrl.forgotController)
 
-router.post('/resetPassword',utility.verifyToken,ctrl.resetPassword)
+// router.post('/resetPassword',utility.verifyToken,ctrl.resetPassword)
+
+router.post('/resetPassword',utility.verifyToken,ctrl.newResetPassword)
+
 
 router.post('/verifyRegistration',utility.verifyToken,ctrl.registrationVerifyController)
 

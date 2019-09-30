@@ -32,7 +32,7 @@ chatApp.service('getUserDetailService', function ($http, $location) {
                      {         
             //In this response we will get ('senderId,senderName,receiverId,receiverName,message) and store that response in 'messageObj'
                         let messageObj=response.data.content;
-                        console.log("=====>new change content",response.data.content)
+            
                         let message=[]
                         let receiverId=localStorage.getItem('receiverId')
                         let receiverName=localStorage.getItem('receiverName')

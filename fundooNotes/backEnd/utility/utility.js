@@ -35,7 +35,6 @@ class UserUtility{
             
                 })
             }else{
-                console.log("token not got");
                 res.status(400).send("Token not got")
             }
         }catch(e)

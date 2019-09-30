@@ -1,7 +1,7 @@
 /*************************************************************************
- * Execution        : 1. default node       cmd> nodemon model.js
+ * @Execution        : 1. default node       cmd> nodemon model.js
  * 
- * Purpose          : 
+ * @Purpose          : 
  *                    
  *                     
  *                    

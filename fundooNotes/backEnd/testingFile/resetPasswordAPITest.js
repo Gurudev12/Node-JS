@@ -1,9 +1,9 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../backEnd/server');
+const server = require('../server');
 const fs=require('fs')
 
-let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/testingFile/testingObjects.json')
+let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/backEnd/testingFile/testingObjects.json')
 let testData=JSON.parse(testObject)
 const resetPasswordData=testData.resetPasswordTest;
 
@@ -19,8 +19,8 @@ describe('This is for reset password', () => {
     it('It should not POST reset password because of empty password', (done) => {
       chai.request(server)
           .post('/resetPassword')
-          .send(resetPasswordData.emptyPassword)
-          .set(resetPasswordData.headerWithToken)
+          .send(resetPasswordData.emptyPassword)  
+          .set(resetPasswordData.headerWithToken) //change the token at everytime
           .end((err, res) => {
                 res.should.have.status(422);
             done();
@@ -34,7 +34,7 @@ it('It should not POST reset password because of password length is', (done) => 
     chai.request(server)
         .post('/resetPassword')
         .send(resetPasswordData.passwordLength)
-        .set(resetPasswordData.headerWithToken)
+        .set(resetPasswordData.headerWithToken)  //change the token at everytime
         .end((err, res) => {
               res.should.have.status(422);
           done();
@@ -48,7 +48,7 @@ it('It should POST reset password successfull..', (done) => {
     chai.request(server)
         .post('/resetPassword')
         .send(resetPasswordData.resetPassword)
-        .set(resetPasswordData.headerWithToken)
+        .set(resetPasswordData.headerWithToken)  //change the token at everytime
         .end((err, res) => {
               res.should.have.status(200);
           done();

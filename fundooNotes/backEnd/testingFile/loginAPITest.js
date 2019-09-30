@@ -1,17 +1,16 @@
 //Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server')
+const server = require('../server');
 const fs=require('fs')
 
-let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/testingFile/testingObjects.json')
+let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/backEnd/testingFile/testingObjects.json')
 let testData=JSON.parse(testObject)
 const loginTestData=testData.loginTest;
 
 chai.use(chaiHttp);
 
 let should = chai.should();
-console.log("SHOULD==>",should);
 
 /*****
  * @description-This test case is for login with empty creadential
@@ -92,19 +91,37 @@ it('It should  not POST login because password length is less than six', (done) 
           done();
         });
   }); 
-/*****
- * @description-This is for email or password not  matched.
- ****/
-it('It should  not POST login because  email or password not matched', (done) => {
+
+  it('It should  POST login because  email or password  matched', (done) => {
        
     chai.request(server)
         .post('/login')
-        .send(loginTestData.credentialNotMatched)
+        .send(loginTestData.credentialMatched)
         .end((err, res) => {
-              res.should.have.status(400);
+              res.should.have.status(200);
           done();
         });
   }); 
-
-
+  it('It should  NOT POST login because  email is wrong', (done) => {
+       
+    chai.request(server)
+        .post('/login')
+        // .send(loginTestData.credentialMatched)
+        .send(loginTestData.emailWrong)
+        .end((err, res) => {
+              res.should.have.status(500);
+          done();
+        });
+  }); 
+  it('It should NOT POST login because  password is wrong', (done) => {
+       
+    chai.request(server)
+        .post('/login')
+        // .send(loginTestData.credentialMatched)
+        .send(loginTestData.passwordWrong)
+        .end((err, res) => {
+              res.should.have.status(500);
+          done();
+        });
+  }); 
 });

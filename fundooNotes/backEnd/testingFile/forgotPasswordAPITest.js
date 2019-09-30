@@ -1,9 +1,9 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../backEnd/server');
+const server = require('../server');
 const fs=require('fs')
 
-let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/testingFile/testingObjects.json')
+let testObject=fs.readFileSync('/home/administrator/Desktop/Bridgelab/fundooNotes/backEnd/testingFile/testingObjects.json')
 let testData=JSON.parse(testObject)
 const forgotPasswordTestData=testData.forgotPasswordTest;
 
@@ -50,6 +50,20 @@ describe('/forgotPassword', () => {
             .send(forgotPasswordTestData.validEmail)
             .end((err, res) => {
                   res.should.have.status(200);
+              done();
+
+              // Error: Timeout of 2000ms exceeded. if this error will occure note that while executing' Error: Timeout of 2000ms exceeded'.
+            });
+      }); 
+      it('It should not POST forgot password because of email is not present in database', (done) => {
+       
+        chai.request(server)
+            .post('/forgotPassword')
+            // .send(forgotPasswordTestData.invalidEmail)
+            .send(forgotPasswordTestData.notPresentEmail)
+
+            .end((err, res) => {
+                  res.should.have.status(500);
               done();
             });
       }); 

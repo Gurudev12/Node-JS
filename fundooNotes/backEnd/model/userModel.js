@@ -1,10 +1,8 @@
 /*************************************************************************
- * Execution        :
+ * @Execution        :1. default node       cmd> nodemon model.js
  * 
- * Purpose          : 
- *                    
- *                     
- *                    
+ * @Purpose          : It contain only CRUD operations
+ *                                     
  * 
  * @file            : userModel.js
  * @author          : Gurudev Murkar
@@ -54,29 +52,30 @@ class UserClass {
     /***************************FIND EMAIL************************************************/
     //this method will check the email is already present in database or not
     findEmail = (email) => {
-        return new Promise((resolve, reject) => {
-            this.User.find({ 'email': email })        //['_id','email','password']
-                .then((data) => {
-                    if (data.length > 0) {
-                        resolve(data)
-                    }
-                    else {
-                        resolve();
-                    }
-                })
-                .catch((err) => {
-                    reject("EMAIL IS NOT PRESENT")
-                })
-        })
+            return new Promise((resolve, reject) => {
+                this.User.find({ 'email': email })        
+                    .then((data) => {
+                        if (data.length > 0) {
+                            resolve(data)
+                        }
+                        else {
+                            resolve();
+                        }
+                    })
+                    .catch((err) => {
+                        reject("EMAIL IS NOT PRESENT")
+                    })
+            })
+       
     }
     /****************************CREATE NEW USER***********************************************/
     /***
      * @description-this method will create new entry in database
      */
     createNewUser = (paramObject) => {
-
+    
         return new Promise((resolve, reject) => {
-            let user = new this.User({
+            let newUser = new this.User({
                 "firstName": paramObject.firstName,
                 "lastName": paramObject.lastName,
                 "email": paramObject.email,
@@ -85,7 +84,7 @@ class UserClass {
                 "isVerify":false
             });
 
-            user.save()
+            newUser.save()
                 .then(savedUser => {
                     let newRegisterUser={
                         "_id":savedUser._id,
@@ -98,76 +97,89 @@ class UserClass {
                     resolve(newRegisterUser)
                 })
                 .catch(err => {
-                    console.log("Error occured while new user saved")
                     reject({ "Error occured while new user saved": err })
                 })
         })
+       
     }
 
 
     updateRegistrationDetail=(userId_id)=>{
-        // return new Promise((resolve,reject)=>{
-          
 
-        return new Promise((resolve, reject) => {
-            this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })    //{ _id:id },
-                .then(() => {
-                    resolve("REGISTRTION VERIFIED SUCCESSFULL")
-                })
-                .catch(err => {
-                    reject("REGISTRTION VERIFICATION FAILED")
-                })
-
-        })
+            return new Promise((resolve, reject) => {
+                this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })    //{ _id:id },
+                    .then(() => {
+                        resolve("REGISTRTION VERIFIED SUCCESSFULL")
+                    })
+                    .catch(err => {
+                        reject("REGISTRTION VERIFICATION FAILED")
+                    })
+    
+            })
     }
-    /*********login and save save token***************************************************/
      /***
      * @description-It will save token  to perticular login user based on its unique id.
      */
     updateToken = (userData, tokenData) => {
-        return new Promise((resolve, reject) => {
+        
+            return new Promise((resolve, reject) => {
 
-            this.User.updateOne({ _id: userData._id }, { $set: { loginToken: tokenData } })
-                .then(savedTokenResponse => {
+                this.User.updateOne({ _id: userData._id }, { $set: { loginToken: tokenData } })
+                    .then(savedTokenResponse => {
+                        console.log("USER DTAA MODEL",userData)
+                        let loginResponse = {
+                            "success": true,
+                            "message": "LOGIN SUCCESSFUL",
+                            data:{
+                                "firstName":userData.firstName,
+                                "lastName":userData.lastName,
+                                "email":userData.email,
+                                "userType":userData.userType
+                            },
+                            "token": tokenData
+                        }
+                        resolve(loginResponse)
                     
-                    let loginResponse = {
-                        "success": true,
-                        "message": "LOGIN SUCCESSFUL",
-                        "id": userData._id,
-                        "firstName": userData.firstName,
-                        "lastName": userData.lastName,
-                        "email": userData.email,
-                        "token": userData.loginToken
-                    }
-                    resolve(loginResponse)
-                
-                })
-                .catch(err => {
-                    console.log("TOKEN DATA SAVE ERROR")
-                    reject("REJECTED TOKEN ERROR")
-                })
-
-        })
+                    })
+                    .catch(err => {
+                        console.log("TOKEN DATA SAVE ERROR")
+                        reject("REJECTED TOKEN ERROR")
+                    })
+    
+            })
     }
 
     /*******************UPDATE PASSWORD*************************************/
     /***
      * @description-It will update the password of perticular  user based on its unique id.
      */
-    updatePassword = (id, newPassword) => {
+    // updatePassword = (id, newPassword) => {
+     
+    //         return new Promise((resolve, reject) => {
+    //             this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
+    //                 .then(() => {
+    //                     resolve("PASSWORD UPDATED SUCCESSFUL")
+    //                 })
+    //                 .catch(err => {
+    //                     reject("ERROR WHILE UPDATING PASSWORD")
+    //                 })
+    
+    //         })
+    // }
 
-        return new Promise((resolve, reject) => {
-            this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
-                .then(() => {
-                    resolve("PASSWORD UPDATED SUCCESSFUL")
-                })
-                .catch(err => {
-                    reject("ERROR WHILE UPDATING PASSWORD")
-                })
+async updateNewPassword(id, newPassword){
+    try{
+       let updatedResult=await this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
+       if(updatedResult.nModified==1){
+           return true
+       }else{
+        return false
+       } 
+    }catch(e){
+           console.log(e)
+       }
+}
 
-        })
-
-    }
 }   
 let UserClassObject = new UserClass();
 module.exports = UserClassObject;
