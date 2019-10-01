@@ -22,10 +22,7 @@ router.post('/login',ctrl.loginController)
 
 router.post('/forgotPassword',ctrl.forgotController)
 
-// router.post('/resetPassword',utility.verifyToken,ctrl.resetPassword)
-
 router.post('/resetPassword',utility.verifyToken,ctrl.newResetPassword)
-
 
 router.post('/verifyRegistration',utility.verifyToken,ctrl.registrationVerifyController)
 

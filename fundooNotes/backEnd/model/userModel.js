@@ -34,10 +34,9 @@ let UserSchema = mongoose.Schema({
     },
     loginToken: {
         type: String,
-        // required:[true,"token is required"]
     },
     isVerify:{
-        type:Boolean
+        type:Boolean,
     }
 },
     {
@@ -68,10 +67,31 @@ class UserClass {
             })
        
     }
+///
+///findEmail= read()    email=paramObject
+///
+read = (email) => {
+    return new Promise((resolve, reject) => {
+        this.User.find({ 'email': email })        
+            .then((data) => {
+                if (data.length > 0) {
+                    resolve(data)
+                }
+                else {
+                    resolve();
+                }
+            })
+            .catch((err) => {
+                reject("EMAIL IS NOT PRESENT")
+            })
+    })
+
+}
+
     /****************************CREATE NEW USER***********************************************/
     /***
      * @description-this method will create new entry in database
-     */
+     ***/
     createNewUser = (paramObject) => {
     
         return new Promise((resolve, reject) => {
@@ -107,7 +127,7 @@ class UserClass {
     updateRegistrationDetail=(userId_id)=>{
 
             return new Promise((resolve, reject) => {
-                this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })    //{ _id:id },
+                this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })   
                     .then(() => {
                         resolve("REGISTRTION VERIFIED SUCCESSFULL")
                     })
@@ -126,7 +146,7 @@ class UserClass {
 
                 this.User.updateOne({ _id: userData._id }, { $set: { loginToken: tokenData } })
                     .then(savedTokenResponse => {
-                        console.log("USER DTAA MODEL",userData)
+                    
                         let loginResponse = {
                             "success": true,
                             "message": "LOGIN SUCCESSFUL",
@@ -142,30 +162,11 @@ class UserClass {
                     
                     })
                     .catch(err => {
-                        console.log("TOKEN DATA SAVE ERROR")
                         reject("REJECTED TOKEN ERROR")
                     })
     
             })
     }
-
-    /*******************UPDATE PASSWORD*************************************/
-    /***
-     * @description-It will update the password of perticular  user based on its unique id.
-     */
-    // updatePassword = (id, newPassword) => {
-     
-    //         return new Promise((resolve, reject) => {
-    //             this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
-    //                 .then(() => {
-    //                     resolve("PASSWORD UPDATED SUCCESSFUL")
-    //                 })
-    //                 .catch(err => {
-    //                     reject("ERROR WHILE UPDATING PASSWORD")
-    //                 })
-    
-    //         })
-    // }
 
 async updateNewPassword(id, newPassword){
     try{
@@ -176,7 +177,7 @@ async updateNewPassword(id, newPassword){
         return false
        } 
     }catch(e){
-           console.log(e)
+           return "Exception ERROR"
        }
 }
 

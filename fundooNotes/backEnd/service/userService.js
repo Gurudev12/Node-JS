@@ -17,6 +17,7 @@ const nodemail=require('../service/sendMail')
 let emailExistence=require('email-existence')
 let utility=require('../utility/utility')
 
+
 class UserService {
 
 
@@ -37,7 +38,7 @@ class UserService {
                    /****
                * @description-Checking that user email id is allready present or not
                ****/
-               userModel.findEmail(paramObject.email)
+               userModel.read(paramObject.email)
                .then((data) => {
                    if(data){
                        reject("EMAIL IS ALLREADY REGISTER")
@@ -65,9 +66,9 @@ class UserService {
                                "_id":data._id
                            }
                            let registrationToken=utility.createNewToken(payload)
-                    
-                           let verifyLink='<p>this is link to REGISTRATION VERIFY</p><a href="http://localhost:4000/registrationVerify/'+registrationToken+'">Registration verify</a>'
-                           nodemail.sendMail(data.email,verifyLink,(error,response)=>{
+                    //let registrationVerifyLink=process.env.REGISTRATION_VERIFY_LINK
+                        let registrationVerifyLink='<p>this is link to REGISTRATION VERIFY</p><a href="http://localhost:4000/registrationVerify/'+registrationToken+'">Registration verify</a>'
+                           nodemail.sendMail(data.email,registrationVerifyLink,(error,response)=>{
                                if(error){
                                    reject(error)
                                }else{
@@ -126,7 +127,7 @@ registrationVerifyService=(_id)=>{
                 /****
                 * @description-Checking that user email id is already present or not.
                 ****/
-                userModel.findEmail(loginDetail.email)
+                userModel.read(loginDetail.email)
                     .then(userData => {
                         if(userData[0].isVerify==true){
                         /****
@@ -144,8 +145,6 @@ registrationVerifyService=(_id)=>{
                                 ****/
                                 let loginToken=utility.createNewToken(payload)
 
-                                console.log("TOKEN",loginToken)
-
                                 //after generating new token saved to database
                                     userModel.updateToken(userData[0],loginToken)   //userData send array and userData[0] send object
                                     .then(updatedData=>{
@@ -153,22 +152,15 @@ registrationVerifyService=(_id)=>{
                                     })
                                     .catch(error=>{
                                         reject("ERROR IN UPDATED DATA WITH TOKEN IN DATABASE")
-                                    
                                     })  
-    
                             }
                             else{
                                 reject("PASSWORD NOT MATCHED")
                             }
                         })
-                            
                         }else{
-                            reject("REGISTRATION VERIFICATION NOT DONE")
-                            
-                        }
-                        
-                      
-                        
+                            reject("REGISTRATION VERIFICATION NOT DONE")  
+                        }    
                     })
                     .catch(err => {
                      reject("WRONG EMAIL ID")
@@ -190,7 +182,7 @@ forgotPasswordService=(email)=>{
             /****
             * @description-Checking that user email id is  present or not
             ****/
-            userModel.findEmail(email)
+            userModel.read(email)
             .then(foundData=>{
                     let payload={
                         "_id":foundData[0]._id
@@ -200,8 +192,10 @@ forgotPasswordService=(email)=>{
                     * @description-After finding email create new token and send it to perticular emailId
                     ****/
                     let forgotToken=utility.createNewToken(payload)
-             
-                    let forgotLink='<p>this is link to RESET PASSWORD</p><a href="http://localhost:4000/resetPassword'+forgotToken+'">Reset PassWord</a>'
+                    //process.env use for link
+                    
+                     let forgotLink='<p>this is link to RESET PASSWORD</p><a href="http://localhost:4000/resetPassword'+forgotToken+'">Reset PassWord</a>'
+                    //let forgotLink=process.env.FORGOT_PASSWORD_LINK
                     nodemail.sendMail(foundData[0].email,forgotLink,(err,data)=>{
                         if(err)
                         {
@@ -223,35 +217,10 @@ forgotPasswordService=(email)=>{
         console.log(e)
     }
 }
-/********************RESET SERVICE**************************************************************/
-/****
-* @description-This is resetPassword service
-****/
-// resetService=(resetData)=>{
-//   try{
-//     return new Promise((resolve,reject)=>{
 
-//         let encrptedPassword=utility.passwordEncrypt(resetData.password)
-//         /****
-//         * @description-This method will pass the perticular user id and encrypted password to userModel 
-//         *              for update password .
-//         ****/
-//         userModel.updatePassword(resetData.id,encrptedPassword)
-//         .then(updatePasswordResponse=>{
-//             resolve("PASSWORD UPDATED SUCCESSFULL")
-//         })
-//         .catch(err=>{
-//             reject("ERROR OCCURED WHILE UPDATING PASSWORD")
-//         })
-//     })
-//   }catch(e){
-//       console.log(e)
-//   }
-// }
-
-async resetNewService(resetData){
+async resetNewPasswordService(resetData){
       try{
-        let encrptedPassword=utility.passwordEncrypt(resetData.password)
+        let encrptedPassword= utility.passwordEncrypt(resetData.password)
        
 
         let updatedResult=await userModel.updateNewPassword(resetData.id,encrptedPassword)
@@ -263,36 +232,28 @@ async resetNewService(resetData){
         }
 
       }catch(e){
-        console.log(e)
+        return e
+      }              
       }
-              
-                        
-      }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 module.exports = { UserService }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // let UserServiceObject=new UserService()
 // module.exports=UserServiceObject

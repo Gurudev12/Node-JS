@@ -95,8 +95,10 @@ registrationController(req,res){
 }
 /******************************************************* */
 registrationVerifyController=(req,res)=>{
+    
    try{
     let response={}
+ 
     serviceObject.registrationVerifyService(req.body.content._id)
     .then(data=>{
         response.success=true;
@@ -105,6 +107,7 @@ registrationVerifyController=(req,res)=>{
     })
     .catch(err=>{
         response.success=false;
+        response.error=err;
         res.status(500).send(response)
 
     })
@@ -153,10 +156,13 @@ loginController=(req,res)=>{
                     response.error=err,
                     res.status(500).send(response)
                 }
+                else if(err=="REGISTRATION VERIFICATION NOT DONE"){
+                    response.success=false,
+                    response.error=err,
+                    res.status(500).send(response)
+                }
             })
-    
         }
-
     }catch(e)
     {
         response.error=e;
@@ -199,46 +205,8 @@ forgotController=(req,res)=>{
         response.message="The server did not understand the request."
         return res.status(400).send(response)
     }
-
-
 }
-/**************************************************************/
-// resetPassword=(req,res)=>{
-//     try{
-//         req.checkBody("password","pasword should not be empty").notEmpty()
-//         req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
-//         let error=req.validationErrors()
-//         let response={}
-    
-//         if(error){
-//             response.success=false;
-//             response.error=error;
-//             return res.status(422).send(response)
-//         }
-//         else{
-//             let resetData={
-//                 "id":req.body.content._id,
-//                 "password":req.body.password
-//             }
-//             serviceObject.resetService(resetData)
-//             .then(resetDataResponse=>{
-//                 response.success=true;
-//                 response.message=resetDataResponse;
-//                 res.status(200).send(response)
-//             })
-//             .catch(err=>{
-//                 response.success=false;
-//                 response.error=err;
-//                 res.status(400).send(response)
-//             })
-//         }
-//     }catch(e)
-//     {
-//         response.error=e;
-//         response.message="The server did not understand the request."
-//         return res.status(400).send(response)
-//     }
-// }
+
 /**RESET PASSWORD WITH ASYNC AWAIT */
 async newResetPassword(req,res){
 
@@ -257,16 +225,27 @@ async newResetPassword(req,res){
             "id":req.body.content._id,
             "password":req.body.password
         }
-     
-            let resetResult  =await serviceObject.resetNewService(resetData)
-            if(resetResult==true){
-                response.success=true;
-                response.message="PASSWORD UPDATED SUCCESSFULLY"
-                return res.status(200).send(response)
-            }else{
-                response.success=false;
-                response.message="ERROR WHILE UPDATIN PASSWORD";
-                return res.status(500).send(response)
+            try{
+                let resetResult  =await serviceObject.resetNewPasswordService(resetData)
+                if(resetResult==true){
+
+                    response.success=true;
+                    response.message="PASSWORD UPDATED SUCCESSFULLY"
+                    return res.status(200).send(response)
+
+                }else{
+
+                    response.success=false;
+                    response.message="ERROR WHILE UPDATIN PASSWORD";
+                    return res.status(500).send(response)
+
+                }
+            }
+         
+            catch(e){
+                response.error=e;
+                return res.status(400).send(response)
+
             }
         }
     

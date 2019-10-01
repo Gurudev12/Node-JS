@@ -18,7 +18,7 @@ let should = chai.should();
 /*****
  * @description-this test case will pass all registration field empty
  ****/
-describe('/registration', () => {
+describe('Registration', () => {
     it('It should not POST registration because empty field', (done) => {
        
       chai.request(server)
