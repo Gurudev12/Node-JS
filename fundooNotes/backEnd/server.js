@@ -13,39 +13,44 @@
  * 
  **************************************************************************/
 
-const express = require('express');
-const validator = require('express-validator');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const routes = require('../backEnd/routes/userRoutes');
-const config=require('../backEnd/config/config')
-require('dotenv').config()
+const express = require("express");
+const validator = require("express-validator");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+
+const routes = require("../backEnd/routes/userRoutes");
+const config=require("../backEnd/config/config");
+require("dotenv").config();
 
 const app = express();
-// const PORT = 4000;
-const PORT=process.env.PORT
+const PORT=config.PORT;
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(validator());
-app.use('/', routes)
+app.use("/", routes);
+const multer=require("multer");
+const redis=require("redis");
+const client=redis.createClient();
 
+//mongoose connectivity
 mongoose.connect(config.url,{useNewUrlParser:true})
-// mongoose.connect(process.env.MONGODB_URL,{useNewUrlParser:true})
-// mongoose.connect('mongodb://localhost:27017/fundooNotes', { useNewUrlParser: true })
     .then(() => {
         console.log("successfully connected to database");
     })
     .catch(err => {
         console.log("could not connected to the database", err);
-        process.exit();
     });
 
-// app.listen(process.env.PORT,()=>{
-    app.listen(config.PORT,()=>{
-    console.log("Server started at port:",config.PORT);
-})
-// app.listen(PORT, () => {
-//     console.log("Server started at port:", PORT);
-// })
+    app.listen(PORT,()=>{
+    console.log("Server started at port:",PORT);
+});
+//Redis connectivity
+client.on("connect",(err,data)=>{
+    if(err){
+        console.log(err);
+    }else{
+        console.log("redis connected successfully");
+    }
+});
+
 module.exports = app;

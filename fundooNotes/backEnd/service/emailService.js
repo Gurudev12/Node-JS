@@ -12,43 +12,38 @@
  * @since           : 07-09-2019
  * 
  **************************************************************************/
-var nodemailer=require('nodemailer')
-const config=require('../config/config')
-module.exports={
-sendMail(userEmail,apiLink,callback)
+var nodemailer=require("nodemailer");
+const config=require("../config/config");
+class EmailSender
+{
+sendMail(userEmail,apiLink,text,callback)
 {
 var transporter=nodemailer.createTransport({
-    service:'gmail',
+    service:"gmail",
     auth:{
         user:config.userEmail,
         pass:config.userPassword
-        
-        // user:process.env.USER_EMAIL,
-        // pass:process.env.USER_PASSWORD
-
-        // user:'murkargurudev@gmail.com',
-        // pass:'gurudev123'
     }
 });
 
 var mailOption={
-    // from:process.env.USER_EMAIL,
-    // from:'murkargurudev@gmail.com',
     from:config.userEmail,
     to:userEmail,
-    subject:'sending mail using node js',
-    text:'Reset password',
+    subject:"sending mail using node js",
+    text:text,
     // following href is url of the state(url:)
     html:apiLink
-    }
+    };
 transporter.sendMail(mailOption,function(err,info){
     if(err)
     {
-        callback(err)
+        callback(err);
     }
     else{
         callback(null,"mail sent");
     }
-})
+});
 }
 }
+let EmailSenderObject=new EmailSender();
+module.exports=EmailSenderObject;

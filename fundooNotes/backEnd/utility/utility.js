@@ -16,6 +16,7 @@ const jwt=require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
 const config=require('../config/config')
+
 class UserUtility{
    
         verifyToken=(req,res,next)=>{
@@ -31,7 +32,10 @@ class UserUtility{
                     if(err){
                         res.status(400).send(err +" Token has expired")
                     }else{
-                    req.body.content=data;
+                    // req.body.content=data;
+                    req.token=data
+                    console.log("REQUESt",req.token)
+                    
                     next();
                     }
             
@@ -42,6 +46,7 @@ class UserUtility{
         }catch(e)
         {
             return res.status(500).send(e)
+      
         }
 }
 /***********

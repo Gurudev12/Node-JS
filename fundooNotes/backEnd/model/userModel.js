@@ -10,7 +10,7 @@
  * @since           : 25-9-2019
  * 
  **************************************************************************/
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 let UserSchema = mongoose.Schema({
     firstName: {
         type: String,
@@ -33,66 +33,29 @@ let UserSchema = mongoose.Schema({
         required: [true, "password is empty"]
     },
     loginToken: {
-        type: String,
+        type: String
     },
     isVerify:{
-        type:Boolean,
+        type:Boolean
+    },
+    imageUrl:{
+        type:String
     }
+    
 },
     {
         timestamps: true,
-    })
+    });
 class UserClass {
     constructor() {
-        this.User = mongoose.model('registeredCollection', UserSchema)
+        this.User = mongoose.model("registeredCollection", UserSchema);
 
     }
-
-    /***************************FIND EMAIL************************************************/
-    //this method will check the email is already present in database or not
-    findEmail = (email) => {
-            return new Promise((resolve, reject) => {
-                this.User.find({ 'email': email })        
-                    .then((data) => {
-                        if (data.length > 0) {
-                            resolve(data)
-                        }
-                        else {
-                            resolve();
-                        }
-                    })
-                    .catch((err) => {
-                        reject("EMAIL IS NOT PRESENT")
-                    })
-            })
-       
-    }
-///
-///findEmail= read()    email=paramObject
-///
-read = (email) => {
-    return new Promise((resolve, reject) => {
-        this.User.find({ 'email': email })        
-            .then((data) => {
-                if (data.length > 0) {
-                    resolve(data)
-                }
-                else {
-                    resolve();
-                }
-            })
-            .catch((err) => {
-                reject("EMAIL IS NOT PRESENT")
-            })
-    })
-
-}
-
-    /****************************CREATE NEW USER***********************************************/
+   /****************************CREATE NEW USER***********************************************/
     /***
      * @description-this method will create new entry in database
      ***/
-    createNewUser = (paramObject) => {
+    create(paramObject){
     
         return new Promise((resolve, reject) => {
             let newUser = new this.User({
@@ -113,74 +76,49 @@ read = (email) => {
                         "email": savedUser.email,
                         "userType": savedUser.userType,
                  
-                    }
-                    resolve(newRegisterUser)
+                    };
+                    resolve(newRegisterUser);
                 })
                 .catch(err => {
-                    reject({ "Error occured while new user saved": err })
+                    reject("ERROR OCCURED WHILE CREATING NEW USER");
+                });
+        });
+    /***
+     * @description-This method will read data in database
+     ***/
+    }
+    read (searchBy) {
+        return new Promise((resolve, reject) => {
+            this.User.find(searchBy)       
+                .then((data) => {
+                    if (data.length > 0) {
+                        resolve(data);
+                    }
+                    else {
+                        resolve();
+                    }
                 })
-        })
-       
-    }
-
-
-    updateRegistrationDetail=(userId_id)=>{
-
-            return new Promise((resolve, reject) => {
-                this.User.updateOne({ _id: userId_id }, { $set: { isVerify: true } })   
-                    .then(() => {
-                        resolve("REGISTRTION VERIFIED SUCCESSFULL")
-                    })
-                    .catch(err => {
-                        reject("REGISTRTION VERIFICATION FAILED")
-                    })
+                .catch((err) => {
+                    reject("EMAIL IS NOT PRESENT");
+                });
+        });
     
-            })
     }
-     /***
-     * @description-It will save token  to perticular login user based on its unique id.
-     */
-    updateToken = (userData, tokenData) => {
-        
-            return new Promise((resolve, reject) => {
+    /***
+     * @description-This method will update the corresponding entry in databass
+     ***/
+    update(findValue,updateValue){
 
-                this.User.updateOne({ _id: userData._id }, { $set: { loginToken: tokenData } })
-                    .then(savedTokenResponse => {
-                    
-                        let loginResponse = {
-                            "success": true,
-                            "message": "LOGIN SUCCESSFUL",
-                            data:{
-                                "firstName":userData.firstName,
-                                "lastName":userData.lastName,
-                                "email":userData.email,
-                                "userType":userData.userType
-                            },
-                            "token": tokenData
-                        }
-                        resolve(loginResponse)
-                    
-                    })
-                    .catch(err => {
-                        reject("REJECTED TOKEN ERROR")
-                    })
-    
-            })
-    }
-
-async updateNewPassword(id, newPassword){
-    try{
-       let updatedResult=await this.User.updateOne({ _id: id }, { $set: { password: newPassword } })    //{ _id:id },
-       if(updatedResult.nModified==1){
-           return true
-       }else{
-        return false
-       } 
-    }catch(e){
-           return "Exception ERROR"
-       }
+        return new Promise((resolve, reject) => {
+            this.User.updateOne( findValue , { $set: updateValue })   
+                .then(() => {
+                    resolve("DOCUMENT UPDATED");
+                })
+                .catch(err => {
+                    reject("DOCUMENT UPDATED FAILED");
+                });
+        });
 }
-
 }   
 let UserClassObject = new UserClass();
 module.exports = UserClassObject;
