@@ -295,17 +295,20 @@ class UserService {
     }
     /********************UPLOAD IMAGE SERVICE***********************************************************/
     async uploadImageService(uploadData) {
+        try{
+            let searchById = { "_id": uploadData._id }
+            let updateValue = { "imageUrl": uploadData.url }
+            let updatedResult = await userModel.update(searchById, updateValue)
+            if (updatedResult == "DOCUMENT UPDATED") {
+                return "FILE UPLOADED SUCCESSFULLY"
+            } else {
+                return "ERROR WHILE UPLOADING FILE"
+            }
 
-        let searchById = { "_id": uploadData._id }
-        let updateValue = { "imageUrl": uploadData.url }
-        let updatedResult = await userModel.update(searchById, updateValue)
-        if (updatedResult == "DOCUMENT UPDATED") {
-            console.log("FILE UPLOADED SUCCESSFULLY")
-            return "FILE UPLOADED SUCCESSFULLY"
-        } else {
-            console.log("ERROR WHILE UPLOADING FILE");
-            return "ERROR WHILE UPLOADING FILE"
+        }catch(e){
+            return e;
         }
+  
     }
 }
 module.exports = { UserService };

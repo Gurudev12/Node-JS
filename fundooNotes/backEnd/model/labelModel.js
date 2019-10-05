@@ -8,7 +8,7 @@ let labelSchema=mongoose.Schema({
     labelName:{
         type: String,
         required: [true, "label is empty"]
-    },
+    }
 },
 {
 timestamp:true
@@ -18,7 +18,7 @@ class LabelClass{
     constructor(){
         this.Label=mongoose.model("labelCollection",labelSchema)
     }
-
+/*************************************************************************************************/
     create(paramObject){
         return new Promise((resolve,reject)=>{
 
@@ -34,20 +34,47 @@ class LabelClass{
                 reject(err)
             })
         })
-
-      
+    }
+/*************************************************************************************************/
+    read(searchBy){
+        return new Promise((resolve,reject)=>{
+            this.Label.find(searchBy)
+            .then((data)=>{
+                    resolve(data)
+            })
+            .catch((err)=>{
+                reject(err)
+            })
+        })
 
     }
+/*************************************************************************************************/
 
-    read(){
-
+    update(findValue,updateValue){
+        return new Promise((resolve,reject)=>{
+            this.Label.updateOne(findValue,{$set:updateValue})
+            .then(data=>{
+                resolve(data)
+            })
+            .catch(err=>{
+                reject(err)
+            })
+        })
     }
-    update(){
-
-    }
-
-    delete(){
+/*************************************************************************************************/
+    delete(deleteValue){
         
+        return new Promise((resolve,reject)=>{
+            this.Label.deleteOne(deleteValue)
+            .then(deletedData=>{
+                console.log("DELETED MODEL",deletedData)
+                resolve(deletedData)
+            })
+            .catch(err=>{
+                console.log("DELETED EROR",err)
+                reject(err)
+            })
+        })
     }
 
 }

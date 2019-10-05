@@ -15,6 +15,7 @@ const express=require('express');
 const ctrl=require('../controller/userController')
 
 const labelCtrl=require('../controller/labelController')
+const noteCtrl=require('../controller/noteController')
 const utility=require('../utility/utility')
 const router=express.Router()
 const multer=require("../service/multer")
@@ -34,10 +35,18 @@ router.post('/uploadImage',utility.verifyToken,multer.single('file'),ctrl.upload
 //Label
 router.post('/createLabel',utility.verifyToken,labelCtrl.createLabelController)
 
-// router.post('/updateLabel',utility.verifyToken,labelCtrl.updateLabelController)
+router.post('/updateLabel',utility.verifyToken,labelCtrl.updateLabelController)
 
-// router.post('/deleteLabel',utility.verifyToken,labelCtrl.deleteLabelController)
+router.post('/deleteLabel',utility.verifyToken,labelCtrl.deleteLabelController)
 
-// router.get('/getAllLabel',utility.verifyToken,labelCtrl.getAllLabelController)
+router.get('/getAllLabel',utility.verifyToken,labelCtrl.getAllLabelController)
 
+//Notes
+router.post('/createNote',utility.verifyToken,noteCtrl.createNoteController)
+
+router.post('/updateNote',utility.verifyToken,noteCtrl.updateNoteController)
+
+router.post('/deleteNote',utility.verifyToken,noteCtrl.deleteNoteController)
+
+router.get('/getAllNote',utility.verifyToken,noteCtrl.getAllNoteController)
 module.exports=router;
