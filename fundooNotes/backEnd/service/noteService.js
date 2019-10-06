@@ -14,42 +14,24 @@ class NoteService {
     }
     /*************************************************************************************************/
     updateNoteService(updateData) {
+
+      let  keyObject=Object.keys(updateData)
+        console.log("OBJECT KEY",keyObject)
         return new Promise((resolve, reject) => {
-            let foundNoteData=[]
+
             let searchBy = { "_id": updateData._id }
-
-
-
             noteModel.read(searchBy)
-                .then(data => {
-                    if (data.length > 0) {
-                        console.log("UPDATE VALUE",updateData.updateValue);
-                        console.log("DATA SRVICE UPADATE",data)
+            .then(foundData=>{
+                let  keyObjectFound=Object.keys(foundData)
+                console.log("FOUNDED DATA",foundData)
+                console.log("KEY OBJECT FOUND  DATA",keyObjectFound)
 
+            })
+            .catch(err=>{
+                console.log("ERROR",err)
 
-                        //Tommarow staret code from here
-
-                        // for(let i=0;i<data.length;i++)
-                        // {
-                        //     // console.log("====>",data[i])
-                        //     if(updateData.updateValue==data[i].noteTitle){
-                        //         console.log("#######33",data[i])
-                        //     }
-                        // }
-
-
-
-
-                        resolve({ "status": true, "content": data })
-                    } else {
-                        resolve({ "status": false, "data": "Note was Not present" })
-                    }
-                })
-                .catch(err => {
-                    console.log("UPDATE SERVICE ERROR")
-                    reject(err)
-
-                })
+            })
+               
         })
     }
     /*************************************************************************************************/

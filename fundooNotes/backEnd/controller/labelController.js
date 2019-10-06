@@ -44,7 +44,7 @@ class LabelController {
         let response = {};
 
         try {
-            req.checkBody("updateLabelName", "labek name should not be null").notEmpty();
+            req.checkBody("updateLabelName","label name should not be null").notEmpty();
          
             let error = req.validationErrors();
             if (error) {
@@ -65,7 +65,7 @@ class LabelController {
                 } else {
                     response.success = false;
                     response.message = "Error while label updating";
-                    return res.status(400).send(response);
+                    return res.status(500).send(response);
                 }
             }
         } catch (e) {
@@ -93,7 +93,7 @@ class LabelController {
             else {
                 response.success = false;
                 response.message = "Error while label deleting";
-                return res.status(400).send(response);
+                return res.status(500).send(response);
             }
         }catch(e){
             response.error = e;

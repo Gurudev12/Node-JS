@@ -4,6 +4,7 @@ class NoteController {
     async  createNoteController(req, res) {
         let response = {}
         try{
+           
             let noteData = {
                 "userId": req.token._id,
                 "title": req.body.noteTitle,
@@ -34,14 +35,10 @@ class NoteController {
 
     updateNoteController(req,res){
     let response={}
+        req.body.userId=req.token._id
         
-        let updateData={
-            "userId":req.token._id,
-            "_id":req.body._id,
-            "updateValue":req.body.noteTitle
-        }
-        
-        noteService.updateNoteService(updateData)
+        console.log("CONTROLLER req.body",req.body)
+        noteService.updateNoteService(req.body)
         .then(updateData=>{
             if(updateData.status==true){
                 response.success = true;

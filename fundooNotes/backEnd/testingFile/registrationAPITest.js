@@ -1,6 +1,6 @@
 //During the test the env variable is set to test
 
-//Require the dev-dependencies
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');

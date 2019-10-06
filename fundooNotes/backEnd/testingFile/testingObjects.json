@@ -1,156 +1,199 @@
 {
-    "registrationTest":{
-        "emptyRegistration":{
-            "firstName":"adxd",
-            "lastName":"adxd",
-            "email":"addccd@gmail.com",
-            "userType":"bmnjbmn",
-            "password":""
+    "registrationTest": {
+        "emptyRegistration": {
+            "firstName": "adxd",
+            "lastName": "adxd",
+            "email": "addccd@gmail.com",
+            "userType": "bmnjbmn",
+            "password": ""
         },
-        "successfulRegistration":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "successfulRegistration": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "dashrathmurkar@gmail.com",
+            "userType": "user",
+            "password": "dasharath123"
         },
-
-        "emptyFirstName":{
-            "firstName":"",
-            "lastName":"murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "emptyFirstName": {
+            "firstName": "",
+            "lastName": "murkar",
+            "email": "dashrathmurkar@gmail.com",
+            "userType": "user",
+            "password": "dasharath123"
         },
-        "invalidFirstName":{
-            "firstName":"dashu123",
-            "lastName":"murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "invalidFirstName": {
+            "firstName": "dashu123",
+            "lastName": "murkar",
+            "email": "dashrathmurkar@gmail.com",
+            "userType": "user",
+            "password": "dasharath123"
         },
-
-        "emailNotExist":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"gurudeeeeeeev@gmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "emailNotExist": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "gurudeeeeeeev@gmail.com",
+            "userType": "user",
+            "password": "dasharath123"
         },
-        "emailAllreadyPresent":{
-            "firstName":"gurudev",
-            "lastName":"murkar",
-            "email":"gurudevrameshmurkar@gmail.com",
-            "userType":"admin",
-            "password":"gurudev12345"
+        "emailAllreadyPresent": {
+            "firstName": "gurudev",
+            "lastName": "murkar",
+            "email": "gurudevrameshmurkar@gmail.com",
+            "userType": "admin",
+            "password": "gurudev12345"
         },
-
-        "emptyEmail":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"",
-            "userType":"user",
-            "password":"dasharath123"
+        "emptyEmail": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "",
+            "userType": "user",
+            "password": "dasharath123"
         },
-        "invalidEmail":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"dashrathmurkargmail.com",
-            "userType":"user",
-            "password":"dasharath123"
+        "invalidEmail": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "dashrathmurkargmail.com",
+            "userType": "user",
+            "password": "dasharath123"
         },
-
-
-        "emptyPassword":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":""
+        "emptyPassword": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "dashrathmurkar@gmail.com",
+            "userType": "user",
+            "password": ""
         },
-        "passwordLength":{
-            "firstName":"dasharath",
-            "lastName":"murkar",
-            "email":"dashrathmurkar@gmail.com",
-            "userType":"user",
-            "password":"1234"
-        }
-
-
-    },
-
-
-    "loginTest":{
-       "emptyLogin":{
-            "email":"",
-            "password":""
-        },
-        "successfulLogin":{
-            "email":"gurudevrameshmurkar@gmail.com",
-	        "password":"gurudev123"
-        },
-        "emptyEmail":{
-            "email":"",
-            "password":"gurudev"
-        },
-        "invalidEmail":{
-            "email":"addccdgmail.com",
-            "password":"gurudev123"
-        },
-        "emptyPassword":{
-            "email":"gurudevrameshmurkar@gmail.com",
-            "password":""
-        },
-        "passwordLength":{
-            "email":"gurudevrameshmurkar@gmail.com",
-            "password":"12"
-        },
-        "credentialNotMatched":{
-            "email":"guruevrameshmurkar@gmail.com",
-            "password":"gurude12345"
-
-        },
-        "credentialMatched":{
-            "email":"gurudevrameshmurkar@gmail.com",
-            "password":"gurudev123"
-        },
-        "emailWrong":{
-            "email":"gurudevrmurkar@gmail.com",
-            "password":"gurudev123"
-        },
-        "passwordWrong":{
-            "email":"gurudevrameshmurkar@gmail.com",
-            "password":"gurudev12345"
+        "passwordLength": {
+            "firstName": "dasharath",
+            "lastName": "murkar",
+            "email": "dashrathmurkar@gmail.com",
+            "userType": "user",
+            "password": "1234"
         }
     },
-    "forgotPasswordTest":{
-        "emptyEmail":{
-            "email":""
+    "loginTest": {
+        "emptyLogin": {
+            "email": "",
+            "password": ""
         },
-        "invalidEmail":{
-            "email":"gurudevrameshmurkargmail.com"
+        "successfulLogin": {
+            "email": "gurudevrameshmurkar@gmail.com",
+            "password": "gurudev123"
         },
-        "validEmail":{
-            "email":"gurudevrameshmurkar@gmail.com"
+        "emptyEmail": {
+            "email": "",
+            "password": "gurudev"
         },
-        "notPresentEmail":{
-            "email":"gurudevrmurkar@gmail.com"
+        "invalidEmail": {
+            "email": "addccdgmail.com",
+            "password": "gurudev123"
+        },
+        "emptyPassword": {
+            "email": "gurudevrameshmurkar@gmail.com",
+            "password": ""
+        },
+        "passwordLength": {
+            "email": "gurudevrameshmurkar@gmail.com",
+            "password": "12"
+        },
+        "credentialNotMatched": {
+            "email": "guruevrameshmurkar@gmail.com",
+            "password": "gurude12345"
+        },
+        "credentialMatched": {
+            "email": "gurudevrameshmurkar@gmail.com",
+            "password": "gurudev123"
+        },
+        "emailWrong": {
+            "email": "gurudevrmurkar@gmail.com",
+            "password": "gurudev123"
+        },
+        "passwordWrong": {
+            "email": "gurudevrameshmurkar@gmail.com",
+            "password": "gurudev12345"
         }
     },
-
-
-    "resetPasswordTest":{
-        "emptyPassword":{
-            "password":""
+    "forgotPasswordTest": {
+        "emptyEmail": {
+            "email": ""
         },
-        "passwordLength":{
-            "password":"122"
+        "invalidEmail": {
+            "email": "gurudevrameshmurkargmail.com"
         },
-        "resetPassword":{
-        "password":"1234567"
+        "validEmail": {
+            "email": "gurudevrameshmurkar@gmail.com"
         },
-        "headerWithToken":{
-            "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDkxODkzZDJmMjBmMTI0ZWRhYjBjYWEiLCJpYXQiOjE1Njk4MjIyMTMsImV4cCI6MTU2OTgyOTQxM30.uRG_JvdIwb6XP8FbZbdnF68g-6b5EAqjOEINeTKALcw"
+        "notPresentEmail": {
+            "email": "gurudevrmurkar@gmail.com"
         }
+    },
+    "resetPasswordTest": {
+        "emptyPassword": {
+            "password": ""
+        },
+        "passwordLength": {
+            "password": "122"
+        },
+        "resetPassword": {
+            "password": "1234567"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDkxODkzZDJmMjBmMTI0ZWRhYjBjYWEiLCJpYXQiOjE1Njk4MjIyMTMsImV4cCI6MTU2OTgyOTQxM30.uRG_JvdIwb6XP8FbZbdnF68g-6b5EAqjOEINeTKALcw"
+        }
+    },
+    "createLabelTest": {
+        "emptyLabel": {
+            "labelName": ""
+        },
+        "newLabel": {
+            "labelName": "Hello"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDk3NDI3ZGUzODA1OTVjZWQ1ODU4MGMiLCJpYXQiOjE1NzAzNTcxNTcsImV4cCI6MTU3MDM2NDM1N30.aVnXcw56HBip3KIa-IJ3iybdTtiY-47kMAj85JZkcFI"
+        }
+    },
+    "updateLabelTest": {
+        "emptyLabel": {
+            "_id": "5d9833aafec7695f87621194",
+            "updateLabelName": ""
+        },
+        "updateLabel": {
+            "_id": "5d9833aafec7695f87621194",
+            "updateLabelName": "updatelabel"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDk3NDI3ZGUzODA1OTVjZWQ1ODU4MGMiLCJpYXQiOjE1NzAzNTcxNTcsImV4cCI6MTU3MDM2NDM1N30.aVnXcw56HBip3KIa-IJ3iybdTtiY-47kMAj85JZkcFI"
+        }
+    },
+    "deleteLabelTest": {
+        "deleteLabel": {
+            "_id": "5d982c680c1b944dee81558e"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDk3NDI3ZGUzODA1OTVjZWQ1ODU4MGMiLCJpYXQiOjE1NzAzNTcxNTcsImV4cCI6MTU3MDM2NDM1N30.aVnXcw56HBip3KIa-IJ3iybdTtiY-47kMAj85JZkcFI"
+        }
+    },
+    "createNoteTest": {
+        "emptyNote": {
+            "noteTitle": "",
+            "noteDescription": ""
+        },
+        "validNote": {
+            "noteTitle": "Birthday",
+            "noteDescription": "Harshal"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDk3NDI3ZGUzODA1OTVjZWQ1ODU4MGMiLCJpYXQiOjE1NzAzNTcxNTcsImV4cCI6MTU3MDM2NDM1N30.aVnXcw56HBip3KIa-IJ3iybdTtiY-47kMAj85JZkcFI"
+        }   
+    },
+
+    "deleteNoteTest":{
+        "deleteNote":{
+            "_id":"5d986384d122612382382bed"
+        },
+        "headerWithToken": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDk3NDI3ZGUzODA1OTVjZWQ1ODU4MGMiLCJpYXQiOjE1NzAzNTcxNTcsImV4cCI6MTU3MDM2NDM1N30.aVnXcw56HBip3KIa-IJ3iybdTtiY-47kMAj85JZkcFI"
+        }  
+
     }
 }
