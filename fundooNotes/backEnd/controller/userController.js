@@ -1,4 +1,4 @@
-/*************************************************************************
+/***************************************************************************
  * @Execution        : 1. default node       cmd> nodemon model.js
  * 
  * @Purpose          : userController.js is used to handle request and response of client in backend server
@@ -19,7 +19,7 @@
  *                       The request was well-formed but was unable to be followed due to semantic errors.
  * 
  * 
- **************************************************************************/
+ ***************************************************************************/
 const service=require("../service/userService");
 const serviceObject=new service.UserService();
 
@@ -153,16 +153,16 @@ loginController(req,res){
                 if(err=="WRONG EMAIL ID"){
                     response.success=false;
                     response.error=err;
-                    res.status(500).send(response);
+                    res.status(400).send(response);
                 }
                 else if(err=="PASSWORD NOT MATCHED"){
                     response.success=false;
                     response.error=err;
-                    res.status(500).send(response);
+                    res.status(400).send(response);
                 }
                 else if(err=="REGISTRATION VERIFICATION NOT DONE"){
                     response.success=false;
-                    response.error=err;
+                    response.error=err;s
                     res.status(500).send(response);
                 }
             });
@@ -261,7 +261,6 @@ async uploadImageController(req,res){
     const s3url = await s3.getSignedUrl("getObject", { Bucket: config.bucket, Key: req.file.originalname });
 
     let response={};
-    console.log("DATTA ",req.token._id);
     
     let uploadData={
         "_id":req.token._id,

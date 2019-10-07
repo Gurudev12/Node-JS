@@ -18,7 +18,7 @@ const labelCtrl=require('../controller/labelController')
 const noteCtrl=require('../controller/noteController')
 const utility=require('../utility/utility')
 const router=express.Router()
-// const multer=require("../service/multer")
+const multer=require("../service/multer")
 
 router.post('/registration',ctrl.registrationController)
 
@@ -30,7 +30,7 @@ router.post('/forgotPassword',ctrl.forgotController)
 
 router.post('/resetPassword',utility.verifyToken,ctrl.newResetPassword)
 
-// router.post('/uploadImage',utility.verifyToken,multer.single('file'),ctrl.uploadImageController)
+router.post('/uploadImage',utility.verifyToken,multer.single('file'),ctrl.uploadImageController)
 
 //Label
 router.post('/createLabel',utility.verifyToken,labelCtrl.createLabelController)
