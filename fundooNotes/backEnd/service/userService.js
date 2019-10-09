@@ -23,7 +23,6 @@ const client = redis.createClient();
 class UserService {
 
 
-
     /***************************REGISTRATION SERVICE****************************************************/
     /****
      * @description-This is  registration service while new registration
@@ -65,18 +64,21 @@ class UserService {
                                     userModel.create(registrationDetail)
 
                                         .then(data => {
-                                         
+
                                             let payload = {
                                                 "_id": data._id
                                             };
                                             let registrationToken = utility.createNewToken(payload);
+                                            console.log("REGISTRATION TOKEN", registrationToken)
 
-                                        
-                                            shortUrl.short('https://amazon.com', function(err, url){
-                                            // shortUrl.short('http://localhost:4000/registrationVerify/ + registrationToken +', function(err, url){
+
+
+                                            //This code for url shortner
+                                            shortUrl.short('https://amazon.com', function (err, url) {
+                                                // shortUrl.short('http://localhost:4000/registrationVerify/ + registrationToken +', function(err, url){
                                                 console.log(url);
                                             });
-                                            
+
 
 
                                             let registrationVerifyLink = '<p>this is link to REGISTRATION VERIFY</p><a href="http://localhost:4000/registrationVerify/' + registrationToken + '">Registration verify</a>';
@@ -158,7 +160,7 @@ class UserService {
                              ****/
                             bcrypt.compare(loginDetail.password, userData[0].password, (err, result) => {
                                 if (result) {
-                                    
+
                                     let payload = {
                                         "_id": userData[0]._id
                                     };
@@ -168,13 +170,17 @@ class UserService {
                                    ****/
                                     let newToken = utility.createNewToken(payload);
 
+                                    console.log("TOKEN GENERATED WHILE LOGIN",newToken)
 
                                     //Storing token to redis.
-                                    client.set(userData[0]._id+"saveToken", newToken);
+                                    client.set(userData[0]._id+"loginToken", newToken);
 
-                                    client.get(userData[0]._id+"saveToken", function (err, reply) {
-                                        console.log("REPLY=====>", reply.toString());
+                                    client.get(userData[0]._id+"loginToken", function (err, reply) {
+                                        console.log("REPLY OF LOGIN TOKEN=====>", reply.toString());
+
                                     })
+
+
 
 
 
@@ -246,6 +252,31 @@ class UserService {
                         * @description-After finding email create new token and send it to perticular emailId
                         ****/
                         let forgotToken = utility.createNewToken(payload);
+                        console.log("FORGOT TOKEN", forgotToken)
+
+
+
+                        //This is code for storing token to redis
+                        client.set(foundData[0]._id +"forgotToken", forgotToken)
+
+                        client.get(foundData[0]._id +"forgotToken", (err, reply) => {
+                            if (err) {
+                                console.log("TOKEN NOT get from redis", err)
+                            } else {
+                                console.log("REDIS REPLY TOKEN", reply)
+                            }
+                        })
+
+
+
+
+
+
+
+
+
+
+
 
                         let forgotLink = '<p>this is link to RESET PASSWORD</p><a href="http://localhost:4000/resetPassword' + forgotToken + '">Reset PassWord</a>';
                         //let forgotLink=process.env.FORGOT_PASSWORD_LINK
@@ -295,7 +326,7 @@ class UserService {
     }
     /********************UPLOAD IMAGE SERVICE***********************************************************/
     async uploadImageService(uploadData) {
-        try{
+        try {
             let searchById = { "_id": uploadData._id }
             let updateValue = { "imageUrl": uploadData.url }
             let updatedResult = await userModel.update(searchById, updateValue)
@@ -305,10 +336,10 @@ class UserService {
                 return "ERROR WHILE UPLOADING FILE"
             }
 
-        }catch(e){
+        } catch (e) {
             return e;
         }
-  
+
     }
 }
 module.exports = { UserService };

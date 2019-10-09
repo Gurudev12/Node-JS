@@ -37,7 +37,6 @@ class NoteController {
     let response={}
         req.body.userId=req.token._id
         
-        console.log("CONTROLLER req.body",req.body)
         noteService.updateNoteService(req.body)
         .then(updateData=>{
             if(updateData.status==true){
@@ -47,6 +46,7 @@ class NoteController {
                 return res.status(200).send(response)
             }else{
                 response.message = "Note not present"
+                response.error=err;
                 return res.status(200).send(response)
             }
 

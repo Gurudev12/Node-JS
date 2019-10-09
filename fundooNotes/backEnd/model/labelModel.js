@@ -1,10 +1,11 @@
 const mongoose=require("mongoose")
 let labelSchema=mongoose.Schema({
-    userId:{
-        type:String,
-        required: [true, "user_id is empty"]
-
-    },
+    userId :{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'registeredCollection',
+        required: [true, "userId is empty"]
+     },
+    
     labelName:{
         type: String,
         required: [true, "label is empty"]
@@ -41,6 +42,7 @@ class LabelClass{
             this.Label.find(searchBy)
             .then((data)=>{
                     resolve(data)
+
             })
             .catch((err)=>{
                 reject(err)

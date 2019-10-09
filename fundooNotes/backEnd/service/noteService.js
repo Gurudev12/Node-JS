@@ -15,23 +15,33 @@ class NoteService {
     /*************************************************************************************************/
     updateNoteService(updateData) {
 
-      let  keyObject=Object.keys(updateData)
-        console.log("OBJECT KEY",keyObject)
+        let keyObject = Object.keys(updateData)
+        console.log("OBJECT KEY", keyObject)
+
         return new Promise((resolve, reject) => {
+            let findValue = {};
+            let updateValue = {};
+            for (let i = 0; i < keyObject.length; i++) {
+                if (keyObject[i] == '_id' || keyObject[i] == 'userId') {
 
-            let searchBy = { "_id": updateData._id }
-            noteModel.read(searchBy)
-            .then(foundData=>{
-                let  keyObjectFound=Object.keys(foundData)
-                console.log("FOUNDED DATA",foundData)
-                console.log("KEY OBJECT FOUND  DATA",keyObjectFound)
+                    findValue[keyObject[i]] = updateData[keyObject[i]]
+                    console.log("FOINDDDDDDDDDDDDDD", findValue)
+                    continue;
+                }
+                updateValue[keyObject[i]] = updateData[keyObject[i]]
+                console.log("\nUPDATE VALUES===>", updateValue)
+            }
+            noteModel.update(findValue, updateValue)
+                .then(data => {
+                    console.log("SERVICE DATA&&&&&&&&&&&&&&&&&&&&&",data);
+                    resolve(data);
+                })
+                .catch(err => {
+                    console.log("ERRR UPDATING NOTE");
+                    reject(err);
+                    
+                })
 
-            })
-            .catch(err=>{
-                console.log("ERROR",err)
-
-            })
-               
         })
     }
     /*************************************************************************************************/
