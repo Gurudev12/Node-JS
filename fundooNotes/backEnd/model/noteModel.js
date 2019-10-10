@@ -4,8 +4,13 @@
 const mongoose = require('mongoose')
 let noteSchema = mongoose.Schema({
     userId: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'registeredCollection'
     },
+    labelId: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'labelCollection'
+    }],
     noteTitle: {
         type: String,
         required: [true, "Title is empty"]
@@ -22,10 +27,13 @@ let noteSchema = mongoose.Schema({
     },
     isTrash: {
         type: Boolean
+    },
+    isArchieve: {
+        type: Boolean
     }
 },
     {
-        timestamps: true,
+        timestamps: true
     })
 class NoteClass {
     constructor() {
@@ -35,12 +43,14 @@ class NoteClass {
     create(paramObject) {
         return new Promise((resolve, reject) => {
             let newNote = new this.Note({
-                "userId": paramObject.userId,
-                "noteTitle": paramObject.title,
-                "noteDescription": paramObject.description,
+                "userId": (paramObject.userId == null) ? "" : paramObject.userId,
+                "labelId": (paramObject.labelId == null) ? "" : paramObject.labelId,
+                "noteTitle": (paramObject.title == null) ? "" : paramObject.title,
+                "noteDescription": (paramObject.description == null) ? "" : paramObject.description,
                 "reminder": (paramObject.reminder == null) ? "" : paramObject.reminder,            //condition ? consequent : alternative
                 "color": (paramObject.color == null) ? "" : paramObject.color,
-                "isTrash": (paramObject.isTrash == null) ? false : paramObject.isTrash
+                "isTrash": (paramObject.isTrash == null) ? false : paramObject.isTrash,
+                "isArchieve": (paramObject.isArchieve == null) ? false : paramObject.isArchieve
             })
             newNote.save()
                 .then(savedNote => {
@@ -57,7 +67,8 @@ class NoteClass {
         return new Promise((resolve, reject) => {
             this.Note.find(searchBy)
                 .then(findData => {
-
+                    console.log("Using Normal find method",findData);
+                    
                     resolve(findData)
                 })
                 .catch(err => {
@@ -66,12 +77,21 @@ class NoteClass {
                 })
         })
     }
+/***POPULATE DEMO==>**********************************************************************************************/
+readLabel(searchBy) {
+    return new Promise((resolve, reject) => {
+        this.Note.find(searchBy).populate('labelId')
+        .exec(function (err, data) {
+            if (err)
+                return handleError(err);
+            else
+                console.log('USING populate()method==> ',data[0]);//.labelId[0].labelName
+                resolve(data)
+        });
+    })
+}
     /*************************************************************************************************/
     update(findValue, updateValue) {
-
-        console.log("MODEEEEEEEEEEEEELLLLLLLLLLLLLL FIND VALUE", findValue);
-        console.log("MODEEEEEEEEEEEEELLLLLLLLLLLLLL UPDATE VALUE", updateValue);
-
 
         return new Promise((resolve, reject) => {
             this.Note.updateOne(findValue, { $set: updateValue })
@@ -89,7 +109,6 @@ class NoteClass {
         return new Promise((resolve, reject) => {
             this.Note.deleteOne(deleteValue)
                 .then(deletedData => {
-                    console.log("DELETED DATA", deletedData)
                     resolve(deletedData)
                 })
                 .catch(err => {

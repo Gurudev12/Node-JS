@@ -60,6 +60,12 @@ router.post('/deleteNote',utility.verifyTokenWithRedis,noteCtrl.deleteNoteContro
 //router.get('/getAllNote',utility.verifyToken,noteCtrl.getAllNoteController)
 router.get('/getAllNote',utility.verifyTokenWithRedis,noteCtrl.getAllNoteController)
 
+router.post('/searchNote',utility.verifyTokenWithRedis,noteCtrl.searchNoteController)
+
+router.post('/addLabelToNote',utility.verifyTokenWithRedis,noteCtrl.addLabelToNoteController)
+
+// router.post('/deleteLabelFromNote',utility.verifyTokenWithRedis,noteCtrl.deleteLabelFromNoteController)
+
 //new operation using redis
 
 router.post('/resetPass',utility.verifyTokenWithRedis,ctrl.newResetPassword)

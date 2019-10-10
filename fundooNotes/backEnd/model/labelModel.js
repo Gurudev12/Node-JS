@@ -1,9 +1,8 @@
 const mongoose=require("mongoose")
 let labelSchema=mongoose.Schema({
     userId :{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'registeredCollection',
-        required: [true, "userId is empty"]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'registeredCollection'
      },
     
     labelName:{

@@ -47,7 +47,6 @@ class UserUtility {
                                 let redisValidToken = reply
                               
                                         if (validToken == redisValidToken) {
-                                            console.log("TOKEN IS VERIFIED")
                                             req.token = data;   //this data refers to 'redisSavedToken' verify method
                                             next();
                                         }
@@ -236,9 +235,7 @@ class UserUtility {
      *@description-This method will create new token at the time of login,forgetPassword
      * *********/
     createNewToken = (payload) => {
-        // let token=jwt.sign(payload,process.env.SECRETKEY,{expiresIn:'2hr'});
-        // let token=jwt.sign(payload,'secretKey',{expiresIn:'2hr'});
-        let token = jwt.sign(payload, config.secretKey, { expiresIn: '2hr' });
+        let token = jwt.sign(payload, config.secretKey, { expiresIn: '12hr' });
         return token;
     }
 }

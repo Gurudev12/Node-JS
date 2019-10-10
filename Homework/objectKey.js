@@ -20,9 +20,3 @@ let objLength=Object.keys(obj).length
 console.log("length=",objLength);
 
 /********************************************* */
-"title": (notesDetails.title == null) ? "" : notesDetails.title,
-"description": (notesDetails.description == null) ? "" : notesDetails.description,
-"isTrash": (notesDetails.isTrash == null) ? false : notesDetails.isTrash,
-"isArchive": (notesDetails.isArchive == null) ? false : notesDetails.isArchive,
-"reminder": (notesDetails.reminder == null) ? "" : notesDetails.reminder,
-"color": (notesDetails.color == null) ? "" : notesDetails.color
