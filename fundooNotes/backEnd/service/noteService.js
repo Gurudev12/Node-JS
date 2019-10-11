@@ -4,6 +4,8 @@ class NoteService {
         try {
             let noteResult = await noteModel.create(noteData)
             if (noteResult) {
+                console.log("Servise", noteResult);
+
                 return true
             } else {
                 return false
@@ -16,7 +18,7 @@ class NoteService {
     updateNoteService(updateData) {
 
         let keyObject = Object.keys(updateData)
-
+        let updateQuery = {}
         return new Promise((resolve, reject) => {
             let findValue = {};
             let updateValue = {};
@@ -27,8 +29,13 @@ class NoteService {
                     continue;
                 }
                 updateValue[keyObject[i]] = updateData[keyObject[i]]
+
+                //new change
+                updateQuery = {
+                    $set: updateValue
+                }
             }
-            noteModel.update(findValue, updateValue)
+            noteModel.update(findValue, updateQuery)
                 .then(updateResponse => {
                     if (updateResponse.nModified == 1) {
                         resolve({ "success": true, "message": "Note updated successfully" });
@@ -38,9 +45,7 @@ class NoteService {
 
                 })
                 .catch(err => {
-                    console.log("ERRR UPDATING NOTE");
                     reject(err);
-
                 })
 
         })
@@ -64,8 +69,6 @@ class NoteService {
         }
     }
     /*************************************************************************************************/
-
-    /*************************************************************************************************/
     getAllNoteService(loginData) {
         try {
             return new Promise((resolve, reject) => {
@@ -82,13 +85,68 @@ class NoteService {
         } catch (e) {
             return e
         }
-
     }
-
-    searchNoteService(searchNoteData) {
+    /*************************************************************************************************/
+    addLabelToNoteService(addLabelData) {
 
         return new Promise((resolve, reject) => {
-            let value = searchNoteData.search;
+            let findValue = {
+                "_id": addLabelData._id,
+                "userId": addLabelData.userId
+            }
+            let updatevalue = {
+                $push: {
+                    "labelId": addLabelData.labelId
+                }
+            }
+
+            noteModel.update(findValue, updatevalue)
+                .then(updateData => {
+                    if (updateData.nModified = 1) {
+                        resolve(true)
+                    } else {
+                        resolve(false)
+
+                    }
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+    /*************************************************************************************************/
+    deleteLabelFromNoteService(deleteLabelData) {
+
+        return new Promise((resolve, reject) => {
+
+            let findValue = {
+                "_id": deleteLabelData._id,
+                "userId": deleteLabelData.userId
+            }
+            let updateValue = {
+                $pull: { "labelId": deleteLabelData.labelId }
+            }
+
+            noteModel.update(findValue, updateValue)
+                .then(updatedResponse => {
+                    if (updatedResponse.nModified == 1) {
+                        resolve(true)
+                    } else {
+                        resolve(false)
+                    }
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+    /*************************************************************************************************/
+    searchNoteService(searchNoteData) {
+
+        let value = searchNoteData.search;
+
+        return new Promise((resolve, reject) => {
+
             let searchBy = {
                 $and: [{
                     $or: [
@@ -101,39 +159,54 @@ class NoteService {
                 { "userId": searchNoteData.userId }]
             }
 
-            noteModel.readLabel(searchBy)
-            .then(data=>{
+            //This find query for label.
+            let findQuery = {
+                "userId": searchNoteData.userId
+            }
 
-            })
-            .catch(err=>{
-
-            })
-
-              
-
+            //This method is for searching the notes based on title,desription,reminder,color.
+            noteModel.read(searchBy)
+                .then(noteResult => {
 
 
+                    noteModel.readLabel(findQuery, value)
+                        .then(labelResult => {
 
-            // noteModel.read(searchBy)
-            //     .then(foundResult => {
-            //         if (foundResult.length > 0) {
-            //             console.log("SERVICE RESULT NOTE", foundResult)
-            //             resolve({ status: true, data: foundResult })
-            //         }
-            //         else {
-            //             console.log(foundResult);
-            //             resolve({ status: false })
-            //         }
+                            if (labelResult.length > 0) {
+                                let newLabelResult = labelResult.filter((elem) => {
+                                    return elem.labelId.length > 0
+                                })
 
-            //     })
-            //     .catch(err => {
-            //         console.log("SERVICE ERROR", err)
-            //         reject(err)
-            //     })
+                                let mergeResult = noteResult.concat(newLabelResult);
+                                console.log("\n\n\n\n\n\n\n")
 
 
+
+                                if (mergeResult.length > 0) {
+                                    for (let i = 0; i < mergeResult.length - 1; i++) {
+                                        for (let j = i + 1; j < mergeResult.length; j++) {
+                                            if (mergeResult[i]._id.equals(mergeResult[j]._id)) {
+                                                mergeResult.splice(j, 1)
+                                            }
+
+                                        }
+                                    }
+
+                                    resolve(mergeResult)
+                                } else {
+                                    reject("No match found")
+                                }
+                            }
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
+
+                })
+                .catch(error => {
+                    reject(error)
+                })
         })
-
     }
 
 
@@ -143,17 +216,3 @@ class NoteService {
 let noteServiceObject = new NoteService();
 module.exports = noteServiceObject
 
-// $or: [
-//     {
-//       _id: {
-//         $regex: value,
-//         $options: 'ig',
-//       },
-//     },
-//     {
-//       name: {
-//         $regex: value,
-//       $options: 'ig',
-//       },
-//     },
-//   ],

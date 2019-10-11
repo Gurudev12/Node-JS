@@ -1,4 +1,4 @@
-/*************************************************************************
+/**************************************************************************
  * Execution        :
  * 
  * Purpose          : 
@@ -19,7 +19,7 @@ const redis = require("redis");
 const client = redis.createClient();
 class UserUtility {
 
-    verifyTokenWithRedis(req, res, next) {
+verifyTokenWithRedis(req, res, next) {
         let response = {};
         try{
 
@@ -57,7 +57,6 @@ class UserUtility {
                                             return res.status(400).send(response);
                                         }
                             }
-    
                         })
                     }
                 })

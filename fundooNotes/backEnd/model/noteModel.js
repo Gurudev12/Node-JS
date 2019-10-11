@@ -65,36 +65,37 @@ class NoteClass {
     /*************************************************************************************************/
     read(searchBy) {
         return new Promise((resolve, reject) => {
-            this.Note.find(searchBy)
-                .then(findData => {
-                    console.log("Using Normal find method",findData);
-                    
-                    resolve(findData)
-                })
-                .catch(err => {
-                    reject(err)
-
-                })
+            this.Note.find(searchBy).populate('labelId')
+              .exec(function(err,data){
+                  if(err){
+                      reject(err)
+                  }else{
+                      resolve(data)
+                  }
+              })
         })
     }
-/***POPULATE DEMO==>**********************************************************************************************/
-readLabel(searchBy) {
-    return new Promise((resolve, reject) => {
-        this.Note.find(searchBy).populate('labelId')
-        .exec(function (err, data) {
-            if (err)
-                return handleError(err);
-            else
-                console.log('USING populate()method==> ',data[0]);//.labelId[0].labelName
-                resolve(data)
-        });
-    })
-}
+    /***POPULATE DEMO==>**********************************************************************************************/
+    readLabel(searchBy, regexPattern) {
+        return new Promise((resolve, reject) => {
+            this.Note.find(searchBy).populate({
+                path: 'labelId',
+                match: { labelName: { $regex: regexPattern } }
+            })
+                .exec(function (err, data) {
+                    if (err)
+                        return handleError(err);
+                    else
+                        //  console.log('USING populate()method=1==> ',data);//.labelId[0].labelName
+                        resolve(data)
+                });
+        })
+    }
     /*************************************************************************************************/
     update(findValue, updateValue) {
 
         return new Promise((resolve, reject) => {
-            this.Note.updateOne(findValue, { $set: updateValue })
+            this.Note.updateOne(findValue, updateValue)
                 .then((updatedResponse) => {
                     console.log(updatedResponse)
                     resolve(updatedResponse);
@@ -112,7 +113,6 @@ readLabel(searchBy) {
                     resolve(deletedData)
                 })
                 .catch(err => {
-                    console.log("DELETED ERROR", err)
                     reject(err)
 
                 })
