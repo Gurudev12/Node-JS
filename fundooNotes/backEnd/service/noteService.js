@@ -4,8 +4,6 @@ class NoteService {
         try {
             let noteResult = await noteModel.create(noteData)
             if (noteResult) {
-                console.log("Servise", noteResult);
-
                 return true
             } else {
                 return false
@@ -102,10 +100,10 @@ class NoteService {
 
             noteModel.update(findValue, updatevalue)
                 .then(updateData => {
-                    if (updateData.nModified = 1) {
-                        resolve(true)
+                    if (updateData.nModified ==1) {
+                        resolve({"status":true})
                     } else {
-                        resolve(false)
+                        resolve({"status":false})
 
                     }
                 })
@@ -166,21 +164,18 @@ class NoteService {
 
             //This method is for searching the notes based on title,desription,reminder,color.
             noteModel.read(searchBy)
-                .then(noteResult => {
-
+                .then(noteResult=> {
 
                     noteModel.readLabel(findQuery, value)
                         .then(labelResult => {
-
+                            
                             if (labelResult.length > 0) {
-                                let newLabelResult = labelResult.filter((elem) => {
+                                let filterLabelResult = labelResult.filter((elem) => {
+                                    
                                     return elem.labelId.length > 0
                                 })
 
-                                let mergeResult = noteResult.concat(newLabelResult);
-                                console.log("\n\n\n\n\n\n\n")
-
-
+                                let mergeResult = noteResult.concat(filterLabelResult);
 
                                 if (mergeResult.length > 0) {
                                     for (let i = 0; i < mergeResult.length - 1; i++) {
@@ -188,10 +183,8 @@ class NoteService {
                                             if (mergeResult[i]._id.equals(mergeResult[j]._id)) {
                                                 mergeResult.splice(j, 1)
                                             }
-
                                         }
                                     }
-
                                     resolve(mergeResult)
                                 } else {
                                     reject("No match found")
@@ -201,17 +194,12 @@ class NoteService {
                         .catch(err => {
                             reject(err)
                         })
-
                 })
                 .catch(error => {
                     reject(error)
                 })
         })
     }
-
-
-
-
 }
 let noteServiceObject = new NoteService();
 module.exports = noteServiceObject

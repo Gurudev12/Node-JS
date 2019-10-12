@@ -18,6 +18,7 @@ const utility = require("../utility/utility");
 var shortUrl = require('node-url-shortener');
 const redis = require("redis");
 const client = redis.createClient();
+const redisService = require("../service/redisService")
 
 
 class UserService {
@@ -170,46 +171,49 @@ class UserService {
                                    ****/
                                     let newToken = utility.createNewToken(payload);
 
-                                    console.log("TOKEN GENERATED WHILE LOGIN",newToken)
+                                    console.log("TOKEN GENERATED WHILE LOGIN", newToken)
 
                                     //Storing token to redis.
-                                    client.set(userData[0]._id+"loginToken", newToken);
+                                    // client.set(userData[0]._id+"loginToken", newToken);
 
-                                    client.get(userData[0]._id+"loginToken", function (err, reply) {
-                                        console.log("REPLY OF LOGIN TOKEN=====>", reply.toString());
+                                    // client.get(userData[0]._id+"loginToken", function (err, reply) {
+                                    //     console.log("REPLY OF LOGIN TOKEN=====>", reply.toString());
 
-                                    })
-
-
+                                    // })
 
 
 
 
+                                    redisService.redisSetter(userData[0]._id + "loginToken", newToken)
+                                        .then(redisResponse => {
+                                            let findValue = { "_id": userData[0]._id };
+                                            let updateToken = { loginToken: newToken };
+                                            userModel.update(findValue, updateToken)   //userData send array and userData[0] send object
+                                                .then(updatedData => {
 
-
-                                    //after generating new token saved to database
-                                    let findValue = { "_id": userData[0]._id };
-                                    let updateToken = { loginToken: newToken };
-                                    userModel.update(findValue, updateToken)   //userData send array and userData[0] send object
-                                        .then(updatedData => {
-
-
-                                            let loginResponse = {
-                                                "success": true,
-                                                "message": "LOGIN SUCCESSFUL",
-                                                data: {
-                                                    "firstName": userData[0].firstName,
-                                                    "lastName": userData[0].lastName,
-                                                    "email": userData[0].email,
-                                                    "userType": userData[0].userType
-                                                },
-                                                "token": newToken
-                                            };
-                                            resolve(loginResponse);
+                                                    let loginResponse = {
+                                                        "success": true,
+                                                        "message": "LOGIN SUCCESSFUL",
+                                                        data: {
+                                                            "firstName": userData[0].firstName,
+                                                            "lastName": userData[0].lastName,
+                                                            "email": userData[0].email,
+                                                            "userType": userData[0].userType
+                                                        },
+                                                        "token": newToken
+                                                    };
+                                                    resolve(loginResponse);
+                                                })
+                                                .catch(error => {
+                                                    reject("ERROR IN UPDATED DATA WITH TOKEN IN DATABASE");
+                                                });
                                         })
-                                        .catch(error => {
-                                            reject("ERROR IN UPDATED DATA WITH TOKEN IN DATABASE");
-                                        });
+                                        .catch(err => {
+                                            console.log("REDIS TOKEN NOT SAVED")
+                                            reject(err)
+                                        })
+
+
                                 }
                                 else {
                                     reject("PASSWORD NOT MATCHED");
@@ -257,9 +261,9 @@ class UserService {
 
 
                         //This is code for storing token to redis
-                        client.set(foundData[0]._id +"forgotToken", forgotToken)
+                        client.set(foundData[0]._id + "forgotToken", forgotToken)
 
-                        client.get(foundData[0]._id +"forgotToken", (err, reply) => {
+                        client.get(foundData[0]._id + "forgotToken", (err, reply) => {
                             if (err) {
                                 console.log("TOKEN NOT get from redis", err)
                             } else {

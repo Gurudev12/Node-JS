@@ -24,8 +24,7 @@ const service=require("../service/userService");
 const serviceObject=new service.UserService();
 
 const config=require("../config/config")
-const s3=require("../service/s3")
-
+const s3=require("../service/s3Service")
 class UserController
 {
 registrationController(req,res){

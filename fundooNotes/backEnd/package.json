@@ -20,7 +20,8 @@
   },
   "scripts": {
     "test": "mocha",
-    "start": "node server.js"
+    "start": "node server.js",
+    "debug": "nodemon --inspect server.js"
   },
   "author": "",
   "license": "ISC"

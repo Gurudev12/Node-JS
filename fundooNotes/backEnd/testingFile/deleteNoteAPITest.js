@@ -18,7 +18,7 @@ console.log("DTETTETE DATA",deleteNoteTestData.deleteNote)
       chai.request(server)
           .post('/createNote')
           .send(deleteNoteTestData.deleteNote)
-          .set(deleteNoteTestData.headerWithToken)
+          .set(testData.tokenSet)
           .end((err, res) => {
                 res.should.have.status(200);
             done();

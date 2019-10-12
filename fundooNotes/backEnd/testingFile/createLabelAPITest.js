@@ -18,7 +18,7 @@ describe('Create label', () => {
       chai.request(server)
           .post('/createLabel')
           .send(createLabelTestData.emptyLabel)
-          .set(createLabelTestData.headerWithToken)
+          .set(testData.tokenSet)
           .end((err, res) => {
                 res.should.have.status(422);
             done();
@@ -41,7 +41,7 @@ describe('Create label', () => {
         chai.request(server)
             .post('/createLabel')
             .send(createLabelTestData.newLabel)
-            .set(createLabelTestData.headerWithToken)
+            .set(testData.tokenSet)
             .end((err, res) => {
                   res.should.have.status(200);
               done();

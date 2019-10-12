@@ -32,18 +32,39 @@ const multer=require("multer");
 const redis=require("redis");
 const client=redis.createClient();
 
+
+
+
 //mongoose connectivity
-mongoose.connect(config.url,{useNewUrlParser:true})
+let mongodbConnection = mongoose.connect(config.url,{useNewUrlParser:true})
     .then(() => {
         console.log("successfully connected to database");
     })
     .catch(err => {
         console.log("could not connected to the database", err);
+        process.exit(0);
     });
+
+    mongoose.connection.on('disconnected', function(){
+        console.log(("Mongoose default connection is disconnected"));
+        process.exit(1);
+    });
+    
 
     app.listen(PORT,()=>{
     console.log("Server started at port:",PORT);
 });
+
+
+
+
+
+
+
+
+
+
+
 //Redis connectivity
 client.on("connect",(err,data)=>{
     if(err){
@@ -52,5 +73,6 @@ client.on("connect",(err,data)=>{
         console.log("redis connected successfully");
     }
 });
+
 
 module.exports = app;

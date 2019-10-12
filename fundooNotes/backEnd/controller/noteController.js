@@ -6,13 +6,11 @@ class NoteController {
         try {
 
             let noteData = {
-                "labelId": req.body.labelId,
                 "userId": req.token._id,
                 "title": req.body.noteTitle,
                 "description": req.body.noteDescription,
                 "reminder": req.body.reminder
             }
-            console.log("COntroller", noteData);
 
             let noteResult = await noteService.createNoteService(noteData)
             if (noteResult) {
@@ -129,7 +127,7 @@ class NoteController {
 
             noteService.addLabelToNoteService(req.body)
                 .then(addLabelResponse => {
-                    if (addLabelResponse == true) {
+                    if (addLabelResponse.status == true) {
                         response.success = true;
                         response.message = "Label added to note successfully"
                         return res.status(200).send(response)
@@ -143,7 +141,7 @@ class NoteController {
                     response.success = false;
                     response.message = "Error while adding label to note"
                     response.error = err
-                    return res.status(500).send(response)
+                    return res.status(400).send(response)
                 })
         }
         catch (e) {

@@ -1,0 +1,68 @@
+*When your debugger is not working then 
+
+1)Click on debug
+2)start debugger
+3)go to debugger setting
+
+4)Then you will get launch.json file and then you have to add the following code to launch.json file.
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Node: Nodemon",
+            "processId": "${command:PickProcess}",
+            "restart": true,
+            "protocol": "inspector",
+        }
+    ]
+}
+
+
+5)Add following script to package.json
+
+	 "debug": "nodemon --inspect server.js"
+for example:
+
+ "scripts": {
+    "test": "mocha",
+    "start": "node server.js",
+    "debug": "nodemon --inspect server.js"
+  }
+
+6)When you newly going to start debug then you will get the message like "Pick the node js process to attach to"
+
+
+
+7)Then from your terminal type following command
+
+ npm run debug
+
+
+
+
+
+*New change in server.js
+
+server will not run if our mongodb database is inactive.
+1)To check mongodb is active or inactive
+$ sudo service mongodb status
+
+2)To stop mongodb
+sudo service mongodb stop
+
+
+3)To start mongodb
+$ sudo service mongod start
+
+4)If our mongodb is inactive then server should not be run 
+  mongoose.connection.on('disconnected', function(){
+        console.log(("Mongoose default connection is disconnected"));
+        process.exit(1);
+    });
+
+
+
+

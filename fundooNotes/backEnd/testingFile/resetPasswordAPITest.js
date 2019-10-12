@@ -20,7 +20,7 @@ describe('This is for reset password', () => {
       chai.request(server)
           .post('/resetPassword')
           .send(resetPasswordData.emptyPassword)  
-          .set(resetPasswordData.headerWithToken) //change the token at everytime
+          .set(testData.tokenSet)//change the token at everytime
           .end((err, res) => {
                 res.should.have.status(422);
             done();
@@ -34,7 +34,7 @@ it('It should not POST reset password because of password length is', (done) => 
     chai.request(server)
         .post('/resetPassword')
         .send(resetPasswordData.passwordLength)
-        .set(resetPasswordData.headerWithToken)  //change the token at everytime
+        .set(testData.tokenSet)//change the token at everytime
         .end((err, res) => {
               res.should.have.status(422);
           done();
@@ -48,7 +48,7 @@ it('It should POST reset password successfull..', (done) => {
     chai.request(server)
         .post('/resetPassword')
         .send(resetPasswordData.resetPassword)
-        .set(resetPasswordData.headerWithToken)  //change the token at everytime
+        .set(testData.tokenSet)  //change the token at everytime
         .end((err, res) => {
               res.should.have.status(200);
           done();

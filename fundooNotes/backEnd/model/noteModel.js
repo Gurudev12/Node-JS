@@ -42,9 +42,10 @@ class NoteClass {
     /*************************************************************************************************/
     create(paramObject) {
         return new Promise((resolve, reject) => {
+            console.log("MODEL==>",paramObject);
+            
             let newNote = new this.Note({
                 "userId": (paramObject.userId == null) ? "" : paramObject.userId,
-                "labelId": (paramObject.labelId == null) ? "" : paramObject.labelId,
                 "noteTitle": (paramObject.title == null) ? "" : paramObject.title,
                 "noteDescription": (paramObject.description == null) ? "" : paramObject.description,
                 "reminder": (paramObject.reminder == null) ? "" : paramObject.reminder,            //condition ? consequent : alternative
@@ -53,7 +54,7 @@ class NoteClass {
                 "isArchieve": (paramObject.isArchieve == null) ? false : paramObject.isArchieve
             })
             newNote.save()
-                .then(savedNote => {
+                .then(savedNote => {                    
                     resolve(savedNote)
                 })
                 .catch(err => {
@@ -84,9 +85,8 @@ class NoteClass {
             })
                 .exec(function (err, data) {
                     if (err)
-                        return handleError(err);
+                        reject(err);
                     else
-                        //  console.log('USING populate()method=1==> ',data);//.labelId[0].labelName
                         resolve(data)
                 });
         })

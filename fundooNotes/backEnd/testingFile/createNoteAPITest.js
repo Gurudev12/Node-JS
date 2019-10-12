@@ -18,7 +18,7 @@ console.log("DTETTETE DATA",createNoteTestData.emptyNote)
       chai.request(server)
           .post('/createNote')
           .send(createNoteTestData.validNote)
-          .set(createNoteTestData.headerWithToken)
+          .set(testData.tokenSet)
           .end((err, res) => {
                 res.should.have.status(200);
             done();
