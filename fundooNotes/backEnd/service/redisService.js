@@ -8,27 +8,28 @@ class RedisClass{
         return new Promise((resolve,reject)=>{
             client.set(eventName,token,(err,response)=>{
                 if(response=="OK"){
-                 resolve(response)
+                 resolve(response);
                 }
                 else{
-                reject(err)                    
+                reject(err);                    
                 }
-            })
-        })
+            });
+        });
     }
 
 
     redisGetter(eventName,callback){
         client.get(eventName, (err, reply)=>{
             if(err){
-                callback(err)
+                callback(err);
             }else{
-                console.log("GET TOKEN==========>",reply);
-                
-                callback(null,reply)
+                callback(null,reply);
             }
-        })
+        });
     }
+
+
+
 }
 let redisClassObject=new RedisClass();
 module.exports=redisClassObject;

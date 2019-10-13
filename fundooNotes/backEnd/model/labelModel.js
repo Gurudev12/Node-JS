@@ -1,8 +1,8 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 let labelSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'registeredCollection'
+        ref: "registeredCollection"
     },
 
     labelName: {
@@ -12,11 +12,11 @@ let labelSchema = mongoose.Schema({
 },
     {
         timestamp: true
-    })
+    });
 
 class LabelClass {
     constructor() {
-        this.Label = mongoose.model("labelCollection", labelSchema)
+        this.Label = mongoose.model("labelCollection", labelSchema);
     }
     /*************************************************************************************************/
     create(paramObject) {
@@ -25,28 +25,28 @@ class LabelClass {
             let newLabel = new this.Label({
                 "userId": paramObject._id,
                 "labelName": paramObject.labelName
-            })
+            });
             newLabel.save()
                 .then(savedData => {
-                    resolve(savedData)
+                    resolve(savedData);
                 })
                 .catch(err => {
-                    reject(err)
-                })
-        })
+                    reject(err);
+                });
+        });
     }
     /*************************************************************************************************/
     read(searchBy) {
         return new Promise((resolve, reject) => {
             this.Label.find(searchBy)
                 .then((data) => {
-                    resolve(data)
+                    resolve(data);
 
                 })
                 .catch((err) => {
-                    reject(err)
-                })
-        })
+                    reject(err);
+                });
+        });
 
     }
     /*************************************************************************************************/
@@ -55,12 +55,12 @@ class LabelClass {
         return new Promise((resolve, reject) => {
             this.Label.updateOne(findValue, { $set: updateValue })
                 .then(data => {
-                    resolve(data)
+                    resolve(data);
                 })
                 .catch(err => {
-                    reject(err)
-                })
-        })
+                    reject(err);
+                });
+        });
     }
     /*************************************************************************************************/
     delete(deleteValue) {
@@ -68,14 +68,12 @@ class LabelClass {
         return new Promise((resolve, reject) => {
             this.Label.deleteOne(deleteValue)
                 .then(deletedData => {
-                    console.log("DELETED MODEL", deletedData)
-                    resolve(deletedData)
+                    resolve(deletedData);
                 })
                 .catch(err => {
-                    console.log("DELETED EROR", err)
-                    reject(err)
-                })
-        })
+                    reject(err);
+                });
+        });
     }
 
 }

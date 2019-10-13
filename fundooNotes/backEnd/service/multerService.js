@@ -1,7 +1,7 @@
-const multer = require('multer');
-const multerS3 = require('multer-s3')
+const multer = require("multer");
+const multerS3 = require("multer-s3");
 const s3 = require("./s3Service");
-const config=require("../config/config")
+const config=require("../config/config");
 
 
 var upload = multer({

@@ -80,7 +80,7 @@ class UserClass {
                     resolve(newRegisterUser);
                 })
                 .catch(err => {
-                    reject("ERROR OCCURED WHILE CREATING NEW USER");
+                    reject(err);
                 });
         });
     /***
@@ -99,7 +99,7 @@ class UserClass {
                     }
                 })
                 .catch((err) => {
-                    reject("EMAIL IS NOT PRESENT");
+                    reject(err);
                 });
         });
     
@@ -111,11 +111,11 @@ class UserClass {
 
         return new Promise((resolve, reject) => {
             this.User.updateOne( findValue , { $set: updateValue })   
-                .then(() => {
-                    resolve("DOCUMENT UPDATED");
+                .then((data) => {
+                    resolve(data);
                 })
                 .catch(err => {
-                    reject("DOCUMENT UPDATED FAILED");
+                    reject(err);
                 });
         });
 }

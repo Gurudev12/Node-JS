@@ -1,4 +1,4 @@
-const labelService = require("../service/labelService")
+const labelService = require("../service/labelService");
 class LabelController {
 
     async createLabelController(req, res) {
@@ -19,16 +19,16 @@ class LabelController {
                 let labelData = {
                     "_id": req.token._id,
                     "labelName": req.body.labelName
-                }
-                let labelResult = await labelService.createLabelService(labelData)
+                };
+                let labelResult = await labelService.createLabelService(labelData);
                 if (labelResult == true) {
                     response.success = true;
-                    response.message = "New label created"
-                    return res.status(200).send(response)
+                    response.message = "New label created";
+                    return res.status(200).send(response);
                 } else {
                     response.success = false;
-                    response.message = "Error while creating new label"
-                    return res.status(500).send(response)
+                    response.message = "Error while creating new label";
+                    return res.status(500).send(response);
                 }
 
             }
@@ -55,9 +55,8 @@ class LabelController {
                 let updateLabelData = {
                     "_id": req.body._id,
                     "newLabelName": req.body.updateLabelName
-                }
-                let updateLabelResult = await labelService.updateLabelService(updateLabelData)
-                console.log("UPDATED RESULT",updateLabelResult)
+                };
+                let updateLabelResult = await labelService.updateLabelService(updateLabelData);
                 if (updateLabelResult == true) {
                     response.success = true;
                     response.message = "Label updated successfully";
@@ -71,20 +70,18 @@ class LabelController {
         } catch (e) {
             response.error = e;
             response.message = "The server did not understand the request.";
-            console.log(e)
             return res.status(400).send(response);
         }
-
     }
 
 /*************************************************************************************************/
     async deleteLabelController(req, res) {
-        let response = {}
+        let response = {};
         try{
             let deleteLabelData = {
                 "_id": req.body._id
             };
-            let deletedLabelResult = await labelService.deleteLabelService(deleteLabelData)
+            let deletedLabelResult = await labelService.deleteLabelService(deleteLabelData);
             if (deletedLabelResult == true) {
                 response.success = true;
                 response.message = "Label deleted successfully";
@@ -103,13 +100,12 @@ class LabelController {
     }
 /*************************************************************************************************/
     async getAllLabelController(req, res) {
-        let response = {}
+        let response = {};
         try{
-            console.log("GET ALL RESULT", req.token._id);
             let labelData = {
                 "userId": req.token._id
             };
-            let getAllLabelResult = await labelService.getAllLabelService(labelData)
+            let getAllLabelResult = await labelService.getAllLabelService(labelData);
             if (getAllLabelResult) {
                 response.success = true;
                 response.message = "Get all label successfully";

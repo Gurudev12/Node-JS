@@ -40,7 +40,7 @@ transporter.sendMail(mailOption,function(err,info){
         callback(err);
     }
     else{
-        callback(null,"mail sent");
+        callback(null,"mail sent"+info);
     }
 });
 }

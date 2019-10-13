@@ -15,10 +15,10 @@ const bcrypt = require("bcrypt");
 const nodemail = require("./emailService");
 const emailExistence = require("email-existence");
 const utility = require("../utility/utility");
-var shortUrl = require('node-url-shortener');
+var shortUrl = require("node-url-shortener");
 const redis = require("redis");
 const client = redis.createClient();
-const redisService = require("../service/redisService")
+const redisService = require("../service/redisService");
 
 
 class UserService {
@@ -70,19 +70,15 @@ class UserService {
                                                 "_id": data._id
                                             };
                                             let registrationToken = utility.createNewToken(payload);
-                                            console.log("REGISTRATION TOKEN", registrationToken)
-
-
 
                                             //This code for url shortner
-                                            shortUrl.short('https://amazon.com', function (err, url) {
+                                            shortUrl.short("https://amazon.com", function (err, url) {
                                                 // shortUrl.short('http://localhost:4000/registrationVerify/ + registrationToken +', function(err, url){
-                                                console.log(url);
                                             });
 
 
 
-                                            let registrationVerifyLink = '<p>this is link to REGISTRATION VERIFY</p><a href="http://localhost:4000/registrationVerify/' + registrationToken + '">Registration verify</a>';
+                                            let registrationVerifyLink = "<p>this is link to REGISTRATION VERIFY</p><a href=\"http://localhost:4000/registrationVerify/" + registrationToken + "\">Registration verify</a>";
                                             let text = "Registration verification link";
                                             nodemail.sendMail(data.email, registrationVerifyLink, text, (error, response) => {
                                                 if (error) {
@@ -130,7 +126,6 @@ class UserService {
                         resolve(data);
                     })
                     .catch(err => {
-                        console.log("SERVICE ERROTRRRR", err);
                         reject(err);
                     });
             });
@@ -171,7 +166,6 @@ class UserService {
                                    ****/
                                     let newToken = utility.createNewToken(payload);
 
-                                    console.log("TOKEN GENERATED WHILE LOGIN", newToken)
 
                                     //Storing token to redis.
                                     // client.set(userData[0]._id+"loginToken", newToken);
@@ -209,9 +203,8 @@ class UserService {
                                                 });
                                         })
                                         .catch(err => {
-                                            console.log("REDIS TOKEN NOT SAVED")
-                                            reject(err)
-                                        })
+                                            reject(err);
+                                        });
 
 
                                 }
@@ -256,20 +249,17 @@ class UserService {
                         * @description-After finding email create new token and send it to perticular emailId
                         ****/
                         let forgotToken = utility.createNewToken(payload);
-                        console.log("FORGOT TOKEN", forgotToken)
 
 
 
                         //This is code for storing token to redis
-                        client.set(foundData[0]._id + "forgotToken", forgotToken)
+                        // client.set(foundData[0]._id + "forgotToken", forgotToken);
 
-                        client.get(foundData[0]._id + "forgotToken", (err, reply) => {
-                            if (err) {
-                                console.log("TOKEN NOT get from redis", err)
-                            } else {
-                                console.log("REDIS REPLY TOKEN", reply)
-                            }
-                        })
+                        // client.get(foundData[0]._id + "forgotToken", (err, reply) => {
+                        //     if (err) {
+                        //     } else {
+                        //     }
+                        // });
 
 
 
@@ -282,7 +272,7 @@ class UserService {
 
 
 
-                        let forgotLink = '<p>this is link to RESET PASSWORD</p><a href="http://localhost:4000/resetPassword' + forgotToken + '">Reset PassWord</a>';
+                        let forgotLink = "<p>this is link to RESET PASSWORD</p><a href=\"http://localhost:4000/resetPassword" + forgotToken + "\">Reset PassWord</a>";
                         //let forgotLink=process.env.FORGOT_PASSWORD_LINK
                         let text = "Reset password link";
                         nodemail.sendMail(foundData[0].email, forgotLink, text, (err, data) => {
@@ -331,13 +321,13 @@ class UserService {
     /********************UPLOAD IMAGE SERVICE***********************************************************/
     async uploadImageService(uploadData) {
         try {
-            let searchById = { "_id": uploadData._id }
-            let updateValue = { "imageUrl": uploadData.url }
-            let updatedResult = await userModel.update(searchById, updateValue)
+            let searchById = { "_id": uploadData._id };
+            let updateValue = { "imageUrl": uploadData.url };
+            let updatedResult = await userModel.update(searchById, updateValue);
             if (updatedResult == "DOCUMENT UPDATED") {
-                return "FILE UPLOADED SUCCESSFULLY"
+                return "FILE UPLOADED SUCCESSFULLY";
             } else {
-                return "ERROR WHILE UPLOADING FILE"
+                return "ERROR WHILE UPLOADING FILE";
             }
 
         } catch (e) {

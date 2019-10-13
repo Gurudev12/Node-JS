@@ -23,8 +23,8 @@
 const service=require("../service/userService");
 const serviceObject=new service.UserService();
 
-const config=require("../config/config")
-const s3=require("../service/s3Service")
+const config=require("../config/config");
+const s3=require("../service/s3Service");
 class UserController
 {
 registrationController(req,res){
@@ -99,8 +99,6 @@ registrationVerifyController(req,res){
    try{
     let response={};
 
-    console.log("REQUEST TOKEN ID",req.token._id);
-    
     serviceObject.registrationVerifyService(req.token._id)
     .then(data=>{
         response.success=true;
@@ -161,7 +159,7 @@ loginController(req,res){
                 }
                 else if(err=="REGISTRATION VERIFICATION NOT DONE"){
                     response.success=false;
-                    response.error=err;s
+                    response.error=err;
                     res.status(500).send(response);
                 }
             });
@@ -198,7 +196,7 @@ forgotController(req,res){
             })
             .catch(err=>{
                 if(err=="EMAL NOT FOUND IN DATABASE")
-                response.success=false;
+                {response.success=false;}
                 response.error=err;
                 res.status(500).send(response);
             });
@@ -219,7 +217,6 @@ async newResetPassword(req,res){
     req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
     let error=req.validationErrors();
     let response={};
-    console.log("RESET PASSWORD",req.token._id);
     
     if(error){
         response.success=false;
@@ -266,7 +263,7 @@ async uploadImageController(req,res){
         "url":s3url
     };
 
-    let uploadResult =await serviceObject.uploadImageService(uploadData)
+    let uploadResult =await serviceObject.uploadImageService(uploadData);
         if(uploadResult){
             response.success=true;
             response.message=uploadResult;

@@ -22,6 +22,13 @@ module.exports = {
     ],
     "rules": {
         "semi": ["error", "always"],
-        "quotes": ["error", "double"]
+        "quotes": ["error", "double"],
+        "no-console": ["error", { allow: ["warn", "error"] }],
+        "for-direction": "error",   //for (var i = 10; i >= 0; i++) {}
+        "no-dupe-keys": "error",
+        "no-dupe-args": "error", // function(a,b,a)
+        "no-duplicate-case": "error",  //no duplicate case in switch case   
+        "valid-typeof": "error",    //typeof name === "strnig"
+        "curly": "error"     // curly braces required in if else statement
     }
 };

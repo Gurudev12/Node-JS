@@ -42,6 +42,7 @@ let choice=0
                state=returnName[4]
                zip=returnName[5]
                phonenumber=returnName[6]
+               
                 console.log("Add person sucessfully..")
                 break;
             

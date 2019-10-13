@@ -1,18 +1,19 @@
-const labelModel = require("../model/labelModel")
+const labelModel = require("../model/labelModel");
 class LabelServiceClass {
 
+    
     async  createLabelService(labelData) {
         try{
-            let labelResult = await labelModel.create(labelData)
+            
+            let labelResult = await labelModel.create(labelData);
 
-            if (labelResult) {
-    
-                return true
-            } else {
-                return false
-            }
+            if (labelResult) 
+                {return true;}
+            else 
+                {return false;}
+            
         }catch(e){
-            return e
+            return e;
         }
     
     }
@@ -20,26 +21,24 @@ class LabelServiceClass {
 
     async updateLabelService(updateLabelData) {
         try{
-            console.log("SERVICE LABEL", updateLabelData.newLabelName)
-            let searchBy = { "_id": updateLabelData._id }
-            let findLabelResult = await labelModel.read(searchBy)
+            let searchBy = { "_id": updateLabelData._id };
+            let findLabelResult = await labelModel.read(searchBy);
     
-            console.log("SERVICE LABEL", updateLabelData.newLabelName)
             if (findLabelResult) {
     
-                let findValue = { "_id": findLabelResult[0]._id }
-                let updateValue = { "labelName": updateLabelData.newLabelName }
-                let updateLabelResult = await labelModel.update(findValue, updateValue)
+                let findValue = { "_id": findLabelResult[0]._id };
+                let updateValue = { "labelName": updateLabelData.newLabelName };
+                let updateLabelResult = await labelModel.update(findValue, updateValue);
                 if (updateLabelResult) {
-                    return true
+                    return true;
                 } else {
-                    return false
+                    return false;
                 }
             } else {
-                return false
+                return false;
             }
         }catch(e){
-            return e
+            return e;
         }
      
     }
@@ -47,16 +46,16 @@ class LabelServiceClass {
 /*************************************************************************************************/
     async deleteLabelService(deleteLabelData) {
         try{
-            let deleteValue = { "_id": deleteLabelData._id }
+            let deleteValue = { "_id": deleteLabelData._id };
 
-            let deleteLabelResult = await labelModel.delete(deleteValue)
+            let deleteLabelResult = await labelModel.delete(deleteValue);
             if (deleteLabelResult) {
-                return true
+                return true;
             } else {
-                return false
+                return false;
             }
         }catch(e){
-            return e
+            return e;
         }
     
     }
@@ -64,18 +63,17 @@ class LabelServiceClass {
 /*************************************************************************************************/
     async getAllLabelService(labelData) {
         try{
-            console.log("SERVICE ALL DATA",labelData.userId)
-            let searchBy={"userId":labelData.userId}
-            let allLabelData=await labelModel.read(searchBy) 
+            let searchBy={"userId":labelData.userId};
+            let allLabelData=await labelModel.read(searchBy); 
             if(allLabelData){
     
-                return allLabelData
+                return allLabelData;
             }else{
     
-                return false
+                return false;
             }
         }catch(e){
-            return e
+            return e;
         }
       
     }

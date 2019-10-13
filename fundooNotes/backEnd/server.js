@@ -12,14 +12,12 @@
  * @since           : 25-9-2019
  * 
  **************************************************************************/
-
 const express = require("express");
 const validator = require("express-validator");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-
-const routes = require("../backEnd/routes/userRoutes");
 const config=require("../backEnd/config/config");
+const routes=require("./routes/userRoutes")
 require("dotenv").config();
 
 const app = express();
@@ -35,8 +33,8 @@ const client=redis.createClient();
 
 
 
-//mongoose connectivity
-let mongodbConnection = mongoose.connect(config.url,{useNewUrlParser:true})
+//mongoose connectivity  let mongodbConnection = 
+mongoose.connect(config.url,{useNewUrlParser:true})
     .then(() => {
         console.log("successfully connected to database");
     })
@@ -54,16 +52,6 @@ let mongodbConnection = mongoose.connect(config.url,{useNewUrlParser:true})
     app.listen(PORT,()=>{
     console.log("Server started at port:",PORT);
 });
-
-
-
-
-
-
-
-
-
-
 
 //Redis connectivity
 client.on("connect",(err,data)=>{
