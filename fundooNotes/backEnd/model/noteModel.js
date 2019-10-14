@@ -42,7 +42,7 @@ class NoteClass {
     /*************************************************************************************************/
     create(paramObject) {
         return new Promise((resolve, reject) => {
-            
+
             let newNote = new this.Note({
                 "userId": (paramObject.userId == null) ? "" : paramObject.userId,
                 "noteTitle": (paramObject.title == null) ? "" : paramObject.title,
@@ -53,7 +53,7 @@ class NoteClass {
                 "isArchieve": (paramObject.isArchieve == null) ? false : paramObject.isArchieve
             });
             newNote.save()
-                .then(savedNote => {                    
+                .then(savedNote => {
                     resolve(savedNote);
                 })
                 .catch(err => {
@@ -66,13 +66,13 @@ class NoteClass {
     read(searchBy) {
         return new Promise((resolve, reject) => {
             this.Note.find(searchBy).populate("labelId")
-              .exec(function(err,data){
-                  if(err){
-                      reject(err);
-                  }else{
-                      resolve(data);
-                  }
-              });
+                .exec(function (err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
         });
     }
     /***POPULATE DEMO==>**********************************************************************************************/
@@ -83,10 +83,8 @@ class NoteClass {
                 match: { labelName: { $regex: regexPattern } }
             })
                 .exec(function (err, data) {
-                    if (err)
-                        {reject(err);}
-                    else
-                        {resolve(data);}
+                    if (err) { reject(err); }
+                    else { resolve(data); }
                 });
         });
     }

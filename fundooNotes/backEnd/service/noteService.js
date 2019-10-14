@@ -54,7 +54,11 @@ class NoteService {
             return new Promise((resolve, reject) => {
 
                 let searchBy = { "_id": deleteData._id };
-                noteModel.delete(searchBy)
+
+                let updateValue = {
+                    $set: { "isTrash": true }
+                }
+                noteModel.update(searchBy, updateValue)
                     .then(deletedData => {
                         resolve(deletedData);
                     })
@@ -70,9 +74,10 @@ class NoteService {
     getAllNoteService(loginData) {
         try {
             return new Promise((resolve, reject) => {
-                let searchBy = { "userId": loginData.userId };
+                let searchBy = { "userId": loginData.userId, "isTrash": false };
                 noteModel.read(searchBy)
                     .then(readData => {
+
                         resolve(readData);
                     })
                     .catch(err => {
@@ -100,10 +105,10 @@ class NoteService {
 
             noteModel.update(findValue, updatevalue)
                 .then(updateData => {
-                    if (updateData.nModified ==1) {
-                        resolve({"status":true});
+                    if (updateData.nModified == 1) {
+                        resolve({ "status": true });
                     } else {
-                        resolve({"status":false});
+                        resolve({ "status": false });
 
                     }
                 })
@@ -164,14 +169,14 @@ class NoteService {
 
             //This method is for searching the notes based on title,desription,reminder,color.
             noteModel.read(searchBy)
-                .then(noteResult=> {
+                .then(noteResult => {
 
                     noteModel.readLabel(findQuery, value)
                         .then(labelResult => {
-                            
+
                             if (labelResult.length > 0) {
                                 let filterLabelResult = labelResult.filter((elem) => {
-                                    
+
                                     return elem.labelId.length > 0;
                                 });
 
