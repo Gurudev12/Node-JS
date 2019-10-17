@@ -2,6 +2,7 @@
 //   type:mongoose.Schema.Types.ObjectId,
 //ref:'registeredCollection'
 const mongoose = require("mongoose");
+const dateFormat = require("dateformat");
 let noteSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -44,16 +45,16 @@ class NoteClass {
         return new Promise((resolve, reject) => {
 
             let newNote = new this.Note({
-                "userId": (paramObject.userId == null) ? "" : paramObject.userId,
+                "userId": (paramObject.userId == null) ? "" : paramObject.userId, //condition ? consequent : alternative
                 "noteTitle": (paramObject.title == null) ? "" : paramObject.title,
                 "noteDescription": (paramObject.description == null) ? "" : paramObject.description,
-                "reminder": (paramObject.reminder == null) ? "" : paramObject.reminder,            //condition ? consequent : alternative
+                "reminder": (paramObject.reminder == null) ? "" : paramObject.reminder,
                 "color": (paramObject.color == null) ? "" : paramObject.color,
                 "isTrash": (paramObject.isTrash == null) ? false : paramObject.isTrash,
                 "isArchieve": (paramObject.isArchieve == null) ? false : paramObject.isArchieve
             });
             newNote.save()
-                .then(savedNote => {
+                .then(savedNote => {                
                     resolve(savedNote);
                 })
                 .catch(err => {

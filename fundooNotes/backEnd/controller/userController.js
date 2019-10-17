@@ -264,13 +264,13 @@ async uploadImageController(req,res){
     };
 
     let uploadResult =await serviceObject.uploadImageService(uploadData);
-        if(uploadResult){
+        if(uploadResult==true){
             response.success=true;
-            response.message=uploadResult;
+            response.message="Image uploaded successfully";
             return res.status(200).send(response);
         }else{
             response.success=false;
-            response.message=uploadResult;
+            response.message="Error while image uploading";
             return res.status(400).send(response);
         }
 

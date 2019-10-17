@@ -11,7 +11,7 @@ let labelSchema = mongoose.Schema({
     }
 },
     {
-        timestamp: true
+        timestamps: true
     });
 
 class LabelClass {
@@ -23,7 +23,7 @@ class LabelClass {
         return new Promise((resolve, reject) => {
 
             let newLabel = new this.Label({
-                "userId": paramObject._id,
+                "userId": paramObject.userId,
                 "labelName": paramObject.labelName
             });
             newLabel.save()

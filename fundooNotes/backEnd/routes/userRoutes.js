@@ -25,7 +25,8 @@ router.post("/verifyRegistration", utility.verifyToken, ctrl.registrationVerifyC
 router.post("/login", ctrl.loginController); 
 router.post("/forgotPassword", ctrl.forgotController);   
 router.post("/resetPassword", utility.verifyToken, ctrl.newResetPassword);   
-router.post("/uploadImage", utility.verifyToken, multer.single("file"), ctrl.uploadImageController);
+
+router.post("/uploadImage",utility.verifyToken, multer.single("file"), ctrl.uploadImageController);
 
 //Label
 router.post("/createLabel",utility.verifyTokenWithRedis,labelCtrl.createLabelController); 

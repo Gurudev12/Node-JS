@@ -1,12 +1,18 @@
 const noteModel = require("../model/noteModel");
+const dateFormat = require('dateformat');
+const redis = require("redis");
+const client = redis.createClient();
+const redisService = require("../service/redisService")
 class NoteService {
     async createNoteService(noteData) {
         try {
             let noteResult = await noteModel.create(noteData);
+
             if (noteResult) {
                 return true;
             } else {
                 return false;
+
             }
         } catch (e) {
             return e;
@@ -14,18 +20,26 @@ class NoteService {
     }
     /*************************************************************************************************/
     updateNoteService(updateData) {
-
+        /**
+         * @description: The Object.keys() method returns an array of a given object's own enumerable property names,
+         * in the same order as we get with a normal loop
+         */
         let keyObject = Object.keys(updateData);
         let updateQuery = {};
         return new Promise((resolve, reject) => {
             let findValue = {};
             let updateValue = {};
             for (let i = 0; i < keyObject.length; i++) {
+                /**
+                 * @description here find value contain array of object which are noteId ande userId
+                 */
                 if (keyObject[i] == "_id" || keyObject[i] == "userId") {
-
                     findValue[keyObject[i]] = updateData[keyObject[i]];
                     continue;
                 }
+                /**
+                 * @description remaining object will go into the updateValue array
+                 */
                 updateValue[keyObject[i]] = updateData[keyObject[i]];
 
                 //new change
@@ -40,7 +54,6 @@ class NoteService {
                     } else {
                         reject({ "success": false, "message": "Note not updated" });
                     }
-
                 })
                 .catch(err => {
                     reject(err);
@@ -49,16 +62,24 @@ class NoteService {
         });
     }
     /*************************************************************************************************/
+    /****
+     * @description delete note means we are not actually delete the note.We only update the that token i.e
+     *              "isTrash":true 
+     */
     deleteNoteService(deleteData) {
         try {
+
             return new Promise((resolve, reject) => {
 
-                let searchBy = { "_id": deleteData._id };
+                let findValue = {
+                    "userId": deleteData.userId,
+                    "_id": deleteData._id
+                }
 
                 let updateValue = {
-                    $set: { "isTrash": true }
+                    $set: { isTrash: true }
                 }
-                noteModel.update(searchBy, updateValue)
+                noteModel.update(findValue, updateValue)
                     .then(deletedData => {
                         resolve(deletedData);
                     })
@@ -71,32 +92,49 @@ class NoteService {
         }
     }
     /*************************************************************************************************/
-    getAllNoteService(loginData) {
-        try {
-            return new Promise((resolve, reject) => {
-                let searchBy = { "userId": loginData.userId, "isTrash": false };
-                noteModel.read(searchBy)
-                    .then(readData => {
+    // getAllNoteService(loginData) {
+    //     try {
+    //         let findValue = {}
+    //         let i = 0;
+    //         let keyObject = Object.keys(loginData)
+    //         return new Promise((resolve, reject) => {
 
-                        resolve(readData);
-                    })
-                    .catch(err => {
-                        reject(err);
-                    });
-            });
+    //             while (i < keyObject.length) {
+    //                 if (keyObject[i] == loginData.userId) {
+    //                     i++;
+    //                     continue;
+    //                 }
+    //                 findValue[keyObject[i]] = loginData[keyObject[i]]
+    //                 i++;
+    //             }
+    //             /****
+    //              * @description here we are getting the all the notes except that notes which notes "isTrash" value is false
+    //              * *** */
+    //             noteModel.read(findValue)
+    //                 .then(readData => {
 
-        } catch (e) {
-            return e;
-        }
-    }
+    //                     resolve(readData);
+    //                 })
+    //                 .catch(err => {
+    //                     reject(err);
+    //                 });
+    //         });
+
+    //     } catch (e) {
+    //         return e;
+    //     }
+    // }
     /*************************************************************************************************/
     addLabelToNoteService(addLabelData) {
 
         return new Promise((resolve, reject) => {
+            //First we will find the perticular note with perticular userId
             let findValue = {
                 "_id": addLabelData._id,
                 "userId": addLabelData.userId
             };
+            //here we adding the label_id to the labelId[]array in noteCollectipon
+            //$push  is used for adding data to array
             let updatevalue = {
                 $push: {
                     "labelId": addLabelData.labelId
@@ -121,11 +159,13 @@ class NoteService {
     deleteLabelFromNoteService(deleteLabelData) {
 
         return new Promise((resolve, reject) => {
-
+            //First we will find the perticular note with perticular userId
             let findValue = {
                 "_id": deleteLabelData._id,
                 "userId": deleteLabelData.userId
             };
+            //here we removing the label_id from the labelId[] array in noteCollectipon
+            //$pull  is used for removing data from array
             let updateValue = {
                 $pull: { "labelId": deleteLabelData.labelId }
             };
@@ -172,16 +212,26 @@ class NoteService {
                 .then(noteResult => {
 
                     noteModel.readLabel(findQuery, value)
+                        /****
+                         * @description here also we get the all note that match label with search data or not matched
+                         * ,so we have to filter that unmatched note with label
+    
+                         */
                         .then(labelResult => {
 
                             if (labelResult.length > 0) {
+                                //here filtring done
                                 let filterLabelResult = labelResult.filter((elem) => {
 
                                     return elem.labelId.length > 0;
                                 });
-
+                                //here merging the note result and label result
                                 let mergeResult = noteResult.concat(filterLabelResult);
-
+                                /***
+                                 * @description mergingResult contain both notes i.e one which search based 
+                                 *              on title,description,reminder,color 
+                                 *              and other one is based on label matching
+                                 */
                                 if (mergeResult.length > 0) {
                                     for (let i = 0; i < mergeResult.length - 1; i++) {
                                         for (let j = i + 1; j < mergeResult.length; j++) {
@@ -205,6 +255,120 @@ class NoteService {
                 });
         });
     }
+
+
+    reminderService(userId) {
+        return new Promise((resolve, reject) => {
+            let currentDate = new Date();
+
+            let searchBy = {
+                reminder: { $nin: [null, ""] }
+            }
+
+            noteModel.read(searchBy)
+                .then(reminderData => {
+
+                    if (reminderData.length > 0) {
+                        let i = 0
+                        while (i < reminderData.length) {
+                            if (Date.parse(currentDate) == Date.parse(reminderData[i].reminder)) {
+                                resolve(reminderData[i])
+                            }
+                            i++
+                        }
+                    }
+                    else {
+                        reject("Reminder is not set")
+                    }
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+
+    /*************************************************************************************************/
+    getAllNoteService(loginData) {
+
+        let findValue = {}
+        let redisData;
+
+        let redisKey
+        let keyObject = Object.keys(loginData)
+
+        return new Promise((resolve, reject) => {
+
+            for (let i = 0; i < keyObject.length; i++) {
+                //If we want the notes those  has reminder set
+                if(keyObject[i]== "reminder"){
+                    findValue = {
+                        userId:loginData.userId,
+                        reminder: { $nin: [null, ""] }
+                    }
+                }
+                else{
+                    //Otherwise find those note based on user wants to search like isArchieve,isTrash notes
+                    findValue[keyObject[i]] = loginData[keyObject[i]]
+                }
+            }
+            for (let i = 0; i < keyObject.length; i++) {
+
+                //Creating key for isTrash notes
+                if (keyObject[i] == "isTrash" && loginData[keyObject[i]] == "true") {
+                    redisKey = loginData.userId + "isTrash"
+
+                //Creating key for isArchieve note
+                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "true") {
+                    redisKey = loginData.userId + "isArchieve"
+
+                //Creating key for all notes except isArchieve and istrash is true
+                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" || keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
+                    redisKey = loginData.userId + "allNotes"
+
+                //Creating key for notes which has reminder set
+                } else if (keyObject[i] == "reminder") {
+                    redisKey = loginData.userId + "reminderNotes"
+                }
+            }
+            //First it will chech data in redis
+            redisService.redisGetter(redisKey, (err, reply) => {
+                redisData = JSON.parse(reply);
+
+            //If it will get the notes from redis then resolve from redis
+                if (redisData) {
+                    resolve(redisData)
+                }
+                else {
+                    //If redisGetter()method not get notes from redis then fetch notes from database
+                    noteModel.read(findValue)
+                        .then(noteData => {
+                            if (noteData.length > 0) {
+                                //Then store the notes in redis whatever we get from database
+                                redisService.redisSetter(redisKey, JSON.stringify(noteData))
+
+                                //Then resolve notes from redis
+                                redisService.redisGetter(redisKey, (err, reply) => {
+                                    redisData = JSON.parse(reply);
+                                })
+                                resolve(redisData)
+
+                            }
+                            //if No notes of users are created 
+                            else {
+                                resolve("NO NOTES IN DATABASE")
+                            }
+                        })
+                        .catch(err => {
+                            reject(err);
+                        });
+                }
+            })
+        });
+
+    }
+
+
+
 }
 let noteServiceObject = new NoteService();
 module.exports = noteServiceObject;

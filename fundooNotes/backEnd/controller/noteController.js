@@ -4,14 +4,17 @@ class NoteController {
     async  createNoteController(req, res) {
         let response = {};
         try {
-
+            //It will pass the noteData object to service contain information regarding note while creating new note
             let noteData = {
                 "userId": req.token._id,
                 "title": req.body.noteTitle,
                 "description": req.body.noteDescription,
-                "reminder": req.body.reminder
+                "reminder": req.body.reminder,
+                "color": req.body.color,
+                "isTrash": req.body.isTrash,
+                "isArchieve": req.body.isArchieve
             };
-
+            
             let noteResult = await noteService.createNoteService(noteData);
             if (noteResult) {
                 response.success = true;
@@ -35,6 +38,7 @@ class NoteController {
 
     updateNoteController(req, res) {
         let response = {};
+        //here we only add the userId rq.body for identify unique users note
         req.body.userId = req.token._id;
 
         noteService.updateNoteService(req.body)
@@ -61,26 +65,26 @@ class NoteController {
     deleteNoteController(req, res) {
         let response = {};
         try {
-            let deleteData = {
-                "userId": req.token._id,
-                "_id": req.body._id
-            };
 
-            noteService.deleteNoteService(deleteData)
-                .then(data => {
-                    response.success = true;
-                    response.message = "Delete note successfully";
-                    response.data = data;
-                    return res.status(200).send(response);
+            req.body.userId = req.token._id,
 
-                })
-                .catch(err => {
-                    response.success = false;
-                    response.message = "Error while getting deleting note";
-                    response.error = err;
-                    return res.status(500).send(response);
 
-                });
+
+                noteService.deleteNoteService(req.body)
+                    .then(data => {
+                        response.success = true;
+                        response.message = "Delete note successfully";
+                        response.data = data;
+                        return res.status(200).send(response);
+
+                    })
+                    .catch(err => {
+                        response.success = false;
+                        response.message = "Error while getting deleting note";
+                        response.error = err;
+                        return res.status(500).send(response);
+
+                    });
 
         } catch (e) {
             response.success = false;
@@ -93,10 +97,10 @@ class NoteController {
     getAllNoteController(req, res) {
         let response = {};
         try {
-            let userId = {
-                "userId": req.token._id
-            };
-            noteService.getAllNoteService(userId)
+
+            req.body.userId = req.token._id
+
+            noteService.getAllNoteService(req.body)
                 .then(data => {
                     response.success = true;
                     response.message = "Got all notes";
@@ -119,7 +123,7 @@ class NoteController {
 
     }
     /*************************************************************************************************/
-    addLabelToNoteController (req, res) {
+    addLabelToNoteController(req, res) {
         let response = {};
         try {
             req.body.userId = req.token._id;
@@ -178,7 +182,7 @@ class NoteController {
     }
     /*************************************************************************************************/
 
-    searchNoteController  (req, res)  {
+    searchNoteController(req, res) {
         let response = {};
         req.body.userId = req.token._id;
         noteService.searchNoteService(req.body)
@@ -186,7 +190,7 @@ class NoteController {
                 if (searchNoteData) {
                     response.success = true;
                     response.message = "Got all notes",
-                    response.data = searchNoteData;
+                        response.data = searchNoteData;
                     return res.status(200).send(response);
                 } else {
                     response.success = false;
@@ -204,6 +208,20 @@ class NoteController {
     }
 
 
+
+reminderController(userId){
+    return new Promise((resolve,reject)=>{
+        noteService.reminderService(userId)
+        .then(reminderData=>{
+            resolve(reminderData)
+        })
+        .catch(err=>{
+            reject(err)
+        })
+    })
+   
+
+}
 
 
 }

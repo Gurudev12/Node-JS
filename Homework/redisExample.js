@@ -29,6 +29,47 @@ const client = redis.createClient();
 /*****************************************************************/
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //will check the existence of perticular key
 client.exists('key', function(err, reply) {
     if (reply === 1) {

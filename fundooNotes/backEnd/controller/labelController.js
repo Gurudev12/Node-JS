@@ -1,13 +1,17 @@
 const labelService = require("../service/labelService");
 class LabelController {
-
+    /**
+     * 
+     * @param {*} req user request
+     * @param {*} res server response
+     */
     async createLabelController(req, res) {
         let response = {};
         try {
             req.checkBody("labelName", "labek name should not be null").notEmpty();
 
             let error = req.validationErrors();
-            
+
             /******
              * @description-This error will generate validation error and send status code (422)
              * *** */
@@ -16,8 +20,9 @@ class LabelController {
                 response.error = error;
                 return res.status(422).send(response);
             } else {
+                //Here we getting userId from its token,and label name asusual user req 
                 let labelData = {
-                    "_id": req.token._id,
+                    "userId": req.token._id,
                     "labelName": req.body.labelName
                 };
                 let labelResult = await labelService.createLabelService(labelData);
@@ -39,19 +44,26 @@ class LabelController {
         }
     }
 
-/*************************************************************************************************/
+    /*************************************************************************************************/
+
+    /**
+     * 
+     * @param {*} req user request
+     * @param {*} res server response
+     */
     async  updateLabelController(req, res) {
         let response = {};
 
         try {
-            req.checkBody("updateLabelName","label name should not be null").notEmpty();
-         
+            req.checkBody("updateLabelName", "label name should not be null").notEmpty();
+
             let error = req.validationErrors();
             if (error) {
                 response.success = false;
                 return res.status(422).send(response);
 
             } else {
+                //Here we are paasing id of label and new label name
                 let updateLabelData = {
                     "_id": req.body._id,
                     "newLabelName": req.body.updateLabelName
@@ -74,10 +86,15 @@ class LabelController {
         }
     }
 
-/*************************************************************************************************/
+    /*************************************************************************************************/
+    /**
+  * 
+  * @param {*} req user request
+  * @param {*} res server response
+  */
     async deleteLabelController(req, res) {
         let response = {};
-        try{
+        try {
             let deleteLabelData = {
                 "_id": req.body._id
             };
@@ -92,16 +109,21 @@ class LabelController {
                 response.message = "Error while label deleting";
                 return res.status(500).send(response);
             }
-        }catch(e){
+        } catch (e) {
             response.error = e;
             response.message = "The server did not understand the request.";
             return res.status(400).send(response);
         }
     }
-/*************************************************************************************************/
+    /*************************************************************************************************/
+    /**
+ * 
+ * @param {*} req user request
+ * @param {*} res server response
+ */
     async getAllLabelController(req, res) {
         let response = {};
-        try{
+        try {
             let labelData = {
                 "userId": req.token._id
             };
@@ -111,18 +133,18 @@ class LabelController {
                 response.message = "Get all label successfully";
                 response.data = getAllLabelResult;
                 return res.status(200).send(response);
-    
+
             } else {
                 response.success = false;
                 response.message = "Error while getting labels";
                 return res.status(400).send(response);
             }
-        }catch(e){
+        } catch (e) {
             response.error = e;
             response.message = "The server did not understand the request.";
             return res.status(400).send(response);
         }
-      
+
     }
 
 

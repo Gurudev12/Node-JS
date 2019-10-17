@@ -205,8 +205,6 @@ class UserService {
                                         .catch(err => {
                                             reject(err);
                                         });
-
-
                                 }
                                 else {
                                     reject("PASSWORD NOT MATCHED");
@@ -324,10 +322,11 @@ class UserService {
             let searchById = { "_id": uploadData._id };
             let updateValue = { "imageUrl": uploadData.url };
             let updatedResult = await userModel.update(searchById, updateValue);
-            if (updatedResult == "DOCUMENT UPDATED") {
-                return "FILE UPLOADED SUCCESSFULLY";
+
+            if (updatedResult.nModified == 1) {
+                return true
             } else {
-                return "ERROR WHILE UPLOADING FILE";
+                return false
             }
 
         } catch (e) {

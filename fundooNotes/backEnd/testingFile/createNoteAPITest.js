@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 
 let should = chai.should();
 
-let testObject=fs.readFileSync("/home/administrator/Desktop/Bridgelab/fundooNotes/backEnd/testingFile/testingObjects.json");
+let testObject=fs.readFileSync("./testingObjects.json");
 let testData=JSON.parse(testObject);
  let createNoteTestData=testData.createNoteTest;
 

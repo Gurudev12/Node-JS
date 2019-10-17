@@ -108,6 +108,9 @@ class UserClass {
      * @description-This method will update the corresponding entry in databass
      ***/
     update(findValue,updateValue){
+// console.log("FIND VALUE",findValue);
+// console.log("UPDATE VALUE",updateValue);
+
 
         return new Promise((resolve, reject) => {
             this.User.updateOne( findValue , { $set: updateValue })   
