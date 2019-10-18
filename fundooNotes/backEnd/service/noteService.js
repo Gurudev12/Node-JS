@@ -9,7 +9,9 @@ class NoteService {
             let noteResult = await noteModel.create(noteData);
 
             if (noteResult) {
-                return true;
+                let loginKey = noteResult.userId + "loginToken"
+                await redisService.redisManager(loginKey)
+                return true
             } else {
                 return false;
 
@@ -19,6 +21,8 @@ class NoteService {
         }
     }
     /*************************************************************************************************/
+
+    /***************************************************** */
     updateNoteService(updateData) {
         /**
          * @description: The Object.keys() method returns an array of a given object's own enumerable property names,
@@ -29,6 +33,8 @@ class NoteService {
         return new Promise((resolve, reject) => {
             let findValue = {};
             let updateValue = {};
+
+
             for (let i = 0; i < keyObject.length; i++) {
                 /**
                  * @description here find value contain array of object which are noteId ande userId
@@ -42,15 +48,24 @@ class NoteService {
                  */
                 updateValue[keyObject[i]] = updateData[keyObject[i]];
 
-                //new change
                 updateQuery = {
                     $set: updateValue
                 };
             }
+
+            //To update perticular field of note
             noteModel.update(findValue, updateQuery)
                 .then(updateResponse => {
                     if (updateResponse.nModified == 1) {
-                        resolve({ "success": true, "message": "Note updated successfully" });
+
+                        let loginKey = updateData.userId + "loginToken"
+                        redisService.redisManager(loginKey)
+                            .then(response => {
+                                resolve({ "success": true, "message": "Note updated successfully" });
+                            })
+                            .catch(err => {
+                                reject(err)
+                            })
                     } else {
                         reject({ "success": false, "message": "Note not updated" });
                     }
@@ -70,18 +85,30 @@ class NoteService {
         try {
 
             return new Promise((resolve, reject) => {
-
+                //We are finding the notes based on th noteId and userId
                 let findValue = {
                     "userId": deleteData.userId,
                     "_id": deleteData._id
                 }
-
+                //we only update the isTrash value to true
                 let updateValue = {
                     $set: { isTrash: true }
                 }
+                //It will not actually delete note,it change the the value of isTrash false to true.
                 noteModel.update(findValue, updateValue)
                     .then(deletedData => {
-                        resolve(deletedData);
+                        //creating a loginKey,because we don't want to remove the loginKey from redis.
+                        let loginKey = deleteData.userId + "loginToken"
+
+                        //this will remove the all key from redis and again set key to redis using loginKey
+                        redisService.redisManager(loginKey)
+                            .then(response => {
+                                resolve(deletedData);
+                            })
+                            .catch(err => {
+                                reject(err);
+                            })
+
                     })
                     .catch(err => {
                         reject(err);
@@ -91,39 +118,7 @@ class NoteService {
             return e;
         }
     }
-    /*************************************************************************************************/
-    // getAllNoteService(loginData) {
-    //     try {
-    //         let findValue = {}
-    //         let i = 0;
-    //         let keyObject = Object.keys(loginData)
-    //         return new Promise((resolve, reject) => {
 
-    //             while (i < keyObject.length) {
-    //                 if (keyObject[i] == loginData.userId) {
-    //                     i++;
-    //                     continue;
-    //                 }
-    //                 findValue[keyObject[i]] = loginData[keyObject[i]]
-    //                 i++;
-    //             }
-    //             /****
-    //              * @description here we are getting the all the notes except that notes which notes "isTrash" value is false
-    //              * *** */
-    //             noteModel.read(findValue)
-    //                 .then(readData => {
-
-    //                     resolve(readData);
-    //                 })
-    //                 .catch(err => {
-    //                     reject(err);
-    //                 });
-    //         });
-
-    //     } catch (e) {
-    //         return e;
-    //     }
-    // }
     /*************************************************************************************************/
     addLabelToNoteService(addLabelData) {
 
@@ -143,10 +138,22 @@ class NoteService {
 
             noteModel.update(findValue, updatevalue)
                 .then(updateData => {
+                    //we get updateData object,if data updated successfully then it will return the "nModified:1"
                     if (updateData.nModified == 1) {
-                        resolve({ "status": true });
+
+                        //creating a loginKey,because we don't want to remove the loginKey from redis.
+                        let loginKey = addLabelData.userId + "loginToken"
+
+                        //this will remove the all key from redis and again set key to redis using loginKey
+                        redisService.redisManager(loginKey)
+                            .then(response => {
+                                resolve(true)
+                            })
+                            .catch(err => {
+                                reject(err);
+                            })
                     } else {
-                        resolve({ "status": false });
+                        resolve(false)
 
                     }
                 })
@@ -172,12 +179,25 @@ class NoteService {
 
             noteModel.update(findValue, updateValue)
                 .then(updatedResponse => {
+                    //we get updateData object,if data updated successfully then it will return the "nModified:1"
                     if (updatedResponse.nModified == 1) {
-                        resolve(true);
+
+                        //creating a loginKey,because we don't want to remove the loginKey from redis.
+                        let loginKey = deleteLabelData.userId + "loginToken"
+
+                        //this will remove the all key from redis and again set key to redis using loginKey
+                        redisService.redisManager(loginKey)
+                            .then(response => {
+                                resolve(true)
+                            })
+                            .catch(err => {
+                                reject(err);
+                            })
                     } else {
                         resolve(false);
                     }
                 })
+                //When error occured in database
                 .catch(err => {
                     reject(err);
                 });
@@ -260,7 +280,7 @@ class NoteService {
     reminderService(userId) {
         return new Promise((resolve, reject) => {
             let currentDate = new Date();
-
+            //searchBy only searches the notes those who has reminder
             let searchBy = {
                 reminder: { $nin: [null, ""] }
             }
@@ -271,12 +291,14 @@ class NoteService {
                     if (reminderData.length > 0) {
                         let i = 0
                         while (i < reminderData.length) {
+                            //It will note compare the system date with reminder date so thats why we parse() both dates
                             if (Date.parse(currentDate) == Date.parse(reminderData[i].reminder)) {
                                 resolve(reminderData[i])
                             }
                             i++
                         }
                     }
+                    //There is no reminder for any of notes
                     else {
                         reject("Reminder is not set")
                     }
@@ -300,13 +322,13 @@ class NoteService {
 
             for (let i = 0; i < keyObject.length; i++) {
                 //If we want the notes those  has reminder set
-                if(keyObject[i]== "reminder"){
+                if (keyObject[i] == "reminder") {
                     findValue = {
-                        userId:loginData.userId,
+                        userId: loginData.userId,
                         reminder: { $nin: [null, ""] }
                     }
                 }
-                else{
+                else {
                     //Otherwise find those note based on user wants to search like isArchieve,isTrash notes
                     findValue[keyObject[i]] = loginData[keyObject[i]]
                 }
@@ -315,17 +337,17 @@ class NoteService {
 
                 //Creating key for isTrash notes
                 if (keyObject[i] == "isTrash" && loginData[keyObject[i]] == "true") {
-                    redisKey = loginData.userId + "isTrash"
+                    redisKey = loginData.userId + "isTrashNotes"
 
-                //Creating key for isArchieve note
+                    //Creating key for isArchieve note
                 } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "true") {
-                    redisKey = loginData.userId + "isArchieve"
+                    redisKey = loginData.userId + "isArchieveNotes"
 
-                //Creating key for all notes except isArchieve and istrash is true
-                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" || keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
+                    //Creating key for all notes except isArchieve and istrash is true
+                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" && keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
                     redisKey = loginData.userId + "allNotes"
 
-                //Creating key for notes which has reminder set
+                    //Creating key for notes which has reminder set
                 } else if (keyObject[i] == "reminder") {
                     redisKey = loginData.userId + "reminderNotes"
                 }
@@ -334,7 +356,7 @@ class NoteService {
             redisService.redisGetter(redisKey, (err, reply) => {
                 redisData = JSON.parse(reply);
 
-            //If it will get the notes from redis then resolve from redis
+                //If it will get the notes from redis then resolve from redis
                 if (redisData) {
                     resolve(redisData)
                 }
@@ -349,11 +371,12 @@ class NoteService {
                                 //Then resolve notes from redis
                                 redisService.redisGetter(redisKey, (err, reply) => {
                                     redisData = JSON.parse(reply);
+                                    resolve(redisData)
                                 })
-                                resolve(redisData)
+
 
                             }
-                            //if No notes of users are created 
+                            //if there is no notes in database
                             else {
                                 resolve("NO NOTES IN DATABASE")
                             }
@@ -364,12 +387,9 @@ class NoteService {
                 }
             })
         });
-
     }
-
-
-
 }
 let noteServiceObject = new NoteService();
 module.exports = noteServiceObject;
 
+/*************************************************************************************************/

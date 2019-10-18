@@ -130,7 +130,7 @@ class NoteController {
 
             noteService.addLabelToNoteService(req.body)
                 .then(addLabelResponse => {
-                    if (addLabelResponse.status == true) {
+                    if (addLabelResponse == true) {
                         response.success = true;
                         response.message = "Label added to note successfully";
                         return res.status(200).send(response);
