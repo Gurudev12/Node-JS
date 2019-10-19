@@ -18,6 +18,7 @@ const config = require('../config/config')
 const redis = require("redis");
 const client = redis.createClient();
 const redisService = require("../service/redisService")
+const underscore = require("underscore")
 class UserUtility {
 
     verifyTokenWithRedis(req, res, next) {
@@ -36,7 +37,7 @@ class UserUtility {
                     else {
                         let validToken = token
                         redisService.redisGetter(data._id + "loginToken", (err, reply) => {
-                            if (err) {                                
+                            if (err) {
                                 response.success = false;
                                 response.message = "ERROR WHILE GETTING TOKEN FROM REDIS";
                                 response.error = err;
@@ -47,7 +48,7 @@ class UserUtility {
                                 if (validToken == redisToken) {
                                     req.token = data;   //this data refers to 'jwt.verify()' method
                                     next();
-                                } 
+                                }
                             }
                         })
                     }
@@ -61,8 +62,23 @@ class UserUtility {
             return res.status(400).send(e)
         }
     }
+    /********************************************************************************** */
+    notePagination(redisData, pageNo) {
+        return new Promise((resolve, reject) => {
+            let noteLength = redisData.length;
+            let partition = 2;
+            let pages = underscore.chunk(redisData, partition)
+            
+            if (pageNo == undefined || pageNo== 1) {
+                resolve(pages[0])
+            }else{
+                resolve(pages[pageNo-1])
+            }
+
+        })
 
 
+    }
     /****************************************************************************************************/
     verifyToken = (req, res, next) => {
         try {

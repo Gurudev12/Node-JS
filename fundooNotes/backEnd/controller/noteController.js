@@ -98,8 +98,10 @@ class NoteController {
         let response = {};
         try {
 
-            req.body.userId = req.token._id
-
+            req.body.userId = req.token._id;
+            req.body.pageNo=req.query.pageNo;
+            
+            
             noteService.getAllNoteService(req.body)
                 .then(data => {
                     response.success = true;
@@ -127,7 +129,7 @@ class NoteController {
         let response = {};
         try {
             req.body.userId = req.token._id;
-
+            
             noteService.addLabelToNoteService(req.body)
                 .then(addLabelResponse => {
                     if (addLabelResponse == true) {

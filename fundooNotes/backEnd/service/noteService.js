@@ -3,6 +3,8 @@ const dateFormat = require('dateformat');
 const redis = require("redis");
 const client = redis.createClient();
 const redisService = require("../service/redisService")
+const underscore = require("underscore")
+const utility = require("../utility/utility");
 class NoteService {
     async createNoteService(noteData) {
         try {
@@ -314,10 +316,9 @@ class NoteService {
 
         let findValue = {}
         let redisData;
-
-        let redisKey
+        let redisKey;
         let keyObject = Object.keys(loginData)
-
+        let pageNo = loginData.pageNo;
         return new Promise((resolve, reject) => {
 
             for (let i = 0; i < keyObject.length; i++) {
@@ -344,7 +345,7 @@ class NoteService {
                     redisKey = loginData.userId + "isArchieveNotes"
 
                     //Creating key for all notes except isArchieve and istrash is true
-                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" && keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
+                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" || keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
                     redisKey = loginData.userId + "allNotes"
 
                     //Creating key for notes which has reminder set
@@ -356,9 +357,17 @@ class NoteService {
             redisService.redisGetter(redisKey, (err, reply) => {
                 redisData = JSON.parse(reply);
 
-                //If it will get the notes from redis then resolve from redis
+                //If it will get the notes from redis then resolve from redis.
                 if (redisData) {
-                    resolve(redisData)
+                    //I dont want to show all the the redis data,thats why I do pagination.
+                    utility.notePagination(redisData, pageNo)
+                        .then(response => {
+                            //response will not send all redis data only send the selected page data.
+                            resolve(response)
+                        })
+                        .catch(err => {
+                            reject(err)
+                        })
                 }
                 else {
                     //If redisGetter()method not get notes from redis then fetch notes from database
@@ -371,10 +380,16 @@ class NoteService {
                                 //Then resolve notes from redis
                                 redisService.redisGetter(redisKey, (err, reply) => {
                                     redisData = JSON.parse(reply);
-                                    resolve(redisData)
+
+                                    utility.notePagination(redisData, pageNo)
+                                        .then(response => {
+                                            //response will not send all redis data only send the selected page data.
+                                            resolve(response)
+                                        })
+                                        .catch(err => {
+                                            reject(err)
+                                        })
                                 })
-
-
                             }
                             //if there is no notes in database
                             else {
@@ -393,3 +408,7 @@ let noteServiceObject = new NoteService();
 module.exports = noteServiceObject;
 
 /*************************************************************************************************/
+     // let  pages = underscore.chunk(redisData, 2);
+                                    // console.log("=====ALL PAGES==============>",pages)
+                                    // console.log("******************************************");
+                                    // console.log("======PAGE NUMBER==============>",pages[pageNo])
