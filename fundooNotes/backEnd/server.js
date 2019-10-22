@@ -51,21 +51,18 @@ client.on("connect", (err, data) => {
  
 
 
-//  let j=schedule.scheduleJob('* * * * * *', function(){
-//    //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
-//   let date=new Date();
-//   logger.info("========>"+date)
-//    let userId="5d97427de380595ced58580c"
-//     ctrl.reminderController(userId)
-//     .then(reminderData=>{
-//       console.log("REMINDER DATA",reminderData);
+ let j=schedule.scheduleJob('* * * * * *', function(){
+   //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
+
+   let userId="5d97427de380595ced58580c"
+    ctrl.reminderController(userId)
+    .then(reminderData=>{
+      logger.info("Get reminder")
+    })
+    .catch(err=>{
+      logger.info("ERRRR",err);
       
-//     })
-//     .catch(err=>{
-//       console.log("ERRRR",err);
-      
-//     })
-//     console.log('The answer to life, the universe, and everything!');
-//   });
+    })
+  });
 
 module.exports = app;

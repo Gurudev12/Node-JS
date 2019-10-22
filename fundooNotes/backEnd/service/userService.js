@@ -248,28 +248,6 @@ class UserService {
                         ****/
                         let forgotToken = utility.createNewToken(payload);
 
-
-
-                        //This is code for storing token to redis
-                        // client.set(foundData[0]._id + "forgotToken", forgotToken);
-
-                        // client.get(foundData[0]._id + "forgotToken", (err, reply) => {
-                        //     if (err) {
-                        //     } else {
-                        //     }
-                        // });
-
-
-
-
-
-
-
-
-
-
-
-
                         let forgotLink = "<p>this is link to RESET PASSWORD</p><a href=\"http://localhost:4000/resetPassword" + forgotToken + "\">Reset PassWord</a>";
                         //let forgotLink=process.env.FORGOT_PASSWORD_LINK
                         let text = "Reset password link";

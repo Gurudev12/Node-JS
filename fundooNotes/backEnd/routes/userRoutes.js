@@ -21,26 +21,26 @@ const router = express.Router();
 const multer = require("../service/multerService");
 
 router.post("/registration", ctrl.registrationController);  
-router.post("/verifyRegistration", utility.verifyToken, ctrl.registrationVerifyController);
+router.post("/verifyRegistration", utility.tokenVerify, ctrl.registrationVerifyController);
 router.post("/login", ctrl.loginController); 
 router.post("/forgotPassword", ctrl.forgotController);   
-router.post("/resetPassword", utility.verifyToken, ctrl.newResetPassword);   
+router.post("/resetPassword", utility.tokenVerify, ctrl.newResetPassword);   
 
-router.post("/uploadImage",utility.verifyToken, multer.single("file"), ctrl.uploadImageController);
+router.post("/uploadImage",utility.tokenVerify, multer.single("file"), ctrl.uploadImageController);
 
 //Label
-router.post("/createLabel",utility.verifyTokenWithRedis,labelCtrl.createLabelController); 
-router.post("/updateLabel", utility.verifyTokenWithRedis, labelCtrl.updateLabelController);  
-router.post("/deleteLabel", utility.verifyTokenWithRedis, labelCtrl.deleteLabelController);  
-router.get("/getAllLabel", utility.verifyTokenWithRedis, labelCtrl.getAllLabelController);   
+router.post("/createLabel",utility.tokenVerify,labelCtrl.createLabelController); 
+router.post("/updateLabel", utility.tokenVerify, labelCtrl.updateLabelController);  
+router.post("/deleteLabel", utility.tokenVerify, labelCtrl.deleteLabelController);  
+router.get("/getAllLabel", utility.tokenVerify, labelCtrl.getAllLabelController);   
 
 //Notes
-router.post("/createNote", utility.verifyTokenWithRedis, noteCtrl.createNoteController); 
-router.post("/updateNote", utility.verifyTokenWithRedis, noteCtrl.updateNoteController);
-router.post("/deleteNote", utility.verifyTokenWithRedis, noteCtrl.deleteNoteController); 
-router.get("/getAllNote", utility.verifyTokenWithRedis, noteCtrl.getAllNoteController);  
-router.post("/addLabel", utility.verifyTokenWithRedis, noteCtrl.addLabelToNoteController);  
-router.post("/deleteLabelFromNote", utility.verifyTokenWithRedis, noteCtrl.deleteLabelFromNoteController);
-router.post("/searchNote", utility.verifyTokenWithRedis, noteCtrl.searchNoteController);
+router.post("/createNote", utility.tokenVerify, noteCtrl.createNoteController); 
+router.post("/updateNote", utility.tokenVerify, noteCtrl.updateNoteController);
+router.post("/deleteNote", utility.tokenVerify, noteCtrl.deleteNoteController); 
+router.get("/getAllNote", utility.tokenVerify, noteCtrl.getAllNoteController);  
+router.post("/addLabel", utility.tokenVerify, noteCtrl.addLabelToNoteController);  
+router.post("/deleteLabelFromNote", utility.tokenVerify, noteCtrl.deleteLabelFromNoteController);
+router.post("/searchNote", utility.tokenVerify, noteCtrl.searchNoteController);
 
 module.exports = router;

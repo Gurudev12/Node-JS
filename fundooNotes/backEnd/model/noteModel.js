@@ -1,6 +1,4 @@
 
-//   type:mongoose.Schema.Types.ObjectId,
-//ref:'registeredCollection'
 const mongoose = require("mongoose");
 const dateFormat = require("dateformat");
 let noteSchema = mongoose.Schema({
@@ -76,7 +74,7 @@ class NoteClass {
                 });
         });
     }
-    /***POPULATE DEMO==>**********************************************************************************************/
+    /*************************************************************************************************/
     readLabel(searchBy, regexPattern) {
         return new Promise((resolve, reject) => {
             this.Note.find(searchBy).populate({

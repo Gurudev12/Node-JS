@@ -8,7 +8,7 @@ class MongooseClass {
 
         mongoose.connection.on('disconnected', function () {
             logger.error(("Mongoose default connection is disconnected"));
-            process.exit(0);
+            process.exit(1);
         });
 
         mongoose.connect(config.url, { useNewUrlParser: true }, (err, data) => {

@@ -21,7 +21,7 @@ const redisService = require("../service/redisService")
 const underscore = require("underscore")
 class UserUtility {
 
-    verifyTokenWithRedis(req, res, next) {
+    tokenVerify(req, res, next) {
         let response = {};
         try {
 
@@ -79,34 +79,7 @@ class UserUtility {
 
 
     }
-    /****************************************************************************************************/
-    verifyToken = (req, res, next) => {
-        try {
-            let token = req.headers.token;
-            if (token) {
-
-                jwt.verify(token, config.secretKey, (err, data) => {
-
-                    //data contain({ _id: '5d75e97800a7b9335ace7796', iat: 1568008896, exp: 1568012496 })
-
-                    if (err) {
-                        res.status(400).send(err + " Token has expired")
-                    } else {
-                        // req.body.content=data;
-                        req.token = data
-                        console.log("REQUESt", req.token)
-                        next();
-                    }
-
-                })
-            } else {
-                res.status(400).send("Token not got")
-            }
-        } catch (e) {
-            return res.status(500).send(e)
-
-        }
-    }
+   
     /***********
         *@description-This method will encrypt the plaintext password.
         * *********/
@@ -123,6 +96,9 @@ class UserUtility {
         let token = jwt.sign(payload, config.secretKey, { expiresIn: '24hr' });
         return token;
     }
+     /****************************************************************************************************/
+  
+    /********************************************/
 }
 let userUtilityObject = new UserUtility()
 module.exports = userUtilityObject

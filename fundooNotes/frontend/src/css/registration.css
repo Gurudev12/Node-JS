@@ -1,0 +1,47 @@
+
+.fundoo{
+    font-size: 30px;
+    text-align: center
+  }
+.fStyle{
+    color: #344fed;
+   
+  }
+  
+  .uStyle{
+    color:  #ea4235;
+  }
+  .nStyle{
+    color: #2a8118;
+  }
+  
+  .dStyle{
+    color:#344fed;
+  }
+  
+  .oStyle{
+    color: #e2df2d;
+  }
+  
+  .oOstyle{
+    color: #ea4235;
+  }
+  .tStyle{
+    color: #2913ec;
+  }
+  .eStyle{
+    color: #2ee524;
+  }
+  
+  .o0Style{
+    color: #dfd43f;
+  }
+
+  
+  /* .nameLabel{
+    text-align:center;
+  left: 10%;
+  top: 400px;
+  width: 30px
+} */
+  
