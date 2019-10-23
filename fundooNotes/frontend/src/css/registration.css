@@ -1,13 +1,18 @@
 
 .fundoo{
     font-size: 30px;
-    text-align: center
+    margin-right:10%
+  }
+  .fundooName{
+    font-size: 30px;
+    margin-left:35%;
+    margin-top: 5px  
   }
 .fStyle{
     color: #344fed;
    
   }
-  
+
   .uStyle{
     color:  #ea4235;
   }
@@ -36,8 +41,22 @@
   .o0Style{
     color: #dfd43f;
   }
+  .label{
 
-  
+    margin-left:25%;
+    margin-top: 5px  
+  }
+ 
+
+  .lName{
+    top: 30px;
+    left: 150px;
+  }
+  .email{
+    top: 40px;
+    left:120px
+  }
+
   /* .nameLabel{
     text-align:center;
   left: 10%;

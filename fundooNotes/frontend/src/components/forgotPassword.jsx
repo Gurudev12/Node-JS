@@ -6,25 +6,33 @@ import { Button } from '@material-ui/core';
 
 
 
-class ForgotPassword extends Component{
-    constructor(props){
+class ForgotPassword extends Component {
+    constructor(props) {
         super(props)
-        this.state={
-            'email':''
+        this.state = {
+            'email': ''
         }
     }
+    //this is handle for email
+    handleChangeEmail = email => event => {
+        console.log("===>email", event.target.value);
+        this.setState({
+            [email]: event.target.value,
+        });
+    };
 
-    render(){
-        return(
+
+    render() {
+        return (
             <div >
 
-            <Card style={{
-                marginTop: "11.8%",
-                marginLeft: "20.8%",
-                position: "absolute",
-                width: "58.4%",
-                height: "63.5%"
-            }}>
+                <Card style={{
+                    marginTop: "11.8%",
+                    marginLeft: "20.8%",
+                    position: "absolute",
+                    width: "58.4%",
+                    height: "63.5%"
+                }}>
 
                     <div className="fundoo">
                         <b>
@@ -43,28 +51,34 @@ class ForgotPassword extends Component{
                         </b>
                     </div><br></br>
 
-                    <div className="forgetPassword"><b>Forgot Password?</b></div><br></br>
-                <label class="label">Enter your valid email to reset password...</label><br></br>
-                    <TextField
-                        id="outlined-email-input"
-                        label="Email"
-                        className="email"
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    <br />
+                    <div className="forgetPassword"><b>Forgot Password?</b></div><br></br><br></br><br></br>
+                    <label class="label">Enter your valid email to reset password...</label>
+                    <br></br>
+                    <div className="fundoo">
+                        <TextField
+                            id="outlined-email-input"
+                            label="Email"
+                            className=""
+                            value={this.state.email}
+                            onChange={this.handleChangeEmail('email')}
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </div>
 
-                    <Button variant="contained" color="primary" className="send">
-                        Send
+                    <div className="fundoo">
+                        <Button variant="contained" color="primary" >
+                            Cancel
+                    </Button>&nbsp;&nbsp;
+                    <Button variant="contained" color="secondary" >
+                            Send
                     </Button>
-                    <Button variant="contained" color="secondary" className="cancel">
-                       Cancel
-                    </Button>
+                    </div>
 
-            </Card>
+                </Card>
             </div>
         )
     }

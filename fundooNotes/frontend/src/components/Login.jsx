@@ -12,23 +12,33 @@ import IconButton from '@material-ui/core/IconButton';
 
 class Login extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            'email':'',
-            'password':'',
-            showPassword:false,
+        this.state = {
+            'email': '',
+            'password': '',
+            showPassword: false,
         };
     }
+    //this is handle for email
+    handleChangeEmail = email => event => {
+        console.log("===>email", event.target.value);
+        this.setState({
+            [email]: event.target.value,
+        });
+    };
 
+    // This is handle for password
     handleChange = prop => event => {
+        console.log("===>pass", event.target.value);
+
         this.setState({ [prop]: event.target.value });
-      };
-    
-      handleClickShowPassword = () => {
+    };
+
+    handleClickShowPassword = () => {
         this.setState(state => ({ showPassword: !state.showPassword }));
-      };
-      
+    };
+
     render() {
         return (
             <div >
@@ -60,40 +70,46 @@ class Login extends Component {
 
                     <div className="signIn"><b>Sign in</b></div>
 
+                    <div className="fundoo">
+                        <TextField
+                            id="outlined-email-input"
+                            label="Email"
+                            type="email"
+                            className=""
+                            value={this.state.email}
+                            onChange={this.handleChangeEmail('email')}
+                            name="email"
+                            autoComplete="email"
+                            
+                            margin="normal"
+                            variant="outlined"
+                        />
+                        <br></br>     <br></br>  
 
-                    <TextField
-                        id="outlined-email-input"
-                        label="Email"
-                        className="email"
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    <br />
-
-
-               <TextField id="outlined-adornment-password" className="password"
-                variant="outlined"
-                 type={this.state.showPassword ? 'text' : 'password'}
-                  label="Password" 
-                  value={this.state.password} onChange={this.handleChange('password')} 
-                  InputProps={{ endAdornment: ( <InputAdornment position="end">
-                       <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} > {this.state.showPassword ? <VisibilityOff /> : <Visibility />} 
-                       </IconButton> 
-                       </InputAdornment> ), 
-                       }} 
-                    />
-
-
-                    <Button variant="contained" color="primary" className="login">
-                        Login
+                        <TextField id="outlined-adornment-password" className=""
+                            variant="outlined"
+                            type={this.state.showPassword ? 'text' : 'password'}
+                            label="Password"
+                            value={this.state.password} 
+                            onChange={this.handleChange('password')}
+                            InputProps={{
+                                endAdornment: (<InputAdornment position="end">
+                                    <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} > {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>),
+                            }}
+                        />
+                    </div> <br></br>   <br></br>  
+                    <div className="fundoo">
+                        <Button variant="contained" color="primary" className="login">
+                            Login
                     </Button>
-                    <Button variant="contained" color="secondary" className="register">
-                        Register
+                        <Button variant="contained" color="secondary" className="register">
+                            Register
                     </Button>
-                    <br></br>
+                    </div>
+
+                    <br></br><br></br><br></br><br></br>
                     <Link href="#" onClick="" className="forgotPassword">
                         forgot password?
                     </Link>
