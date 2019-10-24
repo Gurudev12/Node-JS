@@ -21,10 +21,11 @@ const router = express.Router();
 const multer = require("../service/multerService");
 
 router.post("/registration", ctrl.registrationController);  
-router.post("/verifyRegistration", utility.tokenVerify, ctrl.registrationVerifyController);
+router.post("/verifyRegistration", utility.registrationTokenVerify, ctrl.registrationVerifyController);
 router.post("/login", ctrl.loginController); 
+
 router.post("/forgotPassword", ctrl.forgotController);   
-router.post("/resetPassword", utility.tokenVerify, ctrl.newResetPassword);   
+router.post("/resetPassword", utility.resetTokenVerify, ctrl.newResetPassword);   
 
 router.post("/uploadImage",utility.tokenVerify, multer.single("file"), ctrl.uploadImageController);
 

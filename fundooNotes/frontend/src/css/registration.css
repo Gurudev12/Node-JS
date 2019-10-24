@@ -53,9 +53,17 @@
     left: 150px;
   }
   .email{
-    top: 40px;
-    left:120px
+      text-align: center;
+      margin-left: 300px;
+      width: 230px;
   }
+
+    .password{
+      text-align: center;
+      margin-left: 300px;
+      width: 230px;
+
+    }
 
   /* .nameLabel{
     text-align:center;

@@ -26,7 +26,7 @@ let UserSchema = mongoose.Schema({
     },
     userType: {
         type: String,
-        required: [true, "login type required"]
+        // required: [true, "login type required"]
     },
     password: {
         type: String,
@@ -62,7 +62,7 @@ class UserClass {
                 "firstName": paramObject.firstName,
                 "lastName": paramObject.lastName,
                 "email": paramObject.email,
-                "userType": paramObject.userType,
+                // "userType": paramObject.userType,
                 "password": paramObject.password,
                 "isVerify":false
             });
@@ -74,12 +74,12 @@ class UserClass {
                         "firstName": savedUser.firstName,
                         "lastName": savedUser.lastName,
                         "email": savedUser.email,
-                        "userType": savedUser.userType,
+                        // "userType": savedUser.userType,
                  
-                    };
+                    };                    
                     resolve(newRegisterUser);
                 })
-                .catch(err => {
+                .catch(err => {                    
                     reject(err);
                 });
         });
@@ -108,10 +108,6 @@ class UserClass {
      * @description-This method will update the corresponding entry in databass
      ***/
     update(findValue,updateValue){
-// console.log("FIND VALUE",findValue);
-// console.log("UPDATE VALUE",updateValue);
-
-
         return new Promise((resolve, reject) => {
             this.User.updateOne( findValue , { $set: updateValue })   
                 .then((data) => {

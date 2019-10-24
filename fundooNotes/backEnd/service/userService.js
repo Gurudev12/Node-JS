@@ -29,6 +29,8 @@ class UserService {
      * @description-This is  registration service while new registration
      ****/
     registrationService(paramObject) {
+        console.log("BAcckend SERC  ===>", paramObject);
+
         try {
             return new Promise((resolve, reject) => {
 
@@ -55,7 +57,7 @@ class UserService {
                                         "firstName": paramObject.firstName,
                                         "lastName": paramObject.lastName,
                                         "email": paramObject.email,
-                                        "userType": paramObject.userType,
+                                        // "userType": paramObject.userType,
                                         "password": utility.passwordEncrypt(paramObject.password)
                                     };
 
@@ -70,13 +72,19 @@ class UserService {
                                                 "_id": data._id
                                             };
                                             let registrationToken = utility.createNewToken(payload);
-
+                                            console.log("REGISTER TOKEN==>",registrationToken);
+                                            
                                             //This code for url shortner
                                             shortUrl.short("https://amazon.com", function (err, url) {
                                                 // shortUrl.short('http://localhost:4000/registrationVerify/ + registrationToken +', function(err, url){
                                             });
 
-
+                                            //
+                                            //
+                                            //
+                                            ///
+                                            ///
+                                            redisService.redisSetter(data._id +"registrationToken", registrationToken)
 
                                             let registrationVerifyLink = "<p>this is link to REGISTRATION VERIFY</p><a href=\"http://localhost:4000/registrationVerify/" + registrationToken + "\">Registration verify</a>";
                                             let text = "Registration verification link";
@@ -248,6 +256,16 @@ class UserService {
                         ****/
                         let forgotToken = utility.createNewToken(payload);
 
+                        ////
+                        //
+                        ///
+                        ///New change
+                        redisService.redisSetter(foundData[0]._id +"forgotToken", forgotToken)
+                        .then(data=>{
+                            console.log("REGISTR RESPONCE",data);
+                            
+                        })
+
                         let forgotLink = "<p>this is link to RESET PASSWORD</p><a href=\"http://localhost:4000/resetPassword" + forgotToken + "\">Reset PassWord</a>";
                         //let forgotLink=process.env.FORGOT_PASSWORD_LINK
                         let text = "Reset password link";
@@ -275,13 +293,15 @@ class UserService {
     /********************RESET PASSWORD SERVICE***********************************************************/
 
     async resetNewPasswordService(resetData) {
+        
         try {
             let encrptedPassword = utility.passwordEncrypt(resetData.password);
 
             let updateValue = { "password": encrptedPassword };
             let searchById = { "_id": resetData._id };
             let updatedResult = await userModel.update(searchById, updateValue);
-            if (updatedResult == "DOCUMENT UPDATED") {
+
+            if (updatedResult.nModified==1) {
                 return true;
             } else {
                 return false;

@@ -7,7 +7,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
+import { registrationService } from '../services/userService';
 
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css";
+import { Redirect } from 'react-router-dom'
 
 class Registration extends Component {
     constructor(props) {
@@ -16,77 +20,118 @@ class Registration extends Component {
             firstName: '',
             lastName: '',
             email: '',
-            password:'',
+            password: '',
+            confirmPassword: '',
         };
-        console.log("State",this.state);
+        console.log("State", this.state);
     }
 
-   
+    //This method which is called to redirect another page that is login
+    setRedirect = () => {
+        this.props.history.push('/')
+      }
+  
+    //Clicking on register button following method will call and create 'registrationObject'
+    submitRegistration = () => {
+        if (this.state.password === this.state.confirmPassword) {
+            let registrationObject = {}
+            registrationObject.firstName = this.state.firstName;
+            registrationObject.lastName = this.state.lastName;
+            registrationObject.email = this.state.email;
+            registrationObject.password = this.state.password;
+            registrationObject.confirmPassword = this.state.confirmPassword;
+
+            //Registration object will send it to server
+            registrationService(registrationObject)
+                .then((data) => {
+                    console.log("PROMISE DATA==>", data);
+                    if (data.status === 200) {
+                        toaster.notify("Successfully register", {
+                            position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                            duration: null // This notification will not automatically close
+                        })
+                    }
+                })
+                .catch((err) => {                    
+                        toaster.notify("Register unsuccessfull", {
+                            position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                            duration: null // This notification will not automatically close
+                        })
+                    
+
+                })
+        }
+        else {
+            toaster.notify("Password and confirm password are different", {
+                position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                duration: null // This notification will not automatically close
+            })
+
+        }
+    }
+    //This is handler for 'firstName'
     handleChangeFName = (event) => {
-        let firstName = event.target.value;
+        let firstNameValue = event.target.value;
         this.setState({
-            firstName: firstName
+            firstName: firstNameValue
         });
         console.log("=>state==", this.state);
     };
 
+    //USING PROMISE
+    //    async  handleChangeLName(event) {
+    //         console.log("===>lname", event.target.value);
+    //         let lastName=event.target.value;
+    //        await this.setState({
+    //             lastName:lastName
+    //         });
+    //         console.log("=>state==", this.state);
 
+    //     };
 
+    //This is handler for 'lastName'
+    handleChangeLName = (event) => {
+        console.log("===>lname", event.target.value);
+        let lastNameValue = event.target.value;
+        this.setState({
+            lastName: lastNameValue
+        });
+        console.log("=>state==", this.state);
+    };
 
-   //USING PROMISE
-//    async  handleChangeLName(event) {
-//         console.log("===>lname", event.target.value);
-//         let lastName=event.target.value;
-//        await this.setState({
-//             lastName:lastName
-//         });
-//         console.log("=>state==", this.state);
-
-//     };
-
-
-  handleChangeLName=(event) =>{
-    console.log("===>lname", event.target.value);
-    let lastName=event.target.value;
-   this.setState({
-        lastName:lastName
-    });
-    console.log("=>state==", this.state);
-
-};
-
-
+    //This is handler for 'email'
     handleChangeEmail = (event) => {
         console.log("===>email", event.target.value);
-        let email=event.target.value
+        let emailValue = event.target.value
         this.setState({
-            email: email,
+            email: emailValue,
         });
     };
 
-
-
-
-
-
-    handleChange = prop => event => {
+    //This is handler for 'password'
+    handleChangePassword = (event) => {
         console.log("===>pass", event.target.value);
-        this.setState({ [prop]: event.target.value });
-      };
-      handleClickShowPassword = () => {
+        let passwordValue = event.target.value
+        this.setState({
+            password: passwordValue
+        });
+    };
+    handleClickShowPassword = () => {
         this.setState(state => ({ showPassword: !state.showPassword }));
-      };
+    };
 
-
-    handleChanges = prop => event => {
-        console.log("===>cons", event.target.value);
-
-        this.setState({ [prop]: event.target.value });
+    //This is handler for confirm password
+    handleChangeConfirmPassword = event => {
+        console.log("===>conpass", event.target.value);
+        let confirmPasswordValue = event.target.value
+        this.setState({
+            confirmPassword: confirmPasswordValue
+        });
     };
     handleClickShowPasswords = () => {
         this.setState(state => ({ showPasswords: !state.showPasswords }));
     };
-    
+
     render() {
         return (
             <div>
@@ -124,12 +169,13 @@ class Registration extends Component {
                             name="firstName"
                             // value={this.state.firstName}
                             // onChange={this.handleChangeFName("firstName")}
+
                             value={this.state.firstName}
                             onChange={this.handleChangeFName}
                             margin="normal"
                             variant="outlined"
                         /><br></br>
-                    <TextField
+                        <TextField
                             required
                             id="outlined-name"
                             label="Last Name"
@@ -145,61 +191,64 @@ class Registration extends Component {
                         />
                     </div>
 
-                   <div className="fundoo">
-                   <TextField
-                        required
-                        id="outlined-email-input"
-                        label="Enter Your emailId"
-                        className=""
-                        // value={this.state.email}
-                        // onChange={this.handleChangeEmail('email')}
-                        value={this.state.email}
-                        onChange={this.handleChangeEmail}
-                        type="email"
-                        name="email"
-                        autoComplete="email"
-                        margin="normal"
-                        variant="outlined"
-                    />
-                   </div>
-                   <div className="fundoo">
-            <TextField id="outlined-adornment-password" 
-                variant="outlined"
-                 type={this.state.showPassword ? 'text' : 'password'}
-                  label="Password" 
-                  value={this.state.password}
-                   onChange={this.handleChange('password')} 
-                  InputProps={{ endAdornment: ( <InputAdornment position="end">
-                       <IconButton aria-label="Toggle password visibility" 
-                       onClick={this.handleClickShowPassword} >
-                            {this.state.showPassword ? <VisibilityOff /> : <Visibility />} 
-                       </IconButton> 
-                       </InputAdornment> ), 
-                       }} 
-                    /><br></br><br></br>    
-                    
-                    <TextField id="outlined-adornment-password"
-                        variant="outlined"
-                        type={this.state.showPasswords ? 'text' : 'password'}
-                        label="Confirm password"
-                        value={this.state.confirmPassword} 
-                        onChange={this.handleChanges('confirmPassword')}
-                        InputProps={{
-                            endAdornment: (<InputAdornment position="end">
-                                <IconButton aria-label="Toggle password visibility"
-                                 onClick={this.handleClickShowPasswords} > {this.state.showPasswords ? 
-                                 <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>),
-                        }}
-                    />
-            </div>
-            <br/>
+                    <div className="fundoo">
+                        <TextField
+                            required
+                            id="outlined-email-input"
+                            label="Enter Your emailId"
+                            // className="email"
+                            // value={this.state.email}
+                            // onChange={this.handleChangeEmail('email')}
+                            value={this.state.email}
+                            onChange={this.handleChangeEmail}
+                            type="email"
+                            name="email"
+                            autoComplete="email"
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </div>
+                    <div className="fundoo">
+                        <TextField id="outlined-adornment-password"
+                            className="password"
+                            variant="outlined"
+                            type={this.state.showPassword ? 'text' : 'password'}
+                            label="Password"
+                            className=""
+                            value={this.state.password}
+                            onChange={this.handleChangePassword}
+                            InputProps={{
+                                endAdornment: (<InputAdornment position="end">
+                                    <IconButton aria-label="Toggle password visibility"
+                                        onClick={this.handleClickShowPassword} >
+                                        {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>),
+                            }}
+                        /><br></br><br></br>
+
+                        <TextField id="outlined-adornment-password"
+                            variant="outlined"
+                            type={this.state.showPasswords ? 'text' : 'password'}
+                            label="Confirm password"
+                            value={this.state.confirmPassword}
+                            onChange={this.handleChangeConfirmPassword}
+                            InputProps={{
+                                endAdornment: (<InputAdornment position="end">
+                                    <IconButton aria-label="Toggle password visibility"
+                                        onClick={this.handleClickShowPasswords} > {this.state.showPasswords ?
+                                            <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>),
+                            }}
+                        />
+                    </div>
+                    <br />
 
                     <div className="fundoo">
-                        <Button variant="contained" color="primary" >Cancel
+                        <Button variant="contained" color="primary" onClick={this.setRedirect} >Cancel
                     </Button>&nbsp;&nbsp;
-                        <Button variant="contained" color="secondary" >Create
+                        <Button variant="contained" color="secondary" onClick={this.submitRegistration}>Create Account
                     </Button>
                     </div>
 

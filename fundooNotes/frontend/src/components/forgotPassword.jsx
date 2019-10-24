@@ -3,8 +3,9 @@ import '../css/forgotPassword.css'
 import { Card } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
-
-
+import {forgotPasswordService} from '../services/userService'
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css";
 
 class ForgotPassword extends Component {
     constructor(props) {
@@ -13,11 +14,40 @@ class ForgotPassword extends Component {
             'email': ''
         }
     }
+    //After clicking on "cancel" button it will redirect to login
+    setRedirectToLogin= () => {
+        this.props.history.push('/')
+      }
+
+    submitForgotPassword=()=>{
+        let forgotPasswordObject={}
+        forgotPasswordObject.email=this.state.email
+
+        forgotPasswordService(forgotPasswordObject)
+        .then((data)=>{
+            console.log("PROMISE RESPONCE==>",data);
+            if (data.status === 200) {
+                toaster.notify("Check your mail to reset password", {
+                    position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                    duration: null // This notification will not automatically close
+                })
+            }
+            
+        })
+        .catch((err)=>{
+            toaster.notify("Enter valid email id", {
+                position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                duration: null // This notification will not automatically close
+            })
+        })
+    }
+
     //this is handle for email
-    handleChangeEmail = email => event => {
+    handleChangeEmail =  (event) => {
         console.log("===>email", event.target.value);
+        let eventValue=event.target.value
         this.setState({
-            [email]: event.target.value,
+            email:eventValue,
         });
     };
 
@@ -31,7 +61,10 @@ class ForgotPassword extends Component {
                     marginLeft: "20.8%",
                     position: "absolute",
                     width: "58.4%",
-                    height: "63.5%"
+                    height: "63.5%",
+                    webkitBoxShadow: "1px 3px 1px #9E9E9E",
+                    mozBoxShadow: "1px 3px 1px #9E9E9E",
+                    boxShadow: "1px 3px 1px #9E9E9E"
                 }}>
 
                     <div className="fundoo">
@@ -60,7 +93,7 @@ class ForgotPassword extends Component {
                             label="Email"
                             className=""
                             value={this.state.email}
-                            onChange={this.handleChangeEmail('email')}
+                            onChange={this.handleChangeEmail}
                             type="email"
                             name="email"
                             autoComplete="email"
@@ -70,10 +103,10 @@ class ForgotPassword extends Component {
                     </div>
 
                     <div className="fundoo">
-                        <Button variant="contained" color="primary" >
+                        <Button variant="contained" color="primary" onClick={this.setRedirectToLogin} >
                             Cancel
                     </Button>&nbsp;&nbsp;
-                    <Button variant="contained" color="secondary" >
+                    <Button variant="contained" color="secondary" onClick={this.submitForgotPassword}>
                             Send
                     </Button>
                     </div>

@@ -28,6 +28,7 @@ const s3=require("../service/s3Service");
 class UserController
 {
 registrationController(req,res){
+
     try{
         req.checkBody("firstName","first name should not be null").notEmpty();
         req.checkBody("firstName","first name should be valid format").isAlpha();
@@ -39,11 +40,12 @@ registrationController(req,res){
         req.checkBody("email","email should not be empty").notEmpty();
         req.checkBody("email","email should be in valid format").isEmail();
     
-        req.checkBody("userType","userType should not be empty").notEmpty();
-        req.checkBody("userType","userType should be valid format").isAlpha();
+        // req.checkBody("userType","userType should not be empty").notEmpty();
+        // req.checkBody("userType","userType should be valid format").isAlpha();
 
-        req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
         req.checkBody("password","pasword should not be empty").notEmpty();
+        req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
+   
     let error=req.validationErrors();
     let response={};
     /******
@@ -59,10 +61,10 @@ registrationController(req,res){
             "firstName":req.body.firstName,
             "lastName":req.body.lastName,
             "email":req.body.email,
-            "userType":req.body.userType,
+            // "userType":req.body.userType,
             "password":req.body.password
         };
-
+        
         serviceObject.registrationService(paramObject)
             .then(data=>{
                 response.success=true;
@@ -71,11 +73,15 @@ registrationController(req,res){
             })
             .catch(err=>{
                 if(err=="EMAIL IS ALLREADY REGISTER"){
+                    console.log("===>Email",err);
                     response.success=false;
                     response.error=err;
                     return res.status(500).send(response);
+
                 }
                 else if(err=="SORRY THIS EMAIL ID IS NOT EXISTED"){
+                    console.log("=========>EXISTED");
+                    
                     response.success=false;
                     response.error=err;
                     return res.status(500).send(response);
@@ -95,11 +101,12 @@ registrationController(req,res){
 }
 /******************************************************* */
 registrationVerifyController(req,res){
+    console.log("VERIFY CONTROLLLLER",req.body);
     
    try{
     let response={};
 
-    serviceObject.registrationVerifyService(req.token._id)
+    serviceObject.registrationVerifyService(req.body._id)
     .then(data=>{
         response.success=true;
         response.content=data;
@@ -212,7 +219,7 @@ forgotController(req,res){
 
 /**RESET PASSWORD WITH ASYNC AWAIT */
 async newResetPassword(req,res){
-
+    
     req.checkBody("password","pasword should not be empty").notEmpty();
     req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
     let error=req.validationErrors();
@@ -225,7 +232,7 @@ async newResetPassword(req,res){
     }
     else{
         let resetData={
-            "_id":req.token._id,
+            "_id":req.body._id,
             "password":req.body.password
         };
             try{

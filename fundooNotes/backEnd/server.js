@@ -17,13 +17,16 @@ const validator = require("express-validator");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const config = require("../backEnd/config/config");
-const routes = require("./routes/userRoutes")
-require("dotenv").config();
-
 const app = express();
-const PORT = config.PORT;
 
 app.use(bodyParser.json());
+const routes = require("./routes/userRoutes")
+var cors = require('cors') 
+app.use(cors())
+require("dotenv").config();
+
+const PORT = config.PORT;
+
 app.use(validator());
 app.use("/", routes);
 const multer = require("multer");

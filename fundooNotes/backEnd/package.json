@@ -6,6 +6,7 @@
     "aws-sdk": "^2.541.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
     "cron": "^1.7.2",
     "dateformat": "^3.0.3",
     "email-existence": "^0.1.6",
