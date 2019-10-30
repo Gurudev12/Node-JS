@@ -14,15 +14,16 @@ import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
 class Login extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            'email': '',
-            'password': '',
-            showPassword: false,
-        };
-    }
+        constructor(props){
+            super(props)
+            this.state = {
+                'email': '',
+                'password': '',
+                showPassword: false,
+            };
+        }
+        
+    
 
       //This method which is called to redirect another page that is "login" page
       setRedirectToRegister = () => {
@@ -130,8 +131,8 @@ class Login extends Component {
                             variant="outlined"
                         />
                         <br></br>     
-
-                        <TextField id="outlined-adornment-password" className=""
+                        </div>
+                        <TextField id="outlined-adornment-password" className="password"
                             variant="outlined"
                             type={this.state.showPassword ? 'text' : 'password'}
                             label="Password"
@@ -144,7 +145,7 @@ class Login extends Component {
                                 </InputAdornment>),
                             }}
                         />
-                    </div> <br></br>   <br></br>  
+                     <br></br>   <br></br>  
                     <div className="fundoo">
                         <Button variant="contained" color="primary" className="login" onClick={this.submitLogin}>
                             Login

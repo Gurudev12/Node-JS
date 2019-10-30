@@ -3,51 +3,53 @@ import '../css/forgotPassword.css'
 import { Card } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
-import {forgotPasswordService} from '../services/userService'
+import { forgotPasswordService } from '../services/userService'
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
 class ForgotPassword extends Component {
-    constructor(props) {
+    constructor(props){
         super(props)
         this.state = {
             'email': ''
         }
+    
     }
+   
     //After clicking on "cancel" button it will redirect to login
-    setRedirectToLogin= () => {
+    setRedirectToLogin = () => {
         this.props.history.push('/')
-      }
+    }
 
-    submitForgotPassword=()=>{
-        let forgotPasswordObject={}
-        forgotPasswordObject.email=this.state.email
+    submitForgotPassword = () => {
+        let forgotPasswordObject = {}
+        forgotPasswordObject.email = this.state.email
 
         forgotPasswordService(forgotPasswordObject)
-        .then((data)=>{
-            console.log("PROMISE RESPONCE==>",data);
-            if (data.status === 200) {
-                toaster.notify("Check your mail to reset password", {
+            .then((data) => {
+                console.log("PROMISE RESPONCE==>", data);
+                if (data.status === 200) {
+                    toaster.notify("Check your mail to reset password", {
+                        position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                        duration: null // This notification will not automatically close
+                    })
+                }
+
+            })
+            .catch((err) => {
+                toaster.notify("Enter valid email id", {
                     position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
                     duration: null // This notification will not automatically close
                 })
-            }
-            
-        })
-        .catch((err)=>{
-            toaster.notify("Enter valid email id", {
-                position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
-                duration: null // This notification will not automatically close
             })
-        })
     }
 
     //this is handle for email
-    handleChangeEmail =  (event) => {
+    handleChangeEmail = (event) => {
         console.log("===>email", event.target.value);
-        let eventValue=event.target.value
+        let eventValue = event.target.value
         this.setState({
-            email:eventValue,
+            email: eventValue,
         });
     };
 

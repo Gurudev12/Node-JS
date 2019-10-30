@@ -12,7 +12,9 @@
   .fundoo{
 
     font-size: 30px;
-    margin-right:10%  
+    margin-right:10%;
+    text-align: center;
+    
   }
 
   .signIn{
@@ -53,8 +55,6 @@
 .o0Style{
   color: #dfd43f;
 }
-
-
 .c{
   background: #fff;
    right: 10px;
@@ -63,16 +63,16 @@
 
 .email{
   margin-right: 70%;
-font-size: 14px;
+  width: 50%;
+/* font-size: 14px;
 height: 20px;
-padding: 7px 11px;
+padding: 7px 11px; */
 }
 .password{
+  /* text-align: center; */
+  display: block;
   margin-right: 70%;
-font-size: 14px;
-height: 20px;
-padding: 7px 11px;
-
+  width: 216px;
 }
 .forgotPassword{
   text-align:center;

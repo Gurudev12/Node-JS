@@ -73,14 +73,12 @@ registrationController(req,res){
             })
             .catch(err=>{
                 if(err=="EMAIL IS ALLREADY REGISTER"){
-                    console.log("===>Email",err);
                     response.success=false;
                     response.error=err;
                     return res.status(500).send(response);
 
                 }
                 else if(err=="SORRY THIS EMAIL ID IS NOT EXISTED"){
-                    console.log("=========>EXISTED");
                     
                     response.success=false;
                     response.error=err;
@@ -101,7 +99,6 @@ registrationController(req,res){
 }
 /******************************************************* */
 registrationVerifyController(req,res){
-    console.log("VERIFY CONTROLLLLER",req.body);
     
    try{
     let response={};

@@ -15,8 +15,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const config = require('../config/config')
-const redis = require("redis");
-const client = redis.createClient();
+
 const redisService = require("../service/redisService")
 const underscore = require("underscore")
 class UserUtility {
@@ -113,6 +112,8 @@ class UserUtility {
         try {
 
             let token = req.headers.token;
+            console.log("UTILITY TOKEN",token);
+            
             if (token) {
                 jwt.verify(token, config.secretKey, (err, data) => {
                     if (err) {
@@ -125,12 +126,16 @@ class UserUtility {
                         let validToken = token
                         redisService.redisGetter(data._id + "registrationToken", (err, reply) => {
                             if (err) {
+                                console.log("REDIS GETTEERR ERR",err);
+                                
                                 response.success = false;
                                 response.message = "ERROR WHILE GETTING TOKEN FROM REDIS";
                                 response.error = err;
                                 return res.status(400).send(response);
                             }
                             else {
+                                console.log("REDIS GETTER",reply);
+                                
                                 let redisRegistrationToken = reply
                                 if (validToken == redisRegistrationToken) {
                                     req.body._id = data._id;   //this data refers to 'jwt.verify()' method

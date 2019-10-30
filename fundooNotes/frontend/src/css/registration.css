@@ -42,9 +42,8 @@
     color: #dfd43f;
   }
   .label{
+    text-align: center;
 
-    margin-left:25%;
-    margin-top: 5px  
   }
  
 
@@ -58,11 +57,10 @@
       width: 230px;
   }
 
-    .password{
+    .regpassword{
       text-align: center;
-      margin-left: 300px;
-      width: 230px;
-
+      margin-left: 240px;
+      width: 216px;
     }
 
   /* .nameLabel{

@@ -16,7 +16,17 @@ export function forgotPasswordService(forgotPasswordData){
     return axios.post(url+'/forgotPassword',forgotPasswordData)
 }
 
-export function resetPasswordService(resetPasswordData){    
+export function resetPasswordService(resetPasswordData,tokenData){    
     console.log("Front end reset data===>",resetPasswordData);
-    return axios.post(url+'/resetPassword',resetPasswordData)
+    return axios.post(url+'/resetPassword',resetPasswordData,{
+        headers:{token:tokenData}
+    })
 }
+
+export function verifyRegistrationService(tokenData){    
+    console.log("Front end registration verify data===>",tokenData);
+    return axios.post(url+'/verifyRegistration',{},{
+        headers:{token:tokenData}
+    })
+}
+

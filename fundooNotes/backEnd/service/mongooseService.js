@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
+const logger = require('../config/log')
 const config = require("../config/config");
 require("dotenv").config();
 
-const logger = require('../config/log')
 class MongooseClass {
     mongooseService() {
 

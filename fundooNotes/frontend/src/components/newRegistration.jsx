@@ -10,14 +10,12 @@ import { Button } from '@material-ui/core';
 
 
 class NewRegistration extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
+    
+        state = {
             field: {}
 
         };
-        console.log("===>StateObject", this.state.field)
-    }
+    
 
 
     handleChange = (event) => {

@@ -1,9 +1,6 @@
 const noteModel = require("../model/noteModel");
-const dateFormat = require('dateformat');
-const redis = require("redis");
-const client = redis.createClient();
+
 const redisService = require("../service/redisService")
-const underscore = require("underscore")
 const utility = require("../utility/utility");
 class NoteService {
     async createNoteService(noteData) {

@@ -11,11 +11,10 @@ import { registrationService } from '../services/userService';
 
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
-import { Redirect } from 'react-router-dom'
 
 class Registration extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             firstName: '',
             lastName: '',
@@ -23,14 +22,15 @@ class Registration extends Component {
             password: '',
             confirmPassword: '',
         };
-        console.log("State", this.state);
     }
+
+
 
     //This method which is called to redirect another page that is login
     setRedirect = () => {
         this.props.history.push('/')
-      }
-  
+    }
+
     //Clicking on register button following method will call and create 'registrationObject'
     submitRegistration = () => {
         if (this.state.password === this.state.confirmPassword) {
@@ -52,12 +52,12 @@ class Registration extends Component {
                         })
                     }
                 })
-                .catch((err) => {                    
-                        toaster.notify("Register unsuccessfull", {
-                            position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
-                            duration: null // This notification will not automatically close
-                        })
-                    
+                .catch((err) => {
+                    toaster.notify("Register unsuccessfull", {
+                        position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                        duration: null // This notification will not automatically close
+                    })
+
 
                 })
         }
@@ -169,7 +169,6 @@ class Registration extends Component {
                             name="firstName"
                             // value={this.state.firstName}
                             // onChange={this.handleChangeFName("firstName")}
-
                             value={this.state.firstName}
                             onChange={this.handleChangeFName}
                             margin="normal"
@@ -193,7 +192,7 @@ class Registration extends Component {
 
                     <div className="fundoo">
                         <TextField
-                            required
+                            className="regpassword"
                             id="outlined-email-input"
                             label="Enter Your emailId"
                             // className="email"
@@ -210,11 +209,10 @@ class Registration extends Component {
                     </div>
                     <div className="fundoo">
                         <TextField id="outlined-adornment-password"
-                            className="password"
+                            className="regpassword"
                             variant="outlined"
                             type={this.state.showPassword ? 'text' : 'password'}
                             label="Password"
-                            className=""
                             value={this.state.password}
                             onChange={this.handleChangePassword}
                             InputProps={{
@@ -229,6 +227,7 @@ class Registration extends Component {
 
                         <TextField id="outlined-adornment-password"
                             variant="outlined"
+                            className="regpassword"
                             type={this.state.showPasswords ? 'text' : 'password'}
                             label="Confirm password"
                             value={this.state.confirmPassword}

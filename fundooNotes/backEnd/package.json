@@ -18,6 +18,8 @@
     "node-url-shortener": "^1.0.1",
     "path": "^0.12.7",
     "redis": "^2.8.0",
+    "swagger-ui": "^3.24.0",
+    "swagger-ui-express": "^4.1.2",
     "underscore": "^1.9.1",
     "winston": "^3.2.1"
   },

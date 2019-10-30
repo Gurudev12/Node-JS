@@ -12,16 +12,18 @@ import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
 class ResetPassword extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            'newPassword': '',
-            'confirmPassword': '',
-            showPassword: false,
-            showPasswords: false
+   constructor(props){
+       super(props);
+       this.state = {
+        'newPassword': '',
+        'confirmPassword': '',
+        showPassword: false,
+        showPasswords: false
 
-        }
     }
+   }
+        
+    
     
      //After clicking on "cancel" button it will redirect to login
      setRedirectToLogin= () => {
@@ -34,7 +36,9 @@ class ResetPassword extends Component {
            let resetPasswordObject={}
            resetPasswordObject.password=this.state.newPassword;
 
-           resetPasswordService(resetPasswordObject)
+           let token=this.props.match.params.token;
+           
+           resetPasswordService(resetPasswordObject,token)
            .then((data)=>{
             console.log("PROMICE RESPONCE===>",data);
             if (data.status === 200) {

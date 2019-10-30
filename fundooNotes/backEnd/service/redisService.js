@@ -1,12 +1,16 @@
-const redis = require("redis");
-const client = redis.createClient();
+const config = require("../config/config");
 
 class RedisClass {
 
+    constructor(){
+        this.client = config.cacheClient;
+        // this.client = config.getConnect();
+    }
 
     redisSetter(key, value) {
+        let that = this;
         return new Promise((resolve, reject) => {
-            client.set(key, value, (err, response) => {
+            that.client.set(key, value, (err, response) => {
                 if (response == "OK") {
                     resolve(response);
                 }
@@ -19,8 +23,7 @@ class RedisClass {
 
 
     redisGetter(key, callback) {
-
-        client.get(key, (err, reply) => {
+        this.client.get(key, (err, reply) => {
             if (err) {
                 callback(err);
             } else {
@@ -32,13 +35,10 @@ class RedisClass {
 
     redisKeyRemove(callback) {
         //This is inbuild function which will remove all the keys from redis
-        client.flushdb(function (err, succeeded) {
+        this.client.flushdb(function (err, succeeded) {
             return callback(err, succeeded);  //"succeeded" contain "OK" value
         });
-
     }
-
-
 
     redisManager(loginKey) {
 

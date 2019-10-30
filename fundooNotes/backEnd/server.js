@@ -12,60 +12,53 @@
  * @since           : 25-9-2019
  * 
  **************************************************************************/
+require("dotenv").config();
+
 const express = require("express");
+const cors = require('cors')
+const schedule = require('node-schedule');
 const validator = require("express-validator");
-const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const config = require("../backEnd/config/config");
+const mongooseObject = require("./service/mongooseService")
+const cacheClient = require("../backEnd/service/redisConnectionService")
 const app = express();
-
-app.use(bodyParser.json());
+const logger = require('./config/log')
 const routes = require("./routes/userRoutes")
-var cors = require('cors') 
-app.use(cors())
-require("dotenv").config();
+const swaggerUi =require("swagger-ui-express");
+const swaggerFile=require("./swagger/swagger.json")
+
+
 
 const PORT = config.PORT;
 
+app.use(bodyParser.json());
+app.use(cors())
 app.use(validator());
 app.use("/", routes);
-const multer = require("multer");
-const redis = require("redis");
-const client = redis.createClient();
-const logger = require('./config/log')
-const mongooseObject = require("./service/mongooseService")
-var schedule = require('node-schedule');
-const ctrl=require("../backEnd/controller/noteController")
 
-mongooseObject.mongooseService()
+const ctrl = require("../backEnd/controller/noteController")
+
+mongooseObject.mongooseService();
+
+cacheClient.connect();
+
 
 app.listen(PORT, () => {
-    logger.info("Server started at port:", PORT);
+  logger.info("Server started at port:", PORT);
 });
 
-//Redis connectivity
-client.on("connect", (err, data) => {
-    if (err) {
-        logger.error(err);
-    } else {
-        logger.info("redis connected successfully");
-    }
-});
- 
+schedule.scheduleJob('* * * * * *', function () {
+  //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
 
-
- let j=schedule.scheduleJob('* * * * * *', function(){
-   //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
-
-   let userId="5d97427de380595ced58580c"
-    ctrl.reminderController(userId)
-    .then(reminderData=>{
+  let userId = "5d97427de380595ced58580c"
+  ctrl.reminderController(userId)
+    .then(reminderData => {
       logger.info("Get reminder")
     })
-    .catch(err=>{
-      logger.info("ERRRR",err);
-      
+    .catch(err => {
+      logger.info("ERRRR", err);
     })
-  });
+});
 
 module.exports = app;

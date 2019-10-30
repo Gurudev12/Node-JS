@@ -15,9 +15,7 @@ const bcrypt = require("bcrypt");
 const nodemail = require("./emailService");
 const emailExistence = require("email-existence");
 const utility = require("../utility/utility");
-var shortUrl = require("node-url-shortener");
-const redis = require("redis");
-const client = redis.createClient();
+
 const redisService = require("../service/redisService");
 
 
@@ -29,7 +27,6 @@ class UserService {
      * @description-This is  registration service while new registration
      ****/
     registrationService(paramObject) {
-        console.log("BAcckend SERC  ===>", paramObject);
 
         try {
             return new Promise((resolve, reject) => {
@@ -74,19 +71,11 @@ class UserService {
                                             let registrationToken = utility.createNewToken(payload);
                                             console.log("REGISTER TOKEN==>",registrationToken);
                                             
-                                            //This code for url shortner
-                                            shortUrl.short("https://amazon.com", function (err, url) {
-                                                // shortUrl.short('http://localhost:4000/registrationVerify/ + registrationToken +', function(err, url){
-                                            });
+                                          
 
-                                            //
-                                            //
-                                            //
-                                            ///
-                                            ///
                                             redisService.redisSetter(data._id +"registrationToken", registrationToken)
 
-                                            let registrationVerifyLink = "<p>this is link to REGISTRATION VERIFY</p><a href=\"http://localhost:4000/registrationVerify/" + registrationToken + "\">Registration verify</a>";
+                                            let registrationVerifyLink = "<p>this is link to REGISTRATION VERIFY</p><a href=\"http://localhost:3000/verifyRegistration/" + registrationToken + "\">Registration verify</a>";
                                             let text = "Registration verification link";
                                             nodemail.sendMail(data.email, registrationVerifyLink, text, (error, response) => {
                                                 if (error) {
@@ -175,17 +164,6 @@ class UserService {
                                     let newToken = utility.createNewToken(payload);
 
 
-                                    //Storing token to redis.
-                                    // client.set(userData[0]._id+"loginToken", newToken);
-
-                                    // client.get(userData[0]._id+"loginToken", function (err, reply) {
-                                    //     console.log("REPLY OF LOGIN TOKEN=====>", reply.toString());
-
-                                    // })
-
-
-
-
                                     redisService.redisSetter(userData[0]._id + "loginToken", newToken)
                                         .then(redisResponse => {
                                             let findValue = { "_id": userData[0]._id };
@@ -266,7 +244,7 @@ class UserService {
                             
                         })
 
-                        let forgotLink = "<p>this is link to RESET PASSWORD</p><a href=\"http://localhost:4000/resetPassword" + forgotToken + "\">Reset PassWord</a>";
+                        let forgotLink = "<p>this is link to RESET PASSWORD</p><a href=\"http://localhost:3000/resetPassword/" + forgotToken + "\">Reset PassWord</a>";
                         //let forgotLink=process.env.FORGOT_PASSWORD_LINK
                         let text = "Reset password link";
                         nodemail.sendMail(foundData[0].email, forgotLink, text, (err, data) => {

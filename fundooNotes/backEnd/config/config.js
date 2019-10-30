@@ -1,8 +1,9 @@
 
 require('dotenv').config({ path: './.env' })
 
+const cacheClient = require("../service/redisConnectionService")
 
-module.exports={
+module.exports = {
     url:process.env.MONGODB_URL,
     
     PORT:process.env.PORT,
@@ -17,4 +18,5 @@ module.exports={
     awsSecretKey:process.env.AWS_SECRETKEY,
 
     bucket:process.env.BUCKET,
+    cacheClient : cacheClient.getConnect()
 }
