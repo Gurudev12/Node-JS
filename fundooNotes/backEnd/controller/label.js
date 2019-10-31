@@ -1,11 +1,11 @@
-const labelService = require("../service/labelService");
+const labelService = require("../service/label");
 class LabelController {
     /**
      * 
      * @param {*} req user request
      * @param {*} res server response
      */
-    async createLabelController(req, res) {
+    async create(req, res) {
         let response = {};
         try {
             req.checkBody("labelName", "labek name should not be null").notEmpty();
@@ -25,7 +25,7 @@ class LabelController {
                     "userId": req.token._id,
                     "labelName": req.body.labelName
                 };
-                let labelResult = await labelService.createLabelService(labelData);
+                let labelResult = await labelService.create(labelData);
                 if (labelResult == true) {
                     response.success = true;
                     response.message = "New label created";
@@ -51,7 +51,7 @@ class LabelController {
      * @param {*} req user request
      * @param {*} res server response
      */
-    async  updateLabelController(req, res) {
+    async  update(req, res) {
         let response = {};
 
         try {
@@ -68,7 +68,7 @@ class LabelController {
                     "_id": req.body._id,
                     "newLabelName": req.body.updateLabelName
                 };
-                let updateLabelResult = await labelService.updateLabelService(updateLabelData);
+                let updateLabelResult = await labelService.update(updateLabelData);
                 if (updateLabelResult == true) {
                     response.success = true;
                     response.message = "Label updated successfully";
@@ -92,13 +92,13 @@ class LabelController {
   * @param {*} req user request
   * @param {*} res server response
   */
-    async deleteLabelController(req, res) {
+    async delete(req, res) {
         let response = {};
         try {
             let deleteLabelData = {
                 "_id": req.body._id
             };
-            let deletedLabelResult = await labelService.deleteLabelService(deleteLabelData);
+            let deletedLabelResult = await labelService.delete(deleteLabelData);
             if (deletedLabelResult == true) {
                 response.success = true;
                 response.message = "Label deleted successfully";
@@ -121,13 +121,13 @@ class LabelController {
  * @param {*} req user request
  * @param {*} res server response
  */
-    async getAllLabelController(req, res) {
+    async read(req, res) {
         let response = {};
         try {
             let labelData = {
                 "userId": req.token._id
             };
-            let getAllLabelResult = await labelService.getAllLabelService(labelData);
+            let getAllLabelResult = await labelService.read(labelData);
             if (getAllLabelResult) {
                 response.success = true;
                 response.message = "Get all label successfully";

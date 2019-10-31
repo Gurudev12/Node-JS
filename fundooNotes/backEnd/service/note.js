@@ -1,28 +1,30 @@
-const noteModel = require("../model/noteModel");
+const noteModel = require("../model/note");
+const redisService = require("./redis")
+const utility = require("../utility/authentication");
+const logger = require('../config/log')
 
-const redisService = require("../service/redisService")
-const utility = require("../utility/utility");
 class NoteService {
-    async createNoteService(noteData) {
-        try {
-            let noteResult = await noteModel.create(noteData);
+    async create(noteData) {
 
-            if (noteResult) {
-                let loginKey = noteResult.userId + "loginToken"
-                await redisService.redisManager(loginKey)
-                return true
-            } else {
-                return false;
+        let noteResult = await noteModel.create(noteData);
+        
+        //update logger file
+        logger.info("New note", noteResult)
+        
+        if (noteResult) {
+            let loginKey = noteResult.userId + "loginToken"
+            await redisService.redisManager(loginKey)
+            return true
+        } else {
 
-            }
-        } catch (e) {
-            return e;
+            //update logger file
+            logger.error("Error while creating new note")
+            return false;
         }
+
     }
     /*************************************************************************************************/
-
-    /***************************************************** */
-    updateNoteService(updateData) {
+    update(updateData) {
         /**
          * @description: The Object.keys() method returns an array of a given object's own enumerable property names,
          * in the same order as we get with a normal loop
@@ -57,19 +59,34 @@ class NoteService {
                 .then(updateResponse => {
                     if (updateResponse.nModified == 1) {
 
+                        //update logger file
+                        logger.info("Updated note", findValue)
+
+
                         let loginKey = updateData.userId + "loginToken"
                         redisService.redisManager(loginKey)
                             .then(response => {
+
+                                //update logger file
+                                logger.info("Updated note in redis", findValue)
+
                                 resolve({ "success": true, "message": "Note updated successfully" });
                             })
                             .catch(err => {
+                                //update logger file
+                                logger.error("Error while Updating note in redis", findValue)
                                 reject(err)
                             })
                     } else {
+                        //update logger file
+                        logger.error("Error while Updating note in database", findValue)
                         reject({ "success": false, "message": "Note not updated" });
                     }
                 })
                 .catch(err => {
+
+                    logger.error("Updated note Error", findValue)
+
                     reject(err);
                 });
 
@@ -80,46 +97,59 @@ class NoteService {
      * @description delete note means we are not actually delete the note.We only update the that token i.e
      *              "isTrash":true 
      */
-    deleteNoteService(deleteData) {
-        try {
+    delete(deleteData) {
 
-            return new Promise((resolve, reject) => {
-                //We are finding the notes based on th noteId and userId
-                let findValue = {
-                    "userId": deleteData.userId,
-                    "_id": deleteData._id
-                }
-                //we only update the isTrash value to true
-                let updateValue = {
-                    $set: { isTrash: true }
-                }
-                //It will not actually delete note,it change the the value of isTrash false to true.
-                noteModel.update(findValue, updateValue)
-                    .then(deletedData => {
-                        //creating a loginKey,because we don't want to remove the loginKey from redis.
-                        let loginKey = deleteData.userId + "loginToken"
 
-                        //this will remove the all key from redis and again set key to redis using loginKey
-                        redisService.redisManager(loginKey)
-                            .then(response => {
-                                resolve(deletedData);
-                            })
-                            .catch(err => {
-                                reject(err);
-                            })
+        return new Promise((resolve, reject) => {
+            //We are finding the notes based on th noteId and userId
+            let findValue = {
+                "userId": deleteData.userId,
+                "_id": deleteData._id
+            }
+            //we only update the isTrash value to true
+            let updateValue = {
+                $set: { isTrash: true }
+            }
+            //It will not actually delete note,it change the the value of isTrash false to true.
+            noteModel.update(findValue, updateValue)
+                .then(deletedData => {
 
-                    })
-                    .catch(err => {
-                        reject(err);
-                    });
-            });
-        } catch (e) {
-            return e;
-        }
+                    //update logger file
+                    logger.info("deleted note", findValue)
+
+                    //creating a loginKey,because we don't want to remove the loginKey from redis.
+                    let loginKey = deleteData.userId + "loginToken"
+
+                    //this will remove the all key from redis and again set key to redis using loginKey
+                    redisService.redisManager(loginKey)
+                        .then(response => {
+
+                            //update logger file
+                            logger.info("deleted note in redis", findValue)
+
+                            resolve(deletedData);
+                        })
+                        .catch(err => {
+                            //update logger file
+                            logger.error("Error in deleting note in redis", findValue)
+
+                            reject(err);
+                        })
+
+                })
+                .catch(err => {
+                    //update logger file
+                    logger.error("Error in deleting note in database", findValue)
+
+                    reject(err);
+                });
+        });
+
     }
 
     /*************************************************************************************************/
-    addLabelToNoteService(addLabelData) {
+    
+    add(addLabelData) {
 
         return new Promise((resolve, reject) => {
             //First we will find the perticular note with perticular userId
@@ -140,29 +170,46 @@ class NoteService {
                     //we get updateData object,if data updated successfully then it will return the "nModified:1"
                     if (updateData.nModified == 1) {
 
+                        //update logger file
+                        logger.info("label addded to note", findValue)
+
                         //creating a loginKey,because we don't want to remove the loginKey from redis.
                         let loginKey = addLabelData.userId + "loginToken"
 
                         //this will remove the all key from redis and again set key to redis using loginKey
                         redisService.redisManager(loginKey)
                             .then(response => {
+
+                                //update logger file
+                                logger.info("label addded to note using redis", findValue)
+
                                 resolve(true)
                             })
                             .catch(err => {
+
+                                //update logger file
+                                logger.error("Error while label addded to note using redis", findValue)
+
                                 reject(err);
                             })
                     } else {
+                        //update logger file
+                        logger.error("Label not added to notes", findValue)
                         resolve(false)
 
                     }
                 })
                 .catch(err => {
+
+                    //update logger file
+                    logger.error("Error occured while adding label to note", findValue)
+
                     reject(err);
                 });
         });
     }
     /*************************************************************************************************/
-    deleteLabelFromNoteService(deleteLabelData) {
+    deleteLabel(deleteLabelData) {
 
         return new Promise((resolve, reject) => {
             //First we will find the perticular note with perticular userId
@@ -181,15 +228,26 @@ class NoteService {
                     //we get updateData object,if data updated successfully then it will return the "nModified:1"
                     if (updatedResponse.nModified == 1) {
 
+                        //update logger file
+                        logger.info("label deleted from note", findValue)
+
                         //creating a loginKey,because we don't want to remove the loginKey from redis.
                         let loginKey = deleteLabelData.userId + "loginToken"
 
                         //this will remove the all key from redis and again set key to redis using loginKey
                         redisService.redisManager(loginKey)
                             .then(response => {
+
+                                //update logger file
+                                logger.info("label deleted from note using redis", findValue)
+
                                 resolve(true)
                             })
                             .catch(err => {
+
+                                //update logger file
+                                logger.error("Error while label deleted from note using redis", findValue)
+
                                 reject(err);
                             })
                     } else {
@@ -198,12 +256,16 @@ class NoteService {
                 })
                 //When error occured in database
                 .catch(err => {
+                    //update logger file
+                    logger.error("Error while label deleted from note in database", findValue)
+
                     reject(err);
                 });
         });
     }
     /*************************************************************************************************/
-    searchNoteService(searchNoteData) {
+    //It will search notes 
+    search(searchNoteData) {
 
         let value = searchNoteData.search;
 
@@ -276,7 +338,7 @@ class NoteService {
     }
 
 
-    reminderService(userId) {
+    reminder(userId) {
         return new Promise((resolve, reject) => {
             let currentDate = new Date();
             //searchBy only searches the notes those who has reminder
@@ -309,7 +371,8 @@ class NoteService {
     }
 
     /*************************************************************************************************/
-    getAllNoteService(loginData) {
+    //It will give all the notes
+    read(loginData) {
 
         let findValue = {}
         let redisData;
@@ -405,7 +468,3 @@ let noteServiceObject = new NoteService();
 module.exports = noteServiceObject;
 
 /*************************************************************************************************/
-     // let  pages = underscore.chunk(redisData, 2);
-                                    // console.log("=====ALL PAGES==============>",pages)
-                                    // console.log("******************************************");
-                                    // console.log("======PAGE NUMBER==============>",pages[pageNo])

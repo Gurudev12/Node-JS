@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../css/Login.css'
+import '../css/Login.css';
 // import Button from '@material-ui/core/Button';
 import { Card } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
@@ -50,6 +50,7 @@ class Login extends Component {
                     position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
                     duration: null // This notification will not automatically close
                 })
+                this.props.history.push('/dashboard')
             }
         })
         .catch((err)=>{

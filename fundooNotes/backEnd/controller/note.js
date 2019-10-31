@@ -1,7 +1,8 @@
-const noteService = require("../service/noteService");
+const noteService = require("../service/note");
 class NoteController {
 
-    async  createNoteController(req, res) {
+    //Create new note
+    async  create(req, res) {
         let response = {};
         try {
             //It will pass the noteData object to service contain information regarding note while creating new note
@@ -15,7 +16,7 @@ class NoteController {
                 "isArchieve": req.body.isArchieve
             };
             
-            let noteResult = await noteService.createNoteService(noteData);
+            let noteResult = await noteService.create(noteData);
             if (noteResult) {
                 response.success = true;
                 response.message = "New note created";
@@ -35,13 +36,13 @@ class NoteController {
 
     }
     /*************************************************************************************************/
-
-    updateNoteController(req, res) {
+    //update perticular note
+    update(req, res) {
         let response = {};
         //here we only add the userId rq.body for identify unique users note
         req.body.userId = req.token._id;
 
-        noteService.updateNoteService(req.body)
+        noteService.update(req.body)
             .then(updateData => {
                 if (updateData.success == true) {
                     response.success = true;
@@ -62,7 +63,8 @@ class NoteController {
 
     }
     /*************************************************************************************************/
-    deleteNoteController(req, res) {
+    //delete perticular note
+    delete(req, res) {
         let response = {};
         try {
 
@@ -70,7 +72,7 @@ class NoteController {
 
 
 
-                noteService.deleteNoteService(req.body)
+                noteService.delete(req.body)
                     .then(data => {
                         response.success = true;
                         response.message = "Delete note successfully";
@@ -94,7 +96,8 @@ class NoteController {
         }
     }
     /*************************************************************************************************/
-    getAllNoteController(req, res) {
+    //Controller for getting all notes
+    read(req, res) {
         let response = {};
         try {
 
@@ -102,7 +105,7 @@ class NoteController {
             req.body.pageNo=req.query.pageNo;
             
             
-            noteService.getAllNoteService(req.body)
+            noteService.read(req.body)
                 .then(data => {
                     response.success = true;
                     response.message = "Got all notes";
@@ -125,12 +128,13 @@ class NoteController {
 
     }
     /*************************************************************************************************/
-    addLabelToNoteController(req, res) {
+    //add label to the perticular note
+    add(req, res) {
         let response = {};
         try {
             req.body.userId = req.token._id;
             
-            noteService.addLabelToNoteService(req.body)
+            noteService.add(req.body)
                 .then(addLabelResponse => {
                     if (addLabelResponse == true) {
                         response.success = true;
@@ -157,13 +161,13 @@ class NoteController {
         }
     }
     /*************************************************************************************************/
-
-    deleteLabelFromNoteController(req, res) {
+    //Delete label from the note
+    deleteLabel(req, res) {
         let response = {};
 
         req.body.userId = req.token._id;
 
-        noteService.deleteLabelFromNoteService(req.body)
+        noteService.deleteLabel(req.body)
             .then(deleteLabelResponse => {
                 if (deleteLabelResponse == true) {
                     response.success = true;
@@ -183,11 +187,11 @@ class NoteController {
             });
     }
     /*************************************************************************************************/
-
-    searchNoteController(req, res) {
+    //Search note on basis of title,description etc
+    search(req, res) {
         let response = {};
         req.body.userId = req.token._id;
-        noteService.searchNoteService(req.body)
+        noteService.search(req.body)
             .then(searchNoteData => {
                 if (searchNoteData) {
                     response.success = true;
@@ -209,11 +213,9 @@ class NoteController {
             });
     }
 
-
-
-reminderController(userId){
+    reminder(userId){
     return new Promise((resolve,reject)=>{
-        noteService.reminderService(userId)
+        noteService.reminder(userId)
         .then(reminderData=>{
             resolve(reminderData)
         })

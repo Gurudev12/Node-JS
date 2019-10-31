@@ -20,11 +20,11 @@ const schedule = require('node-schedule');
 const validator = require("express-validator");
 const bodyParser = require("body-parser");
 const config = require("../backEnd/config/config");
-const mongooseObject = require("./service/mongooseService")
-const cacheClient = require("../backEnd/service/redisConnectionService")
+const mongooseObject = require("./service/mongoose")
+const cacheClient = require("./service/redisConnection")
 const app = express();
 const logger = require('./config/log')
-const routes = require("./routes/userRoutes")
+const routes = require("./routes")
 const swaggerUi =require("swagger-ui-express");
 const swaggerFile=require("./swagger/swagger.json")
 
@@ -37,8 +37,9 @@ app.use(cors())
 app.use(validator());
 app.use("/", routes);
 
-const ctrl = require("../backEnd/controller/noteController")
+const ctrl = require("./controller/note")
 
+app.use("/swagger",swaggerUi.serve,swaggerUi.setup(swaggerFile))
 mongooseObject.mongooseService();
 
 cacheClient.connect();
@@ -52,7 +53,7 @@ schedule.scheduleJob('* * * * * *', function () {
   //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
 
   let userId = "5d97427de380595ced58580c"
-  ctrl.reminderController(userId)
+  ctrl.reminder(userId)
     .then(reminderData => {
       logger.info("Get reminder")
     })

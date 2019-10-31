@@ -6,7 +6,8 @@ import Login from './components/login';
 import Registration from './components/registration';
 import VerifyRegistration from './components/verifyRegistration'
 import ForgotPassword from './components/forgotPassword';
-import ResetPassword from './components/resetPassword'
+import ResetPassword from './components/resetPassword';
+import Dashboard from './components/dashboard'
 
 // import NewRegistration from './components/newRegistration';
 
@@ -22,6 +23,7 @@ class App extends Component {
             <Route path="/" exact component={Login}></Route>
             <Route path="/forgotPassword" exact component={ForgotPassword}></Route>
             <Route path="/resetPassword/:token" exact component={ResetPassword}></Route>
+            <Route path="/dashboard" exact component={Dashboard}></Route>
           </Switch>
         </BrowserRouter>
       </div>

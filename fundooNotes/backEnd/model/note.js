@@ -34,7 +34,7 @@ let noteSchema = mongoose.Schema({
     {
         timestamps: true
     });
-class NoteClass {
+class NoteModel {
     constructor() {
         this.Note = mongoose.model("noteCollection", noteSchema);
     }
@@ -114,5 +114,5 @@ class NoteClass {
         });
     }
 }
-let noteClassObject = new NoteClass();
-module.exports = noteClassObject;
+let noteModelObject = new NoteModel();
+module.exports = noteModelObject;

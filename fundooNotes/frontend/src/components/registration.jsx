@@ -78,16 +78,8 @@ class Registration extends Component {
         console.log("=>state==", this.state);
     };
 
-    //USING PROMISE
-    //    async  handleChangeLName(event) {
-    //         console.log("===>lname", event.target.value);
-    //         let lastName=event.target.value;
-    //        await this.setState({
-    //             lastName:lastName
-    //         });
-    //         console.log("=>state==", this.state);
-
-    //     };
+  ///
+  ///
 
     //This is handler for 'lastName'
     handleChangeLName = (event) => {
@@ -192,6 +184,7 @@ class Registration extends Component {
 
                     <div className="fundoo">
                         <TextField
+                        required
                             className="regpassword"
                             id="outlined-email-input"
                             label="Enter Your emailId"
@@ -208,7 +201,9 @@ class Registration extends Component {
                         />
                     </div>
                     <div className="fundoo">
+        
                         <TextField id="outlined-adornment-password"
+                        required
                             className="regpassword"
                             variant="outlined"
                             type={this.state.showPassword ? 'text' : 'password'}
@@ -226,6 +221,7 @@ class Registration extends Component {
                         /><br></br><br></br>
 
                         <TextField id="outlined-adornment-password"
+                        required
                             variant="outlined"
                             className="regpassword"
                             type={this.state.showPasswords ? 'text' : 'password'}

@@ -46,7 +46,7 @@ let UserSchema = mongoose.Schema({
     {
         timestamps: true,
     });
-class UserClass {
+class UserModel {
     constructor() {
         this.User = mongoose.model("registeredCollection", UserSchema);
 
@@ -119,5 +119,5 @@ class UserClass {
         });
 }
 }   
-let UserClassObject = new UserClass();
-module.exports = UserClassObject;
+let userModelObject = new UserModel();
+module.exports = userModelObject;

@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const config = require('../config/config')
 
-const redisService = require("../service/redisService")
+const redisService = require("../service/redis")
 const underscore = require("underscore")
 class UserUtility {
 
@@ -24,7 +24,7 @@ class UserUtility {
     tokenVerify(req, res, next) {
         let response = {};
         try {
-
+            
             let token = req.headers.token;
             if (token) {
                 jwt.verify(token, config.secretKey, (err, data) => {
@@ -45,7 +45,7 @@ class UserUtility {
                             }
                             else {
                                 let redisToken = reply
-                                if (validToken == redisToken) {
+                                if (validToken == redisToken) {                                    
                                     req.token = data;   //this data refers to 'jwt.verify()' method
                                     next();
                                 }

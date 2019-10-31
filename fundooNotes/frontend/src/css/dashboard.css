@@ -1,0 +1,8 @@
+.menu{
+    position: 'relative';
+    margin-left: 400px;
+    background-color: antiquewhite;
+    width: 400px;
+    height: 40px;
+    text-align: center;
+}

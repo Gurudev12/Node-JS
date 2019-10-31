@@ -10,13 +10,13 @@
  * @since           : 25-9-2019
  * 
  **************************************************************************/
-const userModel = require("../model/userModel");
+const userModel = require("../model/user");
 const bcrypt = require("bcrypt");
-const nodemail = require("./emailService");
+const nodemail = require("./email");
 const emailExistence = require("email-existence");
-const utility = require("../utility/utility");
+const utility = require("../utility/authentication");
 
-const redisService = require("../service/redisService");
+const redisService = require("./redis");
 
 
 class UserService {
@@ -26,7 +26,7 @@ class UserService {
     /****
      * @description-This is  registration service while new registration
      ****/
-    registrationService(paramObject) {
+    registration(paramObject) {
 
         try {
             return new Promise((resolve, reject) => {
@@ -111,7 +111,7 @@ class UserService {
         }
     }
     /***************************************************************** */
-    registrationVerifyService(userId) {
+    verify(userId) {
         try {
 
             return new Promise((resolve, reject) => {
@@ -138,7 +138,7 @@ class UserService {
     /****
      * @description-This is login service.
      ****/
-    loginService(loginDetail) {
+    login(loginDetail) {
         try {
             return new Promise((resolve, reject) => {
                 /****
@@ -215,7 +215,7 @@ class UserService {
     /****
     * @description-This is forgotPassword service
     ****/
-    forgotPasswordService(userEmail) {
+    forgotPassword(userEmail) {
         try {
             return new Promise((resolve, reject) => {
 
@@ -234,10 +234,7 @@ class UserService {
                         ****/
                         let forgotToken = utility.createNewToken(payload);
 
-                        ////
-                        //
-                        ///
-                        ///New change
+    
                         redisService.redisSetter(foundData[0]._id +"forgotToken", forgotToken)
                         .then(data=>{
                             console.log("REGISTR RESPONCE",data);
@@ -270,7 +267,7 @@ class UserService {
 
     /********************RESET PASSWORD SERVICE***********************************************************/
 
-    async resetNewPasswordService(resetData) {
+    async reset(resetData) {
         
         try {
             let encrptedPassword = utility.passwordEncrypt(resetData.password);
@@ -293,7 +290,7 @@ class UserService {
         }
     }
     /********************UPLOAD IMAGE SERVICE***********************************************************/
-    async uploadImageService(uploadData) {
+    async uploadImage(uploadData) {
         try {
             let searchById = { "_id": uploadData._id };
             let updateValue = { "imageUrl": uploadData.url };

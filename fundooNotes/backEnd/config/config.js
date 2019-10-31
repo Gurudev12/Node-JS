@@ -1,7 +1,7 @@
 
 require('dotenv').config({ path: './.env' })
 
-const cacheClient = require("../service/redisConnectionService")
+const cacheClient = require("../service/redisConnection")
 
 module.exports = {
     url:process.env.MONGODB_URL,

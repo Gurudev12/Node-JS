@@ -20,14 +20,14 @@
  * 
  * 
  ***************************************************************************/
-const service=require("../service/userService");
+const service=require("../service/user");
 const serviceObject=new service.UserService();
 
 const config=require("../config/config");
-const s3=require("../service/s3Service");
+const s3=require("../service/s3");
 class UserController
 {
-registrationController(req,res){
+registration(req,res){
 
     try{
         req.checkBody("firstName","first name should not be null").notEmpty();
@@ -65,7 +65,7 @@ registrationController(req,res){
             "password":req.body.password
         };
         
-        serviceObject.registrationService(paramObject)
+        serviceObject.registration(paramObject)
             .then(data=>{
                 response.success=true;
                 response.content=data;
@@ -98,12 +98,12 @@ registrationController(req,res){
 
 }
 /******************************************************* */
-registrationVerifyController(req,res){
+verify(req,res){
     
    try{
     let response={};
 
-    serviceObject.registrationVerifyService(req.body._id)
+    serviceObject.verify(req.body._id)
     .then(data=>{
         response.success=true;
         response.content=data;
@@ -125,7 +125,7 @@ registrationVerifyController(req,res){
 }
 
 /**********************LoginController ****************************************/
-loginController(req,res){
+login(req,res){
     try{
         req.checkBody("email","email should not be empty").notEmpty();
         req.checkBody("email","email should be in valid format").isEmail();
@@ -145,7 +145,7 @@ loginController(req,res){
                 "email":req.body.email,
                 "password":req.body.password
             };
-            serviceObject.loginService(loginDetail)
+            serviceObject.login(loginDetail)
             .then(data=>{
                 res.status(200).send(data);
     
@@ -178,7 +178,7 @@ loginController(req,res){
    
 }
 /**********************Forget Password Controller ****************************************/
-forgotController(req,res){
+forgotPassword(req,res){
     try{
         req.check("email","email should not be empty").notEmpty();
         req.check("email","email should be in email form").isEmail();
@@ -192,7 +192,7 @@ forgotController(req,res){
             res.status(422).send(response);
         }
         else{
-            serviceObject.forgotPasswordService(req.body.email)
+            serviceObject.forgotPassword(req.body.email)
             .then(sendinEmailResponse=>{
                 response.success=true;
                 response.content=sendinEmailResponse;
@@ -215,7 +215,7 @@ forgotController(req,res){
 }
 
 /**RESET PASSWORD WITH ASYNC AWAIT */
-async newResetPassword(req,res){
+async reset(req,res){
     
     req.checkBody("password","pasword should not be empty").notEmpty();
     req.checkBody("password","pasword length must be greater than 6").isLength({min:6});
@@ -233,7 +233,7 @@ async newResetPassword(req,res){
             "password":req.body.password
         };
             try{
-                let resetResult  =await serviceObject.resetNewPasswordService(resetData);
+                let resetResult  =await serviceObject.reset(resetData);
                 if(resetResult==true){
 
                     response.success=true;
@@ -256,7 +256,7 @@ async newResetPassword(req,res){
             }
         }
 }
-async uploadImageController(req,res){
+async uploadImage(req,res){
 
     const s3url = await s3.getSignedUrl("getObject", { Bucket: config.bucket, Key: req.file.originalname });
 
@@ -267,7 +267,7 @@ async uploadImageController(req,res){
         "url":s3url
     };
 
-    let uploadResult =await serviceObject.uploadImageService(uploadData);
+    let uploadResult =await serviceObject.uploadImage(uploadData);
         if(uploadResult==true){
             response.success=true;
             response.message="Image uploaded successfully";
@@ -277,10 +277,7 @@ async uploadImageController(req,res){
             response.message="Error while image uploading";
             return res.status(400).send(response);
         }
-
 }
-
-
 }
-let UserControllerObject=new UserController();
-module.exports=UserControllerObject;
+let userControllerObject=new UserController();
+module.exports=userControllerObject;
