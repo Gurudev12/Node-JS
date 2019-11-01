@@ -3,22 +3,19 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs=require("fs");
 
-let testObject=fs.readFileSync("./testingObjects.json");
+let testObject=fs.readFileSync("./test.json");
 
 let testData=JSON.parse(testObject);
-const token=testData.tokenSet;
-console.log("TOKEN SETTING",token);
-
 
 chai.use(chaiHttp);
 
 let should = chai.should();
 
-describe("Negative Test case For getting all Labels", () => {
+describe("Negative Test case For getting all notes", () => {
     it("It should not POST because of token is invalid", (done) => {
        
       chai.request(server)
-          .get("/getAllLabel")
+          .get("/getAllNote")
           .set(testData.invalidToken)
           .end((err, res) => {
                 res.should.have.status(400);
@@ -28,12 +25,11 @@ describe("Negative Test case For getting all Labels", () => {
 });
 
 
-describe("Positive test case For getting all Labels", () => {
+describe("Positive test case For getting all notes", () => {
     it("It should  POST because token is valid", (done) => {
        
       chai.request(server)
-          .get("/getAllLabel")
-        //   .send(updateLabelTestData.emptyLabel)
+          .get("/getAllNote")
           .set(testData.tokenSet)
           .end((err, res) => {
                 res.should.have.status(200);

@@ -4,7 +4,7 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs=require("fs");
 
-let testObject=fs.readFileSync("./testingObjects.json");
+let testObject=fs.readFileSync("./test.json");
 let testData=JSON.parse(testObject);
 const loginTestData=testData.loginTest;
 

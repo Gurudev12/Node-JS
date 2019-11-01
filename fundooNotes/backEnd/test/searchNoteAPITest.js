@@ -3,19 +3,20 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs=require("fs");
 
-let testObject=fs.readFileSync("./testingObjects.json");
+let testObject=fs.readFileSync("./test.json");
 
 let testData=JSON.parse(testObject);
-
+const searchNote=testData.searchNoteData;
 chai.use(chaiHttp);
 
 let should = chai.should();
 
-describe("Negative Test case For getting all notes", () => {
+describe("Negative Test case for search note", () => {
     it("It should not POST because of token is invalid", (done) => {
        
       chai.request(server)
-          .get("/getAllNote")
+          .post("/searchNote")
+          .send(searchNote.searchData)
           .set(testData.invalidToken)
           .end((err, res) => {
                 res.should.have.status(400);
@@ -24,12 +25,12 @@ describe("Negative Test case For getting all notes", () => {
     }); 
 });
 
-
-describe("Positive test case For getting all notes", () => {
-    it("It should  POST because token is valid", (done) => {
+describe("Positive Test case for search note", () => {
+    it("It should  POST because of valid data", (done) => {
        
       chai.request(server)
-          .get("/getAllNote")
+          .post("/searchNote")
+          .send(searchNote.searchData)
           .set(testData.tokenSet)
           .end((err, res) => {
                 res.should.have.status(200);

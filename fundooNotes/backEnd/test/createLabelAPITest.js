@@ -8,7 +8,7 @@ let should = chai.should();
 
 
 
-let testObject=fs.readFileSync("./testingObjects.json");
+let testObject=fs.readFileSync("./test.json");
 let testData=JSON.parse(testObject);
  let createLabelTestData=testData.createLabelTest;
 
