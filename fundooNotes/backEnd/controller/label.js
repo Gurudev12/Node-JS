@@ -122,12 +122,18 @@ class LabelController {
  * @param {*} res server response
  */
     async read(req, res) {
+        console.log("CONTROLLER label ====>");
+        
         let response = {};
         try {
             let labelData = {
                 "userId": req.token._id
             };
+            // req.query.userId=req.token._id;
+            
+            // console.log("CONTROLLER label ====>",req.query);
             let getAllLabelResult = await labelService.read(labelData);
+            // let getAllLabelResult = await labelService.read(req.query);
             if (getAllLabelResult) {
                 response.success = true;
                 response.message = "Get all label successfully";

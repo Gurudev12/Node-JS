@@ -25,10 +25,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.0",
+    "should": "^13.2.3"
   },
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha ",
     "start": "node server.js",
     "coverage": "nyc -r cobertura -r text-summary -r lcov npm test",
     "debug": "nodemon --inspect server.js"

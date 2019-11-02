@@ -45,11 +45,13 @@ class Login extends Component {
         loginService(loginObject)
         .then((data)=>{
             console.log("LOGIN RESPONCE",data);
+            console.log("token=====>",data.data.token);
             if (data.status === 200) {
                 toaster.notify("Login Successful", {
                     position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
                     duration: null // This notification will not automatically close
                 })
+                localStorage.setItem('loginToken', data.data.token)
                 this.props.history.push('/dashboard')
             }
         })

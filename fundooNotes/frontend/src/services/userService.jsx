@@ -30,3 +30,16 @@ export function verifyRegistrationService(tokenData){
     })
 }
 
+export function getNoteService(param,loginToken){    
+    console.log("get note in service===>",param,loginToken);
+    return axios.get(url+'/getAllNote?'+param,{
+        headers:{token:loginToken}
+    })
+}
+
+// export function getLabelService(param,loginToken){    
+//     console.log("get note in service===>",param,loginToken);
+//     return axios.get(url+'/getAllNote?'+param,{
+//         headers:{token:loginToken}
+//     })
+// }

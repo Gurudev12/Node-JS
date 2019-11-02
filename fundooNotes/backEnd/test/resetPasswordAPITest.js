@@ -3,14 +3,17 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs=require("fs");
 
-let testObject=fs.readFileSync("./test.json");
-let testData=JSON.parse(testObject);
+// let testObject=fs.readFileSync("../testJsonFile/test.json");
+// let testData=JSON.parse(testObject);
+
+let testData = require('../testJsonFile/test.json')
+
+
 const resetPasswordData=testData.resetPasswordTest;
 
 
 chai.use(chaiHttp);
-
-let should = chai.should();
+chai.should();
 
 describe("This is for reset password", () => {
 /*****

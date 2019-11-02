@@ -3,7 +3,7 @@ const logger = require('../config/log')
 const config = require("../config/config");
 require("dotenv").config();
 
-class MongooseClass {
+class Mongoose {
     mongooseService() {
 
         mongoose.connection.on('disconnected', function () {
@@ -22,5 +22,5 @@ class MongooseClass {
     }
 
 }
-let mongooseObject = new MongooseClass();
+let mongooseObject = new Mongoose();
 module.exports = mongooseObject;

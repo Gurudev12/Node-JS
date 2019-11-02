@@ -22,8 +22,12 @@ import LabelIcon from '@material-ui/icons/Label';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AppsIcon from '@material-ui/icons/Apps';
+import Divider from '@material-ui/core/Divider';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import {Avatar,Grid} from '@material-ui/core';
+import { Avatar, Grid } from '@material-ui/core';
+import {getNoteService} from '../services/userService'
 const theme = createMuiTheme({
     overrides: {
         MuiDrawer: {
@@ -37,14 +41,25 @@ const theme = createMuiTheme({
             root: {
                 color: "#000000"
             }
+        },
+        MuiIconButton: {
+            root: {
+                color: "#000000",
+            
+            }
         }
     }
+        
 });
 class Dashboard extends Component {
-    state = {
-        open: false,
-        view: true
-    };
+    constructor(props){
+        super(props)
+        this.state = {
+            open: false,
+            view: true
+        };
+    }
+    
 
     handleDrawer = () => {
         console.log("Drawer===>", this.state.open);
@@ -59,28 +74,104 @@ class Dashboard extends Component {
         this.state.view === true ? this.setState({ view: false }) : this.setState({ view: true })
     }
 
+    archiveClick = () => {
+        this.props.history.push('/')
+    }
+
+    // This handler for get all notes 
+    handleNote=()=>{
+        let loginToken=localStorage.getItem('loginToken')
+        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
+        let param="isTrash=false&isArchieve=false"
+        getNoteService(param,loginToken)
+        .then(data=>{
+                console.log("NOTE DATA======>",data);
+                
+        })
+        .catch(err=>{
+            console.log("NOTE DATA ERROR=========>",err);
+            
+        })
+    }
+    //This handler for get all reminder note
+    handleReminder=()=>{
+        let loginToken=localStorage.getItem('loginToken')
+        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
+        let param="reminder=null"
+        getNoteService(param,loginToken)
+        .then(data=>{
+                console.log("REMINDER DATA======>",data);  
+        })
+        .catch(err=>{
+            console.log("REMINDER DATA ERROR=========>",err);
+        })
+    }
+    //This handler for getting all labels
+    // handleLabel=()=>{
+    //     let loginToken=localStorage.getItem('loginToken')
+    //     console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
+    //     let param="reminder=null"
+    //     getNoteService(param,loginToken)
+    //     .then(data=>{
+    //             console.log("REMINDE DATA======>",data);  
+    //     })
+    //     .catch(err=>{
+    //         console.log("REMINDER DATA ERROR=========>",err);
+    //     })
+    // }
+ //This handler for get all archieve note
+    handleArchieve=()=>{
+        let loginToken=localStorage.getItem('loginToken')
+        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
+        let param="isArchieve=true"
+        getNoteService(param,loginToken)
+        .then(data=>{
+                console.log("Archieve DATA======>",data);  
+        })
+        .catch(err=>{
+            console.log("Archieve DATA ERROR=========>",err);
+        })
+    }
+//This handler for get all Trash note
+    handleTrash=()=>{
+        let loginToken=localStorage.getItem('loginToken')
+        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
+        let param="isTrash=true"
+        getNoteService(param,loginToken)
+        .then(data=>{
+                console.log("Trash note DATA======>",data);  
+        })
+        .catch(err=>{
+            console.log("Trash note DATA ERROR=========>",err);
+        })
+    }
     render() {
         return (
             <div>
                 {/* AppBar div*/}
-                <div>
-
+                <div className="appBar">
                     <AppBar position="static" color="default" >
                         <Toolbar >
 
-                            <IconButton color="inherit" aria-label="Open drawer"
-                                onClick={this.handleDrawer}>
-                                {/* onClick={this.handleDrawerOpen} */}
-                                <MenuIcon />
-                            </IconButton>
-
-                            <img src={logo} alt="logo" />
-
-                            <Typography variant="h6" color="inherit">
-                                Fundoo Notes
-                            </Typography>
-
+                            {/* div for first menu icon,image*/}
                             <div className="menu">
+                                <IconButton color="inherit" aria-label="Open drawer"
+                                    onClick={this.handleDrawer}>
+                                    {/* onClick={this.handleDrawerOpen} */}
+                                    <MenuIcon />
+                                </IconButton>
+
+                                <img src={logo} alt="logo" />
+
+                                <Typography variant="h6" color="inherit">
+                                    Fundoo Notes
+                            </Typography>
+                            </div>
+
+
+                            {/* div for search and refresh */}
+                            <div className="search">
+                                {/* className="menu" */}
                                 <InputBase
                                     startAdornment={(<InputAdornment position="start">
                                         <SearchIcon />
@@ -90,24 +181,38 @@ class Dashboard extends Component {
                                 // inputProps={{ 'aria-label': 'search' }}
                                 />
                             </div>
-
-                            {/* refresh button */}
-                            <IconButton onClick="">
-                                {<RefreshIcon />}
-                            </IconButton>
-
-                            {/* list view or grid view */}
-                            <IconButton onClick={this.handleViewChange}>
-                                {this.state.view === true ? <img src={listview} alt="" /> : <img src={gridview} alt="" />}
-                            </IconButton>
-
-                            {/* profile picture */}
-                            <div className="profile">
-                                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"  /> */}
-                                  <Avatar>G</Avatar>
+                            <div className="refresh">
+                                {/* refresh button */}
+                                <IconButton onClick="">
+                                    {<RefreshIcon />}
+                                </IconButton>
                             </div>
-                                
-                            
+
+                            <div className="rightItems" >
+                                <MuiThemeProvider theme={theme}>
+
+
+
+                                    {/* list view or grid view */}
+                                    <IconButton onClick={this.handleViewChange}>
+                                        {this.state.view === true ? <img src={listview} alt="" /> : <img src={gridview} alt="" />}
+                                    </IconButton>
+
+                                    <IconButton>
+                                        <SettingsIcon />
+                                    </IconButton>
+
+                                    <IconButton>
+                                        <AppsIcon />
+                                    </IconButton>
+                                    {/* profile picture */}
+                                    {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"  /> */}
+                                    
+                                    <IconButton>
+                                    <Avatar>G</Avatar>
+                                    </IconButton>
+                                </MuiThemeProvider>
+                            </div>
 
                         </Toolbar>
                     </AppBar>
@@ -122,8 +227,6 @@ class Dashboard extends Component {
                             variant="persistent"
                             anchor="left"
                             open={this.state.open}
-
-
                         >
 
                             <List style={{ width: "250px" }}>
@@ -136,24 +239,24 @@ class Dashboard extends Component {
                         ))} */}
 
 
-                                <ListItem button key="Notes">
+                                <ListItem button key="Notes" onClick={this.handleNote}>
                                     <EmojiObjectsIcon /><ListItemText primary="Notes" />
                                 </ListItem>
 
-
-                                <ListItem button key="Reminder">
+                                <ListItem button key="Reminder" onClick={this.handleReminder}>
                                     <AddAlertIcon /><ListItemText primary="Reminder" />
                                 </ListItem>
+                                <Divider orientation="" />
 
-                                <ListItem button key="Label">
+                                <ListItem button key="Label" onClick={this.handleLabel}>
                                     <LabelIcon /><ListItemText primary="Label" />
                                 </ListItem>
-
-                                <ListItem button key="Archive">
+                                <Divider orientation="" />
+                                <ListItem button key="Archive" onClick={this.handleArchieve}>
                                     <ArchiveIcon /><ListItemText primary="Archive" />
                                 </ListItem>
 
-                                <ListItem button key="Trash">
+                                <ListItem button key="Trash" onClick={this.handleTrash}>
                                     <DeleteIcon /><ListItemText primary="Trash" />
                                 </ListItem>
 
@@ -162,7 +265,10 @@ class Dashboard extends Component {
                         </Drawer>
                     </MuiThemeProvider>
                 </div>
-
+                {/* dynamic content view  */}
+                <div>
+                   
+                </div>
             </div>
         )
     }

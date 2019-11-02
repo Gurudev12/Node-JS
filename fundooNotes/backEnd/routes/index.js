@@ -38,7 +38,7 @@ router.get("/getAllLabel", authentication.tokenVerify, labelCtrl.read);
 router.post("/createNote", authentication.tokenVerify, noteCtrl.create); 
 router.post("/updateNote", authentication.tokenVerify, noteCtrl.update);
 router.post("/deleteNote", authentication.tokenVerify, noteCtrl.delete); 
-router.get("/getAllNote", authentication.tokenVerify, noteCtrl.read);  //above all done,bellow remaining
+router.get("/getAllNote", authentication.tokenVerify, noteCtrl.read); 
 router.post("/addLabel", authentication.tokenVerify, noteCtrl.add);  
 router.post("/deleteLabelFromNote", authentication.tokenVerify, noteCtrl.deleteLabel);
 router.post("/searchNote", authentication.tokenVerify, noteCtrl.search);

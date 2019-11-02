@@ -1,6 +1,6 @@
 const config = require("../config/config");
 
-class RedisClass {
+class Redis {
 
     constructor(){
         this.client = config.cacheClient;
@@ -77,5 +77,5 @@ class RedisClass {
 
 
 }
-let redisClassObject = new RedisClass();
+let redisClassObject = new Redis();
 module.exports = redisClassObject;

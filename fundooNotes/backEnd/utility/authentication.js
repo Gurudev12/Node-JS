@@ -24,6 +24,7 @@ class UserUtility {
     tokenVerify(req, res, next) {
         let response = {};
         try {
+            console.log("authentication",req.headers.token);
             
             let token = req.headers.token;
             if (token) {
@@ -38,6 +39,8 @@ class UserUtility {
                         let validToken = token
                         redisService.redisGetter(data._id + "loginToken", (err, reply) => {
                             if (err) {
+                                console.log("REDIS GETTING ERROr");
+                                
                                 response.success = false;
                                 response.message = "ERROR WHILE GETTING TOKEN FROM REDIS";
                                 response.error = err;
@@ -45,7 +48,9 @@ class UserUtility {
                             }
                             else {
                                 let redisToken = reply
-                                if (validToken == redisToken) {                                    
+                                if (validToken == redisToken) {     
+                                    console.log("MATCHED TOKEN");
+                                                                   
                                     req.token = data;   //this data refers to 'jwt.verify()' method
                                     next();
                                 }
@@ -158,7 +163,7 @@ class UserUtility {
     notePagination(redisData, pageNo) {
         return new Promise((resolve, reject) => {
             let noteLength = redisData.length;
-            let partition = 2;
+            let partition = 5;
             let pages = underscore.chunk(redisData, partition)
             
             if (pageNo == undefined || pageNo== 1) {

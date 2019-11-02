@@ -1,15 +1,13 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
-const fs=require("fs");
 chai.use(chaiHttp);
 
-let should = chai.should();
+chai.should();
 
-let testObject=fs.readFileSync("./test.json");
-let testData=JSON.parse(testObject);
+let testData = require('../testJsonFile/test.json')
+
  let deleteNoteTestData=testData.deleteNoteTest;
-console.log("DTETTETE DATA",deleteNoteTestData.deleteNote);
 
 
  describe("Note", () => {

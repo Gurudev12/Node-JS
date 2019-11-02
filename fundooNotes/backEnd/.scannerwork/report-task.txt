@@ -2,5 +2,5 @@ projectKey=Fundoo_Backend
 serverUrl=http://localhost:9000
 serverVersion=6.7.1.35068
 dashboardUrl=http://localhost:9000/dashboard/index/Fundoo_Backend
-ceTaskId=AW4lz2GRWfE63Tt1fmy8
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AW4lz2GRWfE63Tt1fmy8
+ceTaskId=AW4rFMEji2yrOXfMkLOJ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AW4rFMEji2yrOXfMkLOJ

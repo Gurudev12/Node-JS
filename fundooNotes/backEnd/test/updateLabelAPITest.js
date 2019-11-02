@@ -3,11 +3,12 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs = require("fs");
 chai.use(chaiHttp);
+chai.should();
 
-let should = chai.should();
+// let testObject=fs.readFileSync("../testJsonFile/test.json");
+// let testData = JSON.parse(testObject);
 
-let testObject=fs.readFileSync("./test.json");
-let testData = JSON.parse(testObject);
+let testData = require('../testJsonFile/test.json')
 let updateLabelTestData = testData.updateLabelTest;
 
 

@@ -3,13 +3,14 @@ const chaiHttp = require("chai-http");
 const server = require("../server");
 const fs=require("fs");
 
-let testObject=fs.readFileSync("./test.json");
+// let testObject=fs.readFileSync("../testJsonFile/test.json");
 
-let testData=JSON.parse(testObject);
+// let testData=JSON.parse(testObject);
+let testData= require('../testJsonFile/test.json')
+
 const deleteLabel=testData.deleteLabelFromNote;
 chai.use(chaiHttp);
-
-let should = chai.should();
+chai.should();
 
 describe("Negative Test case for delete label from note", () => {
     it("It should not POST because of token is invalid", (done) => {

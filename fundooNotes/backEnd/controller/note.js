@@ -98,14 +98,15 @@ class NoteController {
     /*************************************************************************************************/
     //Controller for getting all notes
     read(req, res) {
+        console.log("CONTROLLER",req.query);
+        
         let response = {};
         try {
 
-            req.body.userId = req.token._id;
-            req.body.pageNo=req.query.pageNo;
+            req.query.userId = req.token._id;
+           
             
-            
-            noteService.read(req.body)
+            noteService.read(req.query)
                 .then(data => {
                     response.success = true;
                     response.message = "Got all notes";
