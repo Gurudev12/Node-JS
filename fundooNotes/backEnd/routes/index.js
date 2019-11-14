@@ -23,7 +23,7 @@ const multer = require("../service/multer");
 router.post("/registration", ctrl.registration);  
 router.post("/verifyRegistration", authentication.registrationTokenVerify, ctrl.verify);
 router.post("/login", ctrl.login); 
-router.post("/forgotPassword", ctrl.forgotPassword);   ///forgot-password
+router.post("/forgotPassword", ctrl.forgotPassword);   
 router.post("/resetPassword", authentication.resetTokenVerify, ctrl.reset);   
 
 router.post("/uploadImage",authentication.tokenVerify, multer.single("file"), ctrl.uploadImage);
@@ -31,7 +31,7 @@ router.post("/uploadImage",authentication.tokenVerify, multer.single("file"), ct
 //Label
 router.post("/createLabel",authentication.tokenVerify,labelCtrl.create); 
 router.post("/updateLabel", authentication.tokenVerify, labelCtrl.update);  
-router.post("/deleteLabel", authentication.tokenVerify, labelCtrl.delete);  
+router.delete("/deleteLabel", authentication.tokenVerify, labelCtrl.delete);  
 router.get("/getAllLabel", authentication.tokenVerify, labelCtrl.read);   
 
 //Notes

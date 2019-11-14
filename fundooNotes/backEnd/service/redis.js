@@ -33,6 +33,35 @@ class Redis {
         });
     }
 
+    delete(deleteArray){
+        return new Promise((resolve,reject)=>{
+            this.client.del(deleteArray,(err, response) =>{
+                if (response) {
+                 return  resolve(true)
+                } else{
+                return reject(err)
+                }
+             })
+        })
+        
+    }
+
+
+
+
+    redisGetterLabel(key) {
+        return new Promise((resolve,reject)=>{
+
+            this.client.get(key, (err, reply) => {
+                if (err) {
+                    reject (err);
+                } else {                    
+                    resolve(reply);
+                }
+            });
+        })
+    }
+
     redisKeyRemove(callback) {
         //This is inbuild function which will remove all the keys from redis
         this.client.flushdb(function (err, succeeded) {

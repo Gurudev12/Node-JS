@@ -1,6 +1,5 @@
 
 const mongoose = require("mongoose");
-const dateFormat = require("dateformat");
 let noteSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +51,7 @@ class NoteModel {
                 "isArchieve": (paramObject.isArchieve == null) ? false : paramObject.isArchieve
             });
             newNote.save()
-                .then(savedNote => {                
+                .then(savedNote => {
                     resolve(savedNote);
                 })
                 .catch(err => {
@@ -69,6 +68,7 @@ class NoteModel {
                     if (err) {
                         reject(err);
                     } else {
+                        // console.log("model\n\n\n",data);
                         resolve(data);
                     }
                 });
@@ -89,10 +89,12 @@ class NoteModel {
     }
     /*************************************************************************************************/
     update(findValue, updateValue) {
-
+        
         return new Promise((resolve, reject) => {
             this.Note.updateOne(findValue, updateValue)
                 .then((updatedResponse) => {
+                    console.log("RESPONCE",updatedResponse);
+                    
                     resolve(updatedResponse);
                 })
                 .catch(err => {
@@ -102,12 +104,17 @@ class NoteModel {
     }
     /*************************************************************************************************/
     delete(deleteValue) {
+
         return new Promise((resolve, reject) => {
             this.Note.deleteOne(deleteValue)
                 .then(deletedData => {
+                    console.log("MODEL RESPONXE",deletedData);
+                    
                     resolve(deletedData);
                 })
                 .catch(err => {
+                    console.log("ERRR MODEL RESPONXE",deletedData);
+
                     reject(err);
 
                 });

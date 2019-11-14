@@ -41,7 +41,8 @@ class NoteController {
         let response = {};
         //here we only add the userId rq.body for identify unique users note
         req.body.userId = req.token._id;
-
+        console.log("\n\n\n\n============>",req.body);
+        
         noteService.update(req.body)
             .then(updateData => {
                 if (updateData.success == true) {
@@ -69,9 +70,7 @@ class NoteController {
         try {
 
             req.body.userId = req.token._id,
-
-
-
+            
                 noteService.delete(req.body)
                     .then(data => {
                         response.success = true;
@@ -98,7 +97,6 @@ class NoteController {
     /*************************************************************************************************/
     //Controller for getting all notes
     read(req, res) {
-        console.log("CONTROLLER",req.query);
         
         let response = {};
         try {

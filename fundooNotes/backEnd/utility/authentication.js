@@ -24,7 +24,6 @@ class UserUtility {
     tokenVerify(req, res, next) {
         let response = {};
         try {
-            console.log("authentication",req.headers.token);
             
             let token = req.headers.token;
             if (token) {
@@ -38,9 +37,7 @@ class UserUtility {
                     else {
                         let validToken = token
                         redisService.redisGetter(data._id + "loginToken", (err, reply) => {
-                            if (err) {
-                                console.log("REDIS GETTING ERROr");
-                                
+                            if (err) {                                
                                 response.success = false;
                                 response.message = "ERROR WHILE GETTING TOKEN FROM REDIS";
                                 response.error = err;
@@ -49,7 +46,6 @@ class UserUtility {
                             else {
                                 let redisToken = reply
                                 if (validToken == redisToken) {     
-                                    console.log("MATCHED TOKEN");
                                                                    
                                     req.token = data;   //this data refers to 'jwt.verify()' method
                                     next();

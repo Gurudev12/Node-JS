@@ -1,22 +1,24 @@
 const noteModel = require("../model/note");
 const redisService = require("./redis")
-const utility = require("../utility/authentication");
 const logger = require('../config/log')
 
 class NoteService {
     async create(noteData) {
 
         let noteResult = await noteModel.create(noteData);
-        
         //update logger file
         logger.info("New note", noteResult)
-        
         if (noteResult) {
-            let loginKey = noteResult.userId + "loginToken"
-            await redisService.redisManager(loginKey)
-            return true
-        } else {
 
+
+            let deleteArray = [noteResult.userId + "isTrashNotes", noteResult.userId + "isArchieveNotes", noteResult.userId + "allNotes", noteResult.userId + "reminderNotes"]
+            let redisResult = await redisService.delete(deleteArray)
+            if (redisResult == true) {
+                return true
+            } else {
+                return false
+            }
+        } else {
             //update logger file
             logger.error("Error while creating new note")
             return false;
@@ -63,13 +65,11 @@ class NoteService {
                         logger.info("Updated note", findValue)
 
 
-                        let loginKey = updateData.userId + "loginToken"
-                        redisService.redisManager(loginKey)
+                        let deleteArray = [updateData.userId + "isTrashNotes", updateData.userId + "isArchieveNotes", updateData.userId + "allNotes", updateData.userId + "reminderNotes"]
+                        redisService.delete(deleteArray)
                             .then(response => {
-
-                                //update logger file
+                                //         //update logger file
                                 logger.info("Updated note in redis", findValue)
-
                                 resolve({ "success": true, "message": "Note updated successfully" });
                             })
                             .catch(err => {
@@ -77,6 +77,8 @@ class NoteService {
                                 logger.error("Error while Updating note in redis", findValue)
                                 reject(err)
                             })
+
+
                     } else {
                         //update logger file
                         logger.error("Error while Updating note in database", findValue)
@@ -102,44 +104,38 @@ class NoteService {
 
         return new Promise((resolve, reject) => {
             //We are finding the notes based on th noteId and userId
-            let findValue = {
+            let deleteValue = {
                 "userId": deleteData.userId,
                 "_id": deleteData._id
             }
             //we only update the isTrash value to true
-            let updateValue = {
-                $set: { isTrash: true }
-            }
+            // let updateValue = {
+            //     $set: { isTrash: true }
+            // }
             //It will not actually delete note,it change the the value of isTrash false to true.
-            noteModel.update(findValue, updateValue)
+            noteModel.delete(deleteValue)
                 .then(deletedData => {
 
                     //update logger file
-                    logger.info("deleted note", findValue)
+                    logger.info("deleted note", deleteValue)
 
-                    //creating a loginKey,because we don't want to remove the loginKey from redis.
-                    let loginKey = deleteData.userId + "loginToken"
-
-                    //this will remove the all key from redis and again set key to redis using loginKey
-                    redisService.redisManager(loginKey)
+                    let deleteArray = [deleteData.userId + "isTrashNotes", deleteData.userId + "isArchieveNotes", deleteData.userId + "allNotes", deleteData.userId + "reminderNotes"]
+                    redisService.delete(deleteArray)
                         .then(response => {
-
-                            //update logger file
-                            logger.info("deleted note in redis", findValue)
-
-                            resolve(deletedData);
+                            logger.info("deleted note in redis", deleteValue)
+                            resolve(response);
                         })
                         .catch(err => {
-                            //update logger file
-                            logger.error("Error in deleting note in redis", findValue)
-
+                            logger.error("Error in deleting note in redis", deleteValue)
                             reject(err);
                         })
 
+
+                    // resolve(deletedData); 
                 })
                 .catch(err => {
                     //update logger file
-                    logger.error("Error in deleting note in database", findValue)
+                    logger.error("Error in deleting note in database", deleteValue)
 
                     reject(err);
                 });
@@ -148,7 +144,7 @@ class NoteService {
     }
 
     /*************************************************************************************************/
-    
+
     add(addLabelData) {
 
         return new Promise((resolve, reject) => {
@@ -231,25 +227,22 @@ class NoteService {
                         //update logger file
                         logger.info("label deleted from note", findValue)
 
-                        //creating a loginKey,because we don't want to remove the loginKey from redis.
-                        let loginKey = deleteLabelData.userId + "loginToken"
 
-                        //this will remove the all key from redis and again set key to redis using loginKey
-                        redisService.redisManager(loginKey)
+
+                        let deleteArray = [deleteLabelData.userId + "isTrashNotes", deleteLabelData.userId + "isArchieveNotes", deleteLabelData.userId + "allNotes", deleteLabelData.userId + "reminderNotes"]
+                        redisService.delete(deleteArray)
                             .then(response => {
-
-                                //update logger file
-                                logger.info("label deleted from note using redis", findValue)
-
+                                //         //update logger file
+                                logger.info("Updated note in redis", findValue,updateValue)
+                                // resolve({ "success": true, "message": "Note updated successfully" });
                                 resolve(true)
                             })
                             .catch(err => {
-
                                 //update logger file
-                                logger.error("Error while label deleted from note using redis", findValue)
-
-                                reject(err);
+                                logger.error("Error while Updating note in redis", findValue)
+                                reject(err)
                             })
+
                     } else {
                         resolve(false);
                     }
@@ -373,7 +366,6 @@ class NoteService {
     /*************************************************************************************************/
     //It will give all the notes
     read(loginData) {
-
         let findValue = {}
         let redisData;
         let redisKey;
@@ -394,46 +386,43 @@ class NoteService {
                     findValue[keyObject[i]] = loginData[keyObject[i]]
                 }
             }
+
+
             for (let i = 0; i < keyObject.length; i++) {
 
                 //Creating key for isTrash notes
                 if (keyObject[i] == "isTrash" && loginData[keyObject[i]] == "true") {
+
                     redisKey = loginData.userId + "isTrashNotes"
 
-                    //Creating key for isArchieve note
-                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "true") {
-                    redisKey = loginData.userId + "isArchieveNotes"
 
-                    //Creating key for all notes except isArchieve and istrash is true
-                } else if (keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false" || keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false") {
-                    redisKey = loginData.userId + "allNotes"
-
-                    //Creating key for notes which has reminder set
-                } else if (keyObject[i] == "reminder") {
+                } //Creating key for isArchieve note
+                else if ((keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "true") || (keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false")) {
+                    redisKey = loginData.userId + "isArchieveNotes";
+                }
+                //Creating key for all notes except isArchieve and istrash is true
+                else if ((keyObject[i] == "isArchieve" && loginData[keyObject[i]] == "false") || (keyObject[i] == "isTrash" && loginData[keyObject[i]] == "false")) {
+                    redisKey = loginData.userId + "allNotes";
+                }
+                //Creating key for notes which has reminder set
+                else if (keyObject[i] == "reminder") {
                     redisKey = loginData.userId + "reminderNotes"
                 }
             }
             //First it will chech data in redis
             redisService.redisGetter(redisKey, (err, reply) => {
                 redisData = JSON.parse(reply);
-
                 //If it will get the notes from redis then resolve from redis.
                 if (redisData) {
-                    //I dont want to show all the the redis data,thats why I do pagination.
-                    utility.notePagination(redisData, pageNo)
-                        .then(response => {
-                            //response will not send all redis data only send the selected page data.
-                            resolve(response)
-                        })
-                        .catch(err => {
-                            reject(err)
-                        })
+                    resolve(redisData)
+
                 }
                 else {
                     //If redisGetter()method not get notes from redis then fetch notes from database
                     noteModel.read(findValue)
                         .then(noteData => {
-                            if (noteData.length > 0) {
+                            if (noteData.length >= 0) {
+                                // log("\n\n\tnotedata--->",noteData)
                                 //Then store the notes in redis whatever we get from database
                                 redisService.redisSetter(redisKey, JSON.stringify(noteData))
 
@@ -441,14 +430,8 @@ class NoteService {
                                 redisService.redisGetter(redisKey, (err, reply) => {
                                     redisData = JSON.parse(reply);
 
-                                    utility.notePagination(redisData, pageNo)
-                                        .then(response => {
-                                            //response will not send all redis data only send the selected page data.
-                                            resolve(response)
-                                        })
-                                        .catch(err => {
-                                            reject(err)
-                                        })
+                                    resolve(redisData)
+
                                 })
                             }
                             //if there is no notes in database
@@ -468,3 +451,63 @@ let noteServiceObject = new NoteService();
 module.exports = noteServiceObject;
 
 /*************************************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// delete label from note
+                        //creating a loginKey,because we don't want to remove the loginKey from redis.
+                        // let loginKey = deleteLabelData.userId + "loginToken";
+
+                        //this will remove the all key from redis and again set key to redis using loginKey
+                        // redisService.redisManager(loginKey)
+                        //     .then(response => {
+
+                                //update logger file
+                                // logger.info("label deleted from note using redis", findValue)
+
+                            //     resolve(true)
+                            // })
+                            // .catch(err => {
+
+                                //update logger file
+                            //     logger.error("Error while label deleted from note using redis", findValue)
+
+                            //     reject(err);
+                            // })
+

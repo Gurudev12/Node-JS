@@ -7,7 +7,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
-import { registrationService } from '../services/userService';
+import { registrationUser } from '../services/userService';
 
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
@@ -42,7 +42,7 @@ class Registration extends Component {
             registrationObject.confirmPassword = this.state.confirmPassword;
 
             //Registration object will send it to server
-            registrationService(registrationObject)
+            registrationUser(registrationObject)
                 .then((data) => {
                     console.log("PROMISE DATA==>", data);
                     if (data.status === 200) {

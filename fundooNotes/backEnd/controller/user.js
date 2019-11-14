@@ -275,6 +275,7 @@ async uploadImage(req,res){
         }else{
             response.success=false;
             response.message="Error while image uploading";
+            response.data=uploadResult
             return res.status(400).send(response);
         }
 }

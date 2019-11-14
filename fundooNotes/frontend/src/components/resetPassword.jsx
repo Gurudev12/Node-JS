@@ -7,7 +7,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from '@material-ui/core';
-import {resetPasswordService} from '../services/userService';
+import {resetPassword} from '../services/userService';
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
@@ -38,7 +38,7 @@ class ResetPassword extends Component {
 
            let token=this.props.match.params.token;
            
-           resetPasswordService(resetPasswordObject,token)
+           resetPassword(resetPasswordObject,token)
            .then((data)=>{
             console.log("PROMICE RESPONCE===>",data);
             if (data.status === 200) {

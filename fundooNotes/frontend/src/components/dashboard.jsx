@@ -3,7 +3,6 @@ import '../css/dashboard.css'
 import logo from '../assets/keep.png'
 import listview from '../assets/listview.svg'
 import gridview from '../assets/gridview.svg'
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
@@ -12,22 +11,16 @@ import MenuIcon from '@material-ui/icons/Menu';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import AddAlertIcon from '@material-ui/icons/AddAlert';
-import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
-import LabelIcon from '@material-ui/icons/Label';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AppsIcon from '@material-ui/icons/Apps';
-import Divider from '@material-ui/core/Divider';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core'
-import { Avatar, Grid } from '@material-ui/core';
-import {getNoteService} from '../services/userService'
+import { Avatar } from '@material-ui/core';
+import DrawerList from './drawer'
+import { CreateNote } from './createNote'
+import { getAllNote } from '../services/userService'
+import { Notes } from './notes'
+import toaster from "toasted-notes";
 const theme = createMuiTheme({
     overrides: {
         MuiDrawer: {
@@ -45,24 +38,26 @@ const theme = createMuiTheme({
         MuiIconButton: {
             root: {
                 color: "#000000",
-            
+
             }
         }
     }
-        
+
 });
 class Dashboard extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             open: false,
-            view: true
+            view: true,
+            noteData: [],
+            labelData:[],
+            componentCall:'',
+            profileUrl:''
         };
     }
-    
 
     handleDrawer = () => {
-        console.log("Drawer===>", this.state.open);
 
         this.state.open === false ? this.setState({ open: true }) : this.setState({ open: false })
     }
@@ -74,203 +69,163 @@ class Dashboard extends Component {
         this.state.view === true ? this.setState({ view: false }) : this.setState({ view: true })
     }
 
-    archiveClick = () => {
-        this.props.history.push('/')
+
+    //This handler for all note that may be notes,reminder note,archieve note,trash note.It based on child sent param
+    handleGetAllNote = (param) => {
+        let loginToken = localStorage.getItem('loginToken')
+        
+        console.log("GET ALL NOTE COMPONENT===>",param);
+
+        
+        // "componentCall" here set state because we are passing this state to note component and based on state it will display the different icon coponent
+        this.setState({componentCall:param})
+        
+        getAllNote(param, loginToken)
+            .then(data => {
+                this.setState({ noteData: data.data.data })
+            })
+            .catch(err => {
+                toaster.notify("Something going wrong", {
+                    position: "top",
+                    autoClose: 8000,
+                })
+            })
     }
 
-    // This handler for get all notes 
-    handleNote=()=>{
-        let loginToken=localStorage.getItem('loginToken')
-        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
-        let param="isTrash=false&isArchieve=false"
-        getNoteService(param,loginToken)
-        .then(data=>{
-                console.log("NOTE DATA======>",data);
-                
-        })
-        .catch(err=>{
-            console.log("NOTE DATA ERROR=========>",err);
-            
-        })
+    //For auto refresh after deleting note
+    handleNote = () => {
+        let loginToken = localStorage.getItem('loginToken')
+        let param = "isTrash=false&isArchieve=false"
+        getAllNote(param, loginToken)
+            .then(data => {
+                this.setState({ noteData: data.data.data })
+            })
+            .catch(err => {
+                toaster.notify("Something going wrong", {
+                    position: "top",
+                    duration: null
+                })
+            })
     }
-    //This handler for get all reminder note
-    handleReminder=()=>{
-        let loginToken=localStorage.getItem('loginToken')
-        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
-        let param="reminder=null"
-        getNoteService(param,loginToken)
-        .then(data=>{
-                console.log("REMINDER DATA======>",data);  
-        })
-        .catch(err=>{
-            console.log("REMINDER DATA ERROR=========>",err);
-        })
+
+    componentWillMount = () => {
+
+        this.setState({profileUrl:this.props.location.state.profileUrl});
+
+        let loginToken = localStorage.getItem('loginToken')
+
+        let param = "isTrash=false&isArchieve=false"
+        getAllNote(param, loginToken)
+            .then(data => {
+                this.setState({ noteData: data.data.data })
+            })
+
     }
-    //This handler for getting all labels
-    // handleLabel=()=>{
-    //     let loginToken=localStorage.getItem('loginToken')
-    //     console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
-    //     let param="reminder=null"
-    //     getNoteService(param,loginToken)
-    //     .then(data=>{
-    //             console.log("REMINDE DATA======>",data);  
-    //     })
-    //     .catch(err=>{
-    //         console.log("REMINDER DATA ERROR=========>",err);
-    //     })
-    // }
- //This handler for get all archieve note
-    handleArchieve=()=>{
-        let loginToken=localStorage.getItem('loginToken')
-        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
-        let param="isArchieve=true"
-        getNoteService(param,loginToken)
-        .then(data=>{
-                console.log("Archieve DATA======>",data);  
-        })
-        .catch(err=>{
-            console.log("Archieve DATA ERROR=========>",err);
-        })
+
+    handleLabelArray=(labelData)=>{
+        
+        this.setState({labelData:labelData})
     }
-//This handler for get all Trash note
-    handleTrash=()=>{
-        let loginToken=localStorage.getItem('loginToken')
-        console.log("GET TOKEN FROM LOCAL STORAGE===>",loginToken);
-        let param="isTrash=true"
-        getNoteService(param,loginToken)
-        .then(data=>{
-                console.log("Trash note DATA======>",data);  
-        })
-        .catch(err=>{
-            console.log("Trash note DATA ERROR=========>",err);
-        })
-    }
+
     render() {
+
         return (
-            <div>
-                {/* AppBar div*/}
-                <div className="appBar">
-                    <AppBar position="static" color="default" >
-                        <Toolbar >
+            <MuiThemeProvider theme={theme}>
+                <div className="dashboard">
+                    {/* AppBar div*/}
+                    <div className="appBar">
+                        <AppBar position="fixed" color="default" >
+                            <Toolbar >
 
-                            {/* div for first menu icon,image*/}
-                            <div className="menu">
-                                <IconButton color="inherit" aria-label="Open drawer"
-                                    onClick={this.handleDrawer}>
-                                    {/* onClick={this.handleDrawerOpen} */}
-                                    <MenuIcon />
-                                </IconButton>
+                                {/* div for first menu icon,image*/}
+                                <div className="menu">
+                                    <IconButton color="inherit" aria-label="Open drawer"
+                                        onClick={this.handleDrawer}>
+                                        {/* onClick={this.handleDrawerOpen} */}
+                                        <MenuIcon />
+                                    </IconButton>
 
-                                <img src={logo} alt="logo" />
+                                    <img src={logo} alt="logo" />
 
-                                <Typography variant="h6" color="inherit">
-                                    Fundoo Notes
+                                    <Typography variant="h6" color="inherit">
+                                        Fundoo Notes
                             </Typography>
-                            </div>
+                                </div>
 
 
-                            {/* div for search and refresh */}
-                            <div className="search">
-                                {/* className="menu" */}
-                                <InputBase
-                                    startAdornment={(<InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>)}
+                                {/* div for search and refresh */}
+                                <div className="search">
+                                    <InputBase
+                                        startAdornment={(<InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>)}
 
-                                    placeholder="Search"
-                                // inputProps={{ 'aria-label': 'search' }}
-                                />
-                            </div>
-                            <div className="refresh">
-                                {/* refresh button */}
-                                <IconButton onClick="">
-                                    {<RefreshIcon />}
-                                </IconButton>
-                            </div>
-
-                            <div className="rightItems" >
-                                <MuiThemeProvider theme={theme}>
-
-
-
-                                    {/* list view or grid view */}
-                                    <IconButton onClick={this.handleViewChange}>
-                                        {this.state.view === true ? <img src={listview} alt="" /> : <img src={gridview} alt="" />}
+                                        placeholder="Search"
+                                    />
+                                </div>
+                                <div className="refresh">
+                                    {/* refresh button */}
+                                    <IconButton onClick="">
+                                        {<RefreshIcon />}
                                     </IconButton>
+                                </div>
 
-                                    <IconButton>
-                                        <SettingsIcon />
-                                    </IconButton>
+                                <div className="rightItems" >
+                                    <MuiThemeProvider theme={theme}>
 
-                                    <IconButton>
-                                        <AppsIcon />
-                                    </IconButton>
-                                    {/* profile picture */}
-                                    {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"  /> */}
-                                    
-                                    <IconButton>
-                                    <Avatar>G</Avatar>
-                                    </IconButton>
-                                </MuiThemeProvider>
-                            </div>
 
-                        </Toolbar>
-                    </AppBar>
+
+                                        {/* list view or grid view */}
+                                        <IconButton onClick={this.handleViewChange}>
+                                            {this.state.view === true ? <img src={listview} alt="" /> : <img src={gridview} alt="" />}
+                                        </IconButton>
+
+                                        <IconButton>
+                                            <SettingsIcon />
+                                        </IconButton>
+
+                                        <IconButton>
+                                            <AppsIcon />
+                                        </IconButton>
+
+                                        <IconButton>
+                                            <Avatar> <img src="{this.state.profileUrl}" alt=""/> </Avatar>
+                                        </IconButton>
+                                    </MuiThemeProvider>
+                                </div>
+
+                            </Toolbar>
+                        </AppBar>
+                    </div>
+                    {/* Create note component call */}
+                    <CreateNote labelArray={this.state.labelData} getAllNoteProps={this.handleNote} />
+                    {/* DrawerList component call */}
+                    {/* "labelArray" is called in "DrawerList" component and purpose of these to send label data from "DrawerList" component to "Dashboard" component */}
+                    <DrawerList drawerValue={this.state.open} perticularNotesProps={this.handleGetAllNote}  labelArray={this.handleLabelArray}/>
+
+                    {/* "getAllNoteProps" is like callback function which call in child component after some operation will perform.Means it will give refreshed notes */}
+                    {/* "notesValue" it contain all the notes the based on event(means "noteData" may change every time it contain like "reminder" note "trash",archive,etc) */}
+                   <div>
+                       {/* "componentCall" which  icon should display to it */}
+                       {/* "notesValue" all note what are get from backend */}
+
+                   {/* <Notes notesValue={this.state.noteData}  componentCall={this.state.componentCall}  getAllNoteProps={this.handleNote} labelArray={this.state.labelData}></Notes> */}
+                   <Notes notesValue={this.state.noteData}  componentCall={this.state.componentCall}  getAllNoteProps={this.handleGetAllNote} labelArray={this.state.labelData}></Notes>
+
+                   </div>
+
                 </div>
+            </MuiThemeProvider>
 
-                {/* Drawer div */}
-                <div>
-                    <MuiThemeProvider theme={theme}>
-
-                        <Drawer
-                            className="drawer"
-                            variant="persistent"
-                            anchor="left"
-                            open={this.state.open}
-                        >
-
-                            <List style={{ width: "250px" }}>
-
-                                {/* {['Notes', 'Reminders', 'Labels', 'Archive', 'Trash'].map((text, index) => (
-                            <ListItem button key={text}>
-                                <ListItemIcon><AddAlertIcon/></ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        ))} */}
-
-
-                                <ListItem button key="Notes" onClick={this.handleNote}>
-                                    <EmojiObjectsIcon /><ListItemText primary="Notes" />
-                                </ListItem>
-
-                                <ListItem button key="Reminder" onClick={this.handleReminder}>
-                                    <AddAlertIcon /><ListItemText primary="Reminder" />
-                                </ListItem>
-                                <Divider orientation="" />
-
-                                <ListItem button key="Label" onClick={this.handleLabel}>
-                                    <LabelIcon /><ListItemText primary="Label" />
-                                </ListItem>
-                                <Divider orientation="" />
-                                <ListItem button key="Archive" onClick={this.handleArchieve}>
-                                    <ArchiveIcon /><ListItemText primary="Archive" />
-                                </ListItem>
-
-                                <ListItem button key="Trash" onClick={this.handleTrash}>
-                                    <DeleteIcon /><ListItemText primary="Trash" />
-                                </ListItem>
-
-                            </List>
-
-                        </Drawer>
-                    </MuiThemeProvider>
-                </div>
-                {/* dynamic content view  */}
-                <div>
-                   
-                </div>
-            </div>
         )
     }
 }
 export default Dashboard;
+
+// 
+// 
+// 
+// 
+// 
+// 
+// 

@@ -49,17 +49,17 @@ app.listen(PORT, () => {
   logger.info("Server started at port:", PORT);
 });
 
-schedule.scheduleJob('* * * * * *', function () {
-  //here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
+// schedule.scheduleJob('* * * * * *', function () {
+//   here we are assuming that perticular user login with its userId.because we want to fetch notes based on userId
 
-  let userId = "5d97427de380595ced58580c"
-  ctrl.reminder(userId)
-    .then(reminderData => {
-      logger.info("Get reminder")
-    })
-    .catch(err => {
-      logger.info("ERRRR", err);
-    })
-});
+//   let userId = "5d97427de380595ced58580c"
+//   ctrl.reminder(userId)
+//     .then(reminderData => {
+//       logger.info("Get reminder")
+//     })
+//     .catch(err => {
+//       logger.info("ERRRR", err);
+//     })
+// });
 
 module.exports = app;

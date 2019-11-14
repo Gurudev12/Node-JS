@@ -9,65 +9,66 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
-import {loginService} from '../services/userService';
+import { loginUser } from '../services/userService';
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
 class Login extends Component {
-        constructor(props){
-            super(props)
-            this.state = {
-                'email': '',
-                'password': '',
-                showPassword: false,
-            };
-        }
-        
-    
+    constructor(props) {
+        super(props)
+        this.state = {
+            'email': '',
+            'password': '',
+            showPassword: false,
+        };
+    }
 
-      //This method which is called to redirect another page that is "login" page
-      setRedirectToRegister = () => {
+
+
+    //This method which is called to redirect another page that is "login" page
+    setRedirectToRegister = () => {
         this.props.history.push('/registration')
-      }
+    }
 
-      //This method is used to redirect to 'forgetPassword' page
-      setRedirectToForgotPassword = () => {
+    //This method is used to redirect to 'forgetPassword' page
+    setRedirectToForgotPassword = () => {
         this.props.history.push('/forgotPassword')
-      }
+    }
 
-      //After submitting  on "login" button,submitLogin() is called and create object of login creadential
-    submitLogin=()=>{
-       let loginObject={}
-        loginObject.email=this.state.email;
-        loginObject.password=this.state.password
+    //After submitting  on "login" button,submitLogin() is called and create object of login creadential
+    submitLogin = () => {
+        let loginObject = {}
+        loginObject.email = this.state.email;
+        loginObject.password = this.state.password
 
         //This will pass the "loginObject" to "loginService"
-        loginService(loginObject)
-        .then((data)=>{
-            console.log("LOGIN RESPONCE",data);
-            console.log("token=====>",data.data.token);
-            if (data.status === 200) {
-                toaster.notify("Login Successful", {
+        loginUser(loginObject)
+            .then((data) => {
+                console.log("LOGIN RESPONCE", data);
+                console.log("token=====>", data.data.data.imageUrl);
+                if (data.status === 200) {
+                    toaster.notify("Login Successful", {
+                        position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
+                        autoClose: 8000,
+                    })
+                    localStorage.setItem('loginToken', data.data.token)
+
+                    this.props.history.push({ pathname: "/dashboard", state: { profileUrl: data.data.data.imageUrl } }) 
+                }
+            })
+            .catch((err) => {
+                toaster.notify("Login unsuccessfull", {
                     position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
                     duration: null // This notification will not automatically close
                 })
-                localStorage.setItem('loginToken', data.data.token)
-                this.props.history.push('/dashboard')
-            }
-        })
-        .catch((err)=>{
-            toaster.notify("Login unsuccessfull", {
-                position: "top", // top-left, top, top-right, bottom-left, bottom, bottom-right
-                duration: null // This notification will not automatically close
+
             })
-        
-        })
     }
 
     //this is handle for email
-    handleChangeEmail =  (event) => {
+    handleChangeEmail = (event) => {
         console.log("===>email", event.target.value);
-        let emailValue=event.target.value
+        let emailValue = event.target.value
         this.setState({
             email: emailValue,
         });
@@ -76,9 +77,10 @@ class Login extends Component {
     // This is handle for password
     handleChangePassword = (event) => {
         console.log("===>pass", event.target.value);
-        let passwordValue=event.target.value;
-        this.setState({ 
-            password: passwordValue });
+        let passwordValue = event.target.value;
+        this.setState({
+            password: passwordValue
+        });
     };
 
     handleClickShowPassword = () => {
@@ -129,26 +131,26 @@ class Login extends Component {
                             onChange={this.handleChangeEmail}
                             name="email"
                             autoComplete="email"
-                            
+
                             margin="normal"
                             variant="outlined"
                         />
-                        <br></br>     
-                        </div>
-                        <TextField id="outlined-adornment-password" className="password"
-                            variant="outlined"
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            label="Password"
-                            value={this.state.password} 
-                            onChange={this.handleChangePassword}
-                            InputProps={{
-                                endAdornment: (<InputAdornment position="end">
-                                    <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} > {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>),
-                            }}
-                        />
-                     <br></br>   <br></br>  
+                        <br></br>
+                    </div>
+                    <TextField id="outlined-adornment-password" className="password"
+                        variant="outlined"
+                        type={this.state.showPassword ? 'text' : 'password'}
+                        label="Password"
+                        value={this.state.password}
+                        onChange={this.handleChangePassword}
+                        InputProps={{
+                            endAdornment: (<InputAdornment position="end">
+                                <IconButton aria-label="Toggle password visibility" onClick={this.handleClickShowPassword} > {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>),
+                        }}
+                    />
+                    <br></br>   <br></br>
                     <div className="fundoo">
                         <Button variant="contained" color="primary" className="login" onClick={this.submitLogin}>
                             Login
@@ -159,7 +161,7 @@ class Login extends Component {
                     </div>
 
                     <br></br><br></br><br></br><br></br>
-                    <Link href="#" onClick="" className="forgotPassword"  onClick={this.setRedirectToForgotPassword} >
+                    <Link href="#" onClick="" className="forgotPassword" onClick={this.setRedirectToForgotPassword} >
                         forgot password?
                     </Link>
 

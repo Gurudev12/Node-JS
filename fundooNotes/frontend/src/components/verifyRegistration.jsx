@@ -4,7 +4,7 @@ import { Card } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
-import { verifyRegistrationService } from '../services/userService'
+import { verifyRegistration } from '../services/userService'
 class VerifyRegistration extends Component {
 
     setRedirectToLogin = () => {
@@ -17,7 +17,7 @@ class VerifyRegistration extends Component {
     
         let token = this.props.match.params.token;
 
-        verifyRegistrationService(token)
+        verifyRegistration(token)
             .then((data) => {
                 console.log("===>DATA ==>", data);
                 toaster.notify("Verify email successfull", {

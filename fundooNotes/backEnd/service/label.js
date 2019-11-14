@@ -1,5 +1,6 @@
 const labelModel = require("../model/label");
 const logger = require('../config/log');
+const redisService = require("./redis")
 
 class LabelServiceClass {
 
@@ -70,23 +71,72 @@ class LabelServiceClass {
     }
 
     /*************************************************************************************************/
+    //Service for getting all label from database
+
+
+
     async read(labelData) {
+
+
 
         //searchBy object contain userId
         let searchBy = { "userId": labelData.userId };
+        let redisData=[];
+        let allLabelData,redisValue
         //read() method get all the labels of perticular user
-        let allLabelData = await labelModel.read(searchBy);
-        if (allLabelData) {
+        ///
+        let redisKey = labelData.userId + "labels";
 
-            //update logger file
-            logger.info("All labels", allLabelData)
 
-            return allLabelData;
-        } else {
-            //update logger file
-            logger.error("Not got all labels")
-            return false;
-        }
+    // await redisService.redisGetter(redisKey, async (err, reply) => {
+        redisValue= await redisService.redisGetterLabel(redisKey)
+            redisData = JSON.parse(redisValue);
+            // return redisData
+            if (redisData) {
+                // console.log("get from 1 redis",redisData);
+                return redisData
+            }
+            else {
+                 allLabelData = await labelModel.read(searchBy);   
+                //removed await
+                if (allLabelData.length >= 0) {
+
+                    redisService.redisSetter(redisKey, JSON.stringify(allLabelData))
+
+                    //Then resolve notes from redis
+                    // redisService.redisGetter(redisKey, (err, reply) => {
+                      redisValue  =await redisService.redisGetterLabel(redisKey)
+                        redisData = JSON.parse(redisValue);
+
+                        //update logger file
+                        logger.info("All labels", redisData)
+                        return redisData;
+
+                    // })
+
+                } else {
+                    //update logger file
+
+                    logger.error("Labels are not present")
+                    return false;    
+                }
+
+            }
+        // })
+        ///
+
+        // let allLabelData = await labelModel.read(searchBy);
+        // if (allLabelData) {
+
+        //     //update logger file
+        //     logger.info("All labels", allLabelData)
+
+        //     return allLabelData;
+        // } else {
+        //     //update logger file
+        //     logger.error("Not got all labels")
+        //     return false;
+        // }
     }
 }
 let labelServiceObject = new LabelServiceClass();

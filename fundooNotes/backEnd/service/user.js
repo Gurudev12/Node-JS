@@ -178,7 +178,8 @@ class UserService {
                                                             "firstName": userData[0].firstName,
                                                             "lastName": userData[0].lastName,
                                                             "email": userData[0].email,
-                                                            "userType": userData[0].userType
+                                                            "userType": userData[0].userType,
+                                                            "imageUrl":userData[0].imageUrl
                                                         },
                                                         "token": newToken
                                                     };

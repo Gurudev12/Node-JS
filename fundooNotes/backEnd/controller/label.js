@@ -121,11 +121,9 @@ class LabelController {
  * @param {*} req user request
  * @param {*} res server response
  */
-    async read(req, res) {
-        console.log("CONTROLLER label ====>");
-        
+    async read(req, res) {        
         let response = {};
-        try {
+        try {            
             let labelData = {
                 "userId": req.token._id
             };
@@ -133,6 +131,8 @@ class LabelController {
             
             // console.log("CONTROLLER label ====>",req.query);
             let getAllLabelResult = await labelService.read(labelData);
+            // console.log("CONTRoller",getAllLabelResult);
+            
             // let getAllLabelResult = await labelService.read(req.query);
             if (getAllLabelResult) {
                 response.success = true;
@@ -152,8 +152,6 @@ class LabelController {
         }
 
     }
-
-
 
 }
 let labelControllerObject = new LabelController();

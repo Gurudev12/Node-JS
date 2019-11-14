@@ -3,7 +3,7 @@ import '../css/forgotPassword.css'
 import { Card } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Button } from '@material-ui/core';
-import { forgotPasswordService } from '../services/userService'
+import { forgotPassword } from '../services/userService'
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css";
 
@@ -25,7 +25,7 @@ class ForgotPassword extends Component {
         let forgotPasswordObject = {}
         forgotPasswordObject.email = this.state.email
 
-        forgotPasswordService(forgotPasswordObject)
+        forgotPassword(forgotPasswordObject)
             .then((data) => {
                 console.log("PROMISE RESPONCE==>", data);
                 if (data.status === 200) {
