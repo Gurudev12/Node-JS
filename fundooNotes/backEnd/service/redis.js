@@ -37,8 +37,12 @@ class Redis {
         return new Promise((resolve,reject)=>{
             this.client.del(deleteArray,(err, response) =>{
                 if (response) {
+                    console.log("REDIS CREATED RESP",response);
+                    
                  return  resolve(true)
                 } else{
+                    console.log("REDIS CREATED ERR");
+
                 return reject(err)
                 }
              })
@@ -55,7 +59,9 @@ class Redis {
             this.client.get(key, (err, reply) => {
                 if (err) {
                     reject (err);
-                } else {                    
+                } else {  
+                    console.log("\n\n\n\n\n\n\n\nLABEL GET ",reply);
+                                      
                     resolve(reply);
                 }
             });

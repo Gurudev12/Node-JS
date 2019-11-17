@@ -25,6 +25,7 @@ class LabelController {
                     "userId": req.token._id,
                     "labelName": req.body.labelName
                 };
+                
                 let labelResult = await labelService.create(labelData);
                 if (labelResult == true) {
                     response.success = true;
@@ -52,6 +53,11 @@ class LabelController {
      * @param {*} res server response
      */
     async  update(req, res) {
+
+
+
+        console.log("\n\n\n\nfbghgfjhjg",req.body);
+
         let response = {};
 
         try {
@@ -63,6 +69,8 @@ class LabelController {
                 return res.status(422).send(response);
 
             } else {
+                console.log("\n\n\n\n=============>",req.body);
+                
                 //Here we are paasing id of label and new label name
                 let updateLabelData = {
                     "_id": req.body._id,
@@ -93,10 +101,12 @@ class LabelController {
   * @param {*} res server response
   */
     async delete(req, res) {
+        
         let response = {};
         try {
             let deleteLabelData = {
-                "_id": req.body._id
+                "_id": req.body._id,
+                "userId":req.body.userId
             };
             let deletedLabelResult = await labelService.delete(deleteLabelData);
             if (deletedLabelResult == true) {

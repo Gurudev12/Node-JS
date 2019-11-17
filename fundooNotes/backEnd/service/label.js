@@ -2,7 +2,7 @@ const labelModel = require("../model/label");
 const logger = require('../config/log');
 const redisService = require("./redis")
 
-class LabelServiceClass {
+class LabelService {
 
 
     async  create(labelData) {
@@ -10,11 +10,20 @@ class LabelServiceClass {
         let labelResult = await labelModel.create(labelData);
 
         if (labelResult) {
-
+            
             //update logger file
-            logger.info("Updated note", labelResult)
+            logger.info("created new note", labelData)
 
-            return true;
+            // let deleteArray = [labelData.userId + "isTrashNotes", labelData.userId + "isArchieveNotes", labelData.userId + "allNotes", labelData.userId + "reminderNotes" + labelData.userId + "labels"]
+            let deleteArray = [labelData.userId + "isTrashNotes", labelData.userId + "isArchieveNotes", labelData.userId + "allNotes", labelData.userId + "reminderNotes",  labelData.userId + "labels"]
+
+            let redisResult = await redisService.delete(deleteArray)
+            if (redisResult == true) {
+                return true
+            } else {
+                return false
+            }
+            
         }
         else {
             //update logger file
@@ -62,7 +71,15 @@ class LabelServiceClass {
 
             //update logger file
             logger.info("Label deleted", deleteValue)
-            return true;
+            let deleteArray = [deleteLabelData.userId + "isTrashNotes", deleteLabelData.userId + "isArchieveNotes", deleteLabelData.userId + "allNotes", deleteLabelData.userId + "reminderNotes",  deleteLabelData.userId + "labels"]
+
+            let redisResult = await redisService.delete(deleteArray)
+            if (redisResult == true) {
+                return true
+            } else {
+                return false
+            }
+            
         } else {
             //update logger file
             logger.error(" Label not deleted", deleteValue)
@@ -72,12 +89,7 @@ class LabelServiceClass {
 
     /*************************************************************************************************/
     //Service for getting all label from database
-
-
-
     async read(labelData) {
-
-
 
         //searchBy object contain userId
         let searchBy = { "userId": labelData.userId };
@@ -93,7 +105,6 @@ class LabelServiceClass {
             redisData = JSON.parse(redisValue);
             // return redisData
             if (redisData) {
-                // console.log("get from 1 redis",redisData);
                 return redisData
             }
             else {
@@ -122,22 +133,8 @@ class LabelServiceClass {
                 }
 
             }
-        // })
-        ///
-
-        // let allLabelData = await labelModel.read(searchBy);
-        // if (allLabelData) {
-
-        //     //update logger file
-        //     logger.info("All labels", allLabelData)
-
-        //     return allLabelData;
-        // } else {
-        //     //update logger file
-        //     logger.error("Not got all labels")
-        //     return false;
-        // }
+       
     }
 }
-let labelServiceObject = new LabelServiceClass();
+let labelServiceObject = new LabelService();
 module.exports = labelServiceObject;

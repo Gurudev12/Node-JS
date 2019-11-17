@@ -233,7 +233,7 @@ class NoteService {
                         redisService.delete(deleteArray)
                             .then(response => {
                                 //         //update logger file
-                                logger.info("Updated note in redis", findValue,updateValue)
+                                logger.info("Updated note in redis", findValue, updateValue)
                                 // resolve({ "success": true, "message": "Note updated successfully" });
                                 resolve(true)
                             })
@@ -366,20 +366,41 @@ class NoteService {
     /*************************************************************************************************/
     //It will give all the notes
     read(loginData) {
+
         let findValue = {}
         let redisData;
-        let redisKey;
+        let redisKey, i;
+        let populateObject
         let keyObject = Object.keys(loginData)
-        let pageNo = loginData.pageNo;
+        //this find data is for
+        let findData;
+
         return new Promise((resolve, reject) => {
 
-            for (let i = 0; i < keyObject.length; i++) {
+            for (i = 0; i < keyObject.length; i++) {
                 //If we want the notes those  has reminder set
                 if (keyObject[i] == "reminder") {
                     findValue = {
                         userId: loginData.userId,
                         reminder: { $nin: [null, ""] }
                     }
+                } else if (keyObject[i] == "labelId") {
+                    console.log("loging data===>", loginData);
+                    // setting "findData =true" because there are two methods  to search in model
+                    findData = true
+
+                    findValue = {
+                        "userId": loginData.userId
+                    }
+
+                    populateObject = {
+                        path: "labelId",
+                        match: { _id: loginData.labelId }
+                    }
+                    // redisKey = noteRequestData.labelId + "labelId"
+                    /** getting all notes that have same labelId on notes */
+                    // responseArray = await noteModel.findLabelMatch(findQuery, populateObject);
+
                 }
                 else {
                     //Otherwise find those note based on user wants to search like isArchieve,isTrash notes
@@ -408,40 +429,87 @@ class NoteService {
                 else if (keyObject[i] == "reminder") {
                     redisKey = loginData.userId + "reminderNotes"
                 }
+                else if (keyObject[i] == "labelId") {
+
+                    redisKey = loginData.labelId + "labelId"
+                    console.log("REDIS KEY===>", redisKey);
+
+                }
+
             }
             //First it will chech data in redis
             redisService.redisGetter(redisKey, (err, reply) => {
                 redisData = JSON.parse(reply);
+                console.log("\n\n\n\n\n\nREDIS REPLY===>", redisData);
+
                 //If it will get the notes from redis then resolve from redis.
                 if (redisData) {
+                    console.log("\n\n\n\nREDIS RETURN DATATA====>", redisData);
+
                     resolve(redisData)
 
                 }
                 else {
-                    //If redisGetter()method not get notes from redis then fetch notes from database
-                    noteModel.read(findValue)
-                        .then(noteData => {
-                            if (noteData.length >= 0) {
-                                // log("\n\n\tnotedata--->",noteData)
-                                //Then store the notes in redis whatever we get from database
-                                redisService.redisSetter(redisKey, JSON.stringify(noteData))
+                    //"findData" is set request for the note which have same label
+                    if (findData == true) {
+                        console.log("I M INSIDE NEW LABEL METH");
+                        //If redisGetter()method not get notes from redis then fetch notes from database
+                        noteModel.findLabelMatch(findValue, populateObject)
+                            .then(noteData => {
+                                if (noteData.length >= 0 ) {
+                                    console.log("I M INSIDE NEW LAB DATA====>", noteData);
 
-                                //Then resolve notes from redis
-                                redisService.redisGetter(redisKey, (err, reply) => {
-                                    redisData = JSON.parse(reply);
+                                    // log("\n\n\tnotedata--->",noteData)
+                                    //Then store the notes in redis whatever we get from database
+                                    redisService.redisSetter(redisKey, JSON.stringify(noteData))
 
-                                    resolve(redisData)
+                                    //Then resolve notes from redis
+                                    redisService.redisGetter(redisKey, (err, reply) => {
+                                        redisData = JSON.parse(reply);
 
-                                })
-                            }
-                            //if there is no notes in database
-                            else {
-                                resolve("NO NOTES IN DATABASE")
-                            }
-                        })
-                        .catch(err => {
-                            reject(err);
-                        });
+                                        resolve(redisData)
+
+                                    })
+                                }
+                                //if there is no notes in database
+                                else {
+                                    resolve("NO NOTES IN DATABASE")
+                                }
+                            })
+                            .catch(err => {
+                                reject(err);
+                            });
+                    }
+                    else {
+                        console.log("I M INSIDE OLD LABEL METH");
+                        //This is for reading notes from database like "isArchieve,isTrash,allNote,reminder note"
+                        noteModel.read(findValue)
+                            .then(noteData => {
+                                if (noteData.length >= 0) {
+                                    console.log("OLD I M INSIDE old LAB DATA====>", noteData);
+
+                                    // log("\n\n\tnotedata--->",noteData)
+                                    //Then store the notes in redis whatever we get from database
+                                    redisService.redisSetter(redisKey, JSON.stringify(noteData))
+
+                                    //Then resolve notes from redis
+                                    redisService.redisGetter(redisKey, (err, reply) => {
+                                        redisData = JSON.parse(reply);
+
+                                        resolve(redisData)
+
+                                    })
+                                }
+                                //if there is no notes in database
+                                else {
+                                    resolve("NO NOTES IN DATABASE")
+                                }
+                            })
+                            .catch(err => {
+                                reject(err);
+                            });
+                    }
+
                 }
             })
         });
@@ -458,8 +526,24 @@ module.exports = noteServiceObject;
 
 
 
-
-
+// 
+// // 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
 
 
 

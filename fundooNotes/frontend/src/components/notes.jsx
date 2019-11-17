@@ -21,15 +21,29 @@ const theme = createMuiTheme({
     overrides: {
         'MuiPaper': {
             'root': {
-                display: "flex",
-                flexDirection: "row",
-                flexWrap:'wrap',
-                justifyContent: "space-between",
+                color: "rgba(0, 0, 0, 0.87)",
+                width:" 28%",
+                height: "54%",
+                display:" flex",
+                flexWrap: "wrap",
                 marginTop: "3%",
-                width: '30%',
-                height:'40%',
-                marginLeft:'70%'
+                transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                marginRight: "0%",
+                flexDirection: "column",
+                justifyContent: "space-between",                
             }
+            // ,
+            // 'root':{
+            //     display: "flex",
+            //     flexDirection: "row",
+            //     flexWrap:'wrap',
+            //     justifyContent: "space-between",
+            //     marginTop: "3%",
+            //     width: '30%',
+            //     height:'40%',
+            //      marginLeft:'40%',
+            //      marginRight:'0%',
+            // }
         },
     }
 })
@@ -40,6 +54,7 @@ export class Notes extends Component {
         this.state = {
             open: false,
             uniqueNote: {},
+            list:"80%"
         }
         
     }
@@ -88,20 +103,14 @@ export class Notes extends Component {
 
         return (
             <MuiThemeProvider theme={theme}>
+                {/* */}
+                {/* style={{display:"flex",flexDirection:"row",justifyContent:"space-between",marginLeft:"20%",width:"72%",flexWrap:"wrap"}} */}
+                <div  style={{display:"flex",flexDirection:"row",justifyContent:"space-between",marginLeft:"20%",width:"72%",flexWrap:"wrap"}}>
                 
-                <div>
-                {/* <Masonry
-                className={'my-gallery-class'} // default ''
-                elementType={'ul'} // default 'div'
-                options={masonryOptions} // default {}
-                disableImagesLoaded={false} // default false
-                updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-                imagesLoadedOptions={imagesLoadedOptions} // default {}
-            > */}
                     {this.props.notesValue.map((note, index) => (
 
                         //this "backgroundColor" is based on user set color while creating or updating note
-                        <Card style={{ backgroundColor: note.color }}>
+                        <Card style={{ backgroundColor: note.color,width:this.props.view?"300px":this.state.list }}>
 
                             <TextField onClick={() => this.handleDialog(note)}
                                 disabled
@@ -124,11 +133,8 @@ export class Notes extends Component {
 
                             {/* This will map the all label of perticular note */}
                             <div>
-                                 {note.reminder!=null && <Chip 
-                                        label={note.reminder}
-
-                                        // onDelete={() => this.handleDeleteLabel(note, singleLabel)}
-
+                                 {note.reminder!=="" && <Chip 
+                                        label={(note.reminder).substr(3,18)}
                                     />}
 
                                 {note.labelId.map((singleLabel, index) => (

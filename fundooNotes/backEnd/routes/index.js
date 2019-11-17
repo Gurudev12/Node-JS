@@ -25,13 +25,12 @@ router.post("/verifyRegistration", authentication.registrationTokenVerify, ctrl.
 router.post("/login", ctrl.login); 
 router.post("/forgotPassword", ctrl.forgotPassword);   
 router.post("/resetPassword", authentication.resetTokenVerify, ctrl.reset);   
-
 router.post("/uploadImage",authentication.tokenVerify, multer.single("file"), ctrl.uploadImage);
 
 //Label
 router.post("/createLabel",authentication.tokenVerify,labelCtrl.create); 
 router.post("/updateLabel", authentication.tokenVerify, labelCtrl.update);  
-router.delete("/deleteLabel", authentication.tokenVerify, labelCtrl.delete);  
+router.post("/deleteLabel", authentication.tokenVerify, labelCtrl.delete);  
 router.get("/getAllLabel", authentication.tokenVerify, labelCtrl.read);   
 
 //Notes
@@ -41,6 +40,6 @@ router.post("/deleteNote", authentication.tokenVerify, noteCtrl.delete);
 router.get("/getAllNote", authentication.tokenVerify, noteCtrl.read); 
 router.post("/addLabel", authentication.tokenVerify, noteCtrl.add);  
 router.post("/deleteLabelFromNote", authentication.tokenVerify, noteCtrl.deleteLabel);
-router.post("/searchNote", authentication.tokenVerify, noteCtrl.search);
+router.get("/searchNote", authentication.tokenVerify, noteCtrl.search);
 
 module.exports = router;

@@ -1,0 +1,72 @@
+
+.fundoo{
+    font-size: 30px;
+    margin-right:10%
+  }
+  .fundooName{
+    font-size: 30px;
+    margin-left:35%;
+    margin-top: 5px  
+  }
+.fStyle{
+    color: #344fed;
+   
+  }
+
+  .uStyle{
+    color:  #ea4235;
+  }
+  .nStyle{
+    color: #2a8118;
+  }
+  
+  .dStyle{
+    color:#344fed;
+  }
+  
+  .oStyle{
+    color: #e2df2d;
+  }
+  
+  .oOstyle{
+    color: #ea4235;
+  }
+  .tStyle{
+    color: #2913ec;
+  }
+  .eStyle{
+    color: #2ee524;
+  }
+  
+  .o0Style{
+    color: #dfd43f;
+  }
+  .label{
+    text-align: center;
+
+  }
+ 
+
+  .lName{
+    top: 30px;
+    left: 150px;
+  }
+  .email{
+      text-align: center;
+      margin-left: 300px;
+      width: 230px;
+  }
+
+    .regpassword{
+      text-align: center;
+      margin-left: 240px;
+      width: 216px;
+    }
+
+  /* .nameLabel{
+    text-align:center;
+  left: 10%;
+  top: 400px;
+  width: 30px
+} */
+  

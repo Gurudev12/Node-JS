@@ -1,0 +1,7 @@
+.logoutpopper{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background-color:"pink";
+    height:"300px"
+}

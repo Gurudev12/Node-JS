@@ -82,8 +82,14 @@ class NoteModel {
                 match: { labelName: { $regex: regexPattern } }
             })
                 .exec(function (err, data) {
-                    if (err) { reject(err); }
-                    else { resolve(data); }
+                    if (err)
+                     { 
+                         reject(err); 
+                        }
+
+                    else { 
+                        resolve(data); 
+                    }
                 });
         });
     }
@@ -120,6 +126,34 @@ class NoteModel {
                 });
         });
     }
+
+
+  /**
+     * method used for getAll matched label on note
+     * @param {*} findQuery find query for get Note of particular user
+     * @param {*} regexPattern user search value for match with label
+     */
+     findLabelMatch(findQuery,populateObject) {
+        return new Promise((resolve, reject) => {
+            console.log("\n\n\n\n\nLABELS ON NOTE");
+
+            this.Note.find(findQuery).populate(populateObject).exec(function (err, users) {
+                if(err){
+                    reject(err)
+                }
+                /** filter for get only matched label on note data */
+                users = users.filter(function (user) {
+                    console.log("\n\n\n\n\nLABELS ON NOTE",user.labelId);
+                    
+                    if (user.labelId.length > 0)
+                        return user;
+                });
+                resolve(users);
+            });
+        });
+    }
+
+
 }
 let noteModelObject = new NoteModel();
 module.exports = noteModelObject;

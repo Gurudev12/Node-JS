@@ -189,8 +189,9 @@ class NoteController {
     //Search note on basis of title,description etc
     search(req, res) {
         let response = {};
-        req.body.userId = req.token._id;
-        noteService.search(req.body)
+        req.query.userId = req.token._id;
+        
+        noteService.search(req.query)
             .then(searchNoteData => {
                 if (searchNoteData) {
                     response.success = true;
